@@ -55,6 +55,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return <code>true</code> if a parameter of type type could be retrieved from these parameters using the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public boolean hasParameter(@Nonnull final String key) throws ConfigurationException;
@@ -65,6 +66,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -78,6 +80,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public <T> Optional<T> getOptionalParameter(@Nonnull final String key) throws ConfigurationException;
@@ -89,6 +92,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -101,6 +105,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public Optional<Boolean> getOptionalBoolean(@Nonnull final String key) throws ConfigurationException;
@@ -112,6 +117,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -124,6 +130,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public Optional<Double> getOptionalDouble(@Nonnull final String key) throws ConfigurationException;
@@ -135,6 +142,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -147,6 +155,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public Optional<Integer> getOptionalInt(@Nonnull final String key) throws ConfigurationException;
@@ -158,6 +167,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -173,6 +183,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public default Optional<Long> getOptionalLong(@Nonnull final String key) throws ConfigurationException {
@@ -189,6 +200,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -204,6 +216,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public Optional<Path> getOptionalPath(@Nonnull final String key) throws ConfigurationException;
@@ -232,6 +245,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 * @see MessageFormat#format(Object)
@@ -248,6 +262,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 * @see MessageFormat#format(Object)
 	 */
@@ -260,6 +275,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
@@ -272,6 +288,7 @@ public interface Parameters {
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
 	public Optional<URI> getOptionalUri(@Nonnull final String key) throws ConfigurationException;

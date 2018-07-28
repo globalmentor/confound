@@ -27,6 +27,11 @@ import javax.annotation.*;
  * <p>
  * An implementing subclass must override {@link #getOptionalStringImpl(String)} for local raw string retrieval.
  * </p>
+ * <p>
+ * This class provides a facility {@link #normalizeKey(String)} for modifying the requested key if necessary before ultimate retrieval via
+ * {@link #getOptionalStringImpl(String)}. Most implementations will not need this facility, and will use the default implementation which uses the requested
+ * key unmodified. In any case, the implementation must use the original key, not the normalized key, when delegating to the parent configuration, if any.
+ * </p>
  * @author Garret Wilson
  */
 public abstract class BaseConfiguration extends AbstractConfiguration {
@@ -40,9 +45,10 @@ public abstract class BaseConfiguration extends AbstractConfiguration {
 		super(parentConfiguration);
 	}
 
+	/** {@inheritDoc} This implementation normalizes the key using {@link #normalizeKey(String)}. */
 	@Override
 	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return or(getOptionalDereferencedString(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
+		return or(getOptionalDereferencedString(normalizeKey(key)), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
 	}
 
 	/**
@@ -56,10 +62,20 @@ public abstract class BaseConfiguration extends AbstractConfiguration {
 	 * @param key The parameter key.
 	 * @return The value of the string parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
 	 */
 	protected final Optional<String> getOptionalDereferencedString(final String key) throws ConfigurationException {
 		return getOptionalStringImpl(key).map(this::dereferenceString); //get the string parameter and evaluate references before passing it back
+	}
+
+	/**
+	 * Normalizes a requested key if required by this implementation. The default implementation returns the key unmodified after checking for <code>null</code>.
+	 * @param key The parameter key.
+	 * @return The requested parameter key, modified as needed for lookup in this implementation.
+	 */
+	protected String normalizeKey(@Nonnull final String key) {
+		return requireNonNull(key);
 	}
 
 	/**
@@ -69,11 +85,15 @@ public abstract class BaseConfiguration extends AbstractConfiguration {
 	 * string value.
 	 * </p>
 	 * <p>
+	 * The given parameter key is assumed to already be normalized, and should not be modified.
+	 * </p>
+	 * <p>
 	 * This method must not fall back to parent configuration; only local strings must be returned.
 	 * </p>
-	 * @param key The parameter key.
+	 * @param key The exact parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
 	 */
 	protected abstract Optional<String> getOptionalStringImpl(final String key) throws ConfigurationException;
