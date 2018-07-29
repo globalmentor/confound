@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.confound</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.5.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>confound</artifactId>
+
+	<name>Confound</name>
+	<description>Configuration foundation with access via Csar.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.confound</groupId>
+			<artifactId>config</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.confound</groupId>
+			<artifactId>config-env</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.confound</groupId>
+			<artifactId>config-properties</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.csar</groupId>
+			<artifactId>csar</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.npathai</groupId>
+			<artifactId>hamcrest-optional</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<configuration>
+					<environmentVariables>
+						<TEST>example</TEST>
+						<FOO_BAR>baz</FOO_BAR>
+					</environmentVariables>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

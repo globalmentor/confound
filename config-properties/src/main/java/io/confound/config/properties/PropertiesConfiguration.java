@@ -50,6 +50,16 @@ public class PropertiesConfiguration extends AbstractStringConfiguration {
 	 * @param properties The properties to back this configuration.
 	 * @throws NullPointerException if the given parent configuration and/or properties is <code>null</code>.
 	 */
+	public PropertiesConfiguration(@Nonnull final Configuration parentConfiguration, @Nonnull final Properties properties) {
+		this(Optional.of(parentConfiguration), properties);
+	}
+
+	/**
+	 * Parent configuration and properties constructor.
+	 * @param parentConfiguration The parent configuration for fallback lookup.
+	 * @param properties The properties to back this configuration.
+	 * @throws NullPointerException if the given parent configuration and/or properties is <code>null</code>.
+	 */
 	public PropertiesConfiguration(@Nonnull final Optional<Configuration> parentConfiguration, @Nonnull final Properties properties) {
 		super(parentConfiguration);
 		this.properties = requireNonNull(properties);
