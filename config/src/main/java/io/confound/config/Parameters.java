@@ -49,9 +49,6 @@ public interface Parameters {
 
 	/**
 	 * Determines whether a parameter of some type exists for the given parameter key.
-	 * <p>
-	 * This method searches the parent resources hierarchy if no parameter is available in this instance.
-	 * </p>
 	 * @param key The parameter key.
 	 * @return <code>true</code> if a parameter of type type could be retrieved from these parameters using the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.

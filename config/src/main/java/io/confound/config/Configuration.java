@@ -23,8 +23,8 @@ import javax.annotation.*;
 /**
  * Access to configuration parameters.
  * <p>
- * Each parameter lookup method such as {@link #getString(String)} is expected to attempt to look up resources in the {@link #getParentConfiguration()} (if any)
- * if the resource is not found in this resources instance.
+ * Each parameter lookup method such as {@link #getString(String)} is expected to attempt to look up parameter in the {@link #getParentConfiguration()} (if any)
+ * if the parameter is not found in this configuration instance.
  * </p>
  * @author Garret Wilson
  */
@@ -36,7 +36,7 @@ public interface Configuration extends Parameters {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This method searches the parent resources hierarchy if no parameter is available in this instance.
+	 * This method searches the parent configuration hierarchy if no parameter is available in this instance.
 	 * </p>
 	 */
 	public boolean hasParameter(@Nonnull final String key) throws ConfigurationException;
