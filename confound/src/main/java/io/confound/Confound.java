@@ -35,7 +35,7 @@ import io.csar.*;
  * 
  * <pre>
  * {@code
- * Confound.setDefaultConfiguraitonConcern(new MyConfigurationConcern());
+ * Confound.setDefaultConfigurationConcern(new MyConfigurationConcern());
  * }
  * </pre>
  * 
