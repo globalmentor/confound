@@ -228,7 +228,7 @@ public interface Parameters {
 	 * @param path The path to resolve.
 	 * @return A resolved form of the path if appropriate.
 	 */
-	public default Path resolvePath(@Nonnull final Path path) {
+	public default Path resolvePath(@Nonnull final Path path) { //TODO probably move out of interfaces; should not be part of decoration
 		return requireNonNull(path);
 	}
 
