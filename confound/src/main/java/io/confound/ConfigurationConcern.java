@@ -16,6 +16,8 @@
 
 package io.confound;
 
+import static java.util.Objects.*;
+
 import javax.annotation.*;
 
 import io.confound.config.*;
@@ -42,5 +44,15 @@ public interface ConfigurationConcern extends Concern {
 	 * @throws ConfigurationException if there is a configuration error.
 	 */
 	public @Nonnull Configuration getConfiguration() throws ConfigurationException;
+
+	/**
+	 * Creates a default configuration concern to return the given configuration.
+	 * @param configuration The configuration to return.
+	 * @return A default configuration concern that returns the given configuration.
+	 */
+	public static ConfigurationConcern forConfiguration(@Nonnull final Configuration configuration) {
+		requireNonNull(configuration);
+		return () -> configuration;
+	}
 
 }

@@ -33,24 +33,15 @@ public final class EmptyConfiguration extends AbstractConfiguration {
 
 	/** No-argument constructor. */
 	public EmptyConfiguration() {
-		this(Optional.empty());
-	}
-
-	/**
-	 * Context class and parent configuration constructor.
-	 * @param parentConfiguration The parent configuration for fallback lookup.
-	 * @throws NullPointerException if the given parent configuration is <code>null</code>.
-	 */
-	public EmptyConfiguration(@Nonnull final Configuration parentConfiguration) {
-		this(Optional.of(parentConfiguration));
+		this(null);
 	}
 
 	/**
 	 * Optional parent configuration constructor.
-	 * @param parentConfiguration The parent configuration for fallback lookup.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given parent configuration is <code>null</code>.
 	 */
-	public EmptyConfiguration(@Nonnull final Optional<Configuration> parentConfiguration) {
+	public EmptyConfiguration(@Nullable final Configuration parentConfiguration) {
 		super(parentConfiguration);
 	}
 

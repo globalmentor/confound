@@ -79,12 +79,12 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 
 	/**
 	 * Parent configuration constructor.
-	 * @param parentConfiguration The parent configuration for fallback lookup.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param configurationManager The manager for loading and saving the configuration.
 	 * @throws NullPointerException if the given parent configuration is <code>null</code>.
 	 */
-	public ManagedConfiguration(@Nonnull final Optional<Configuration> parentConfiguration, @Nonnull final ConfigurationManager configurationManager) {
-		this.parentConfiguration = requireNonNull(parentConfiguration);
+	public ManagedConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final ConfigurationManager configurationManager) {
+		this.parentConfiguration = Optional.ofNullable(parentConfiguration);
 		this.configurationManager = requireNonNull(configurationManager);
 	}
 
@@ -103,7 +103,10 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 	 */
 	public synchronized Configuration reload() throws IOException, ConfigurationException {
 		invalidate();
-		final Configuration configuration = getConfigurationManager().loadConfiguration(getParentConfiguration().orElse(null));
+		final Configuration parentConfiguration = getParentConfiguration().orElse(null);
+		//if no configuration could be determined, use an empty configuration
+		final Configuration configuration = getConfigurationManager().loadConfiguration(parentConfiguration)
+				.orElseGet(() -> new EmptyConfiguration(parentConfiguration));
 		this.parameters = configuration; //save the local configuration cache, which will be used until it is stale again
 		return configuration;
 	}

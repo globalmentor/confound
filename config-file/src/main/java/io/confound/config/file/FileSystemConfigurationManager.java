@@ -22,6 +22,7 @@ import static java.util.Objects.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -36,7 +37,8 @@ import io.confound.config.*;
  */
 public abstract class FileSystemConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
-	private Path configurationPath = null;
+	/** Information about the determined configuration path, or <code>null</code> if the configuration path has not been determined or has been validated. */
+	private PathInfo configurationPathInfo = null;
 
 	/**
 	 * Determines the file format to use for the given path based on the registered formats and the path filename extension(s).
@@ -58,8 +60,8 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 	 * </p>
 	 */
 	@Override
-	public synchronized Configuration loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException {
-		Path configurationPath = this.configurationPath;
+	public synchronized Optional<Configuration> loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException {
+		Path configurationPath = this.configurationPathInfo != null ? this.configurationPathInfo.getPath().orElse(null) : null;
 		ConfigurationFileFormat fileFormat = null; //we may determine the file format during searching the candidate paths, or directly
 		if(configurationPath == null || !isRegularFile(configurationPath)) { //find a configuration path if we don't already have one, or it doesn't exist anymore
 			try (final Stream<Path> candidatePaths = configurationFileCandidatePaths()) { //be sure to close the stream of paths
@@ -79,23 +81,26 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 					break;
 				}
 			}
-			if(configurationPath == null) { //if we couldn't find a configuration path
+		}
+		final Configuration configuration; //load the configuration or set it to `null`
+		if(configurationPath != null) { //if we had or determined a configuration path
+			if(fileFormat == null) { //if we don't yet know the format of the file
+				final Path fileFormatPath = configurationPath;
+				fileFormat = getFileFormat(fileFormatPath)
+						.orElseThrow(() -> new ConfigurationException(String.format("Configuration file at path %s does not have a supported format.", fileFormatPath)));
+			}
+			assert fileFormat != null : "We expect to have determined the configuration file format.";
+			try (final InputStream inputStream = new BufferedInputStream(newInputStream(configurationPath))) {
+				configuration = fileFormat.load(inputStream, parentConfiguration);
+			}
+		} else { //if we couldn't determine a configuration path
+			if(isRequired()) {
 				throw new ConfigurationException("No supported configuration file found.");
 			}
+			configuration = null;
 		}
-		assert configurationPath != null : "We expect to have determined a configuration path to use.";
-		if(fileFormat == null) { //if we don't yet know the format of the file
-			final Path fileFormatPath = configurationPath;
-			fileFormat = getFileFormat(fileFormatPath)
-					.orElseThrow(() -> new ConfigurationException(String.format("Configuration file at path %s does not have a supported format.", fileFormatPath)));
-		}
-		assert fileFormat != null : "We expect to have determined the configuration file format.";
-		final Configuration configuration; //load the configuration
-		try (final InputStream inputStream = new BufferedInputStream(newInputStream(configurationPath))) {
-			configuration = fileFormat.load(inputStream, parentConfiguration);
-		}
-		this.configurationPath = configurationPath; //save our current configuration path
-		return configuration;
+		this.configurationPathInfo = new PathInfo(configurationPath); //save our current configuration path; we are now no longer stale
+		return Optional.ofNullable(configuration);
 
 	}
 
@@ -117,7 +122,7 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 		if(super.isStale(parameters)) {
 			return true;
 		}
-		if(configurationPath == null) {
+		if(configurationPathInfo == null) {
 			return true;
 		}
 		return false;
@@ -127,7 +132,40 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 	@Override
 	public synchronized void invalidate() {
 		super.invalidate();
-		configurationPath = null;
+		configurationPathInfo = null;
+	}
+
+	/**
+	 * Encapsulates determined path information and related information.
+	 * @author Garret Wilson
+	 *
+	 */
+	private static class PathInfo {
+
+		private final Path path;
+
+		/** @return The path, or {@link Optional#empty()} if none was determined. */
+		public Optional<Path> getPath() {
+			return Optional.ofNullable(path);
+		}
+
+		private final Instant determinedAt;
+
+		/** The time at which the path was determined or determined not to exist. */
+		@SuppressWarnings("unused") //TODO implement periodic checking for file change
+		public Instant getDeterminedAt() {
+			return determinedAt;
+		}
+
+		/**
+		 * Constructor. The path resolution time will be set automatically to the current instant.
+		 * @param path The path, or <code>null</code> if none was determined.
+		 */
+		public PathInfo(@Nullable final Path path) {
+			this.path = path;
+			this.determinedAt = Instant.now();
+		}
+
 	}
 
 	/**
@@ -135,7 +173,7 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 	 * @param configurationPath The path at which to find the configuration file.
 	 * @return A configuration manager for the file at the given path.
 	 */
-	public static FileSystemConfigurationManager forPaths(@Nonnull final Path configurationPath) {
+	public static FileSystemConfigurationManager forPath(@Nonnull final Path configurationPath) {
 		return forCandidatePaths(configurationPath);
 	}
 
@@ -159,5 +197,7 @@ public abstract class FileSystemConfigurationManager extends AbstractFileConfigu
 			}
 		};
 	}
+
+	//TODO add static factory methods for base path and regex/glob
 
 }

@@ -16,8 +16,7 @@
 
 package io.confound.config.file;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Set;
 
 import javax.annotation.*;
@@ -42,12 +41,32 @@ public interface ConfigurationFileFormat {
 	public Set<String> getFilenameExtensionSuffixes();
 
 	/**
+	 * Loads a configuration from the given input stream with no parent configuration.
+	 * <p>
+	 * The given input stream is guaranteed to support {@link InputStream#mark(int)} and {@link InputStream#reset()}.
+	 * </p>
+	 * <p>
+	 * The input stream must <em>not</em> be closed by this method.
+	 * </p>
+	 * <p>
+	 * The default implementation delegates to {@link #load(InputStream, Configuration)} and shuld normally not be overridden.
+	 * </p>
+	 * @param inputStream The input stream from which the configuration will be loaded.
+	 * @return A new configuration, loaded from the given input stream.
+	 * @throws IOException if there is an error loading a configuration from the giving input stream.
+	 * @see InputStream#markSupported()
+	 */
+	public default @Nonnull Configuration load(@Nonnull final InputStream inputStream) throws IOException {
+		return load(inputStream, null);
+	}
+
+	/**
 	 * Loads a configuration from the given input stream.
 	 * <p>
 	 * The given input stream is guaranteed to support {@link InputStream#mark(int)} and {@link InputStream#reset()}.
 	 * </p>
 	 * <p>
-	 * The input stream should <em>not</em> be closed by this method.
+	 * The input stream must <em>not</em> be closed by this method.
 	 * </p>
 	 * @param inputStream The input stream from which the configuration will be loaded.
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.

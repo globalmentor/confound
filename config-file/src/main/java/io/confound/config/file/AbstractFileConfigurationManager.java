@@ -73,6 +73,7 @@ public abstract class AbstractFileConfigurationManager implements ConfigurationM
 	 * indicate the same filename extension suffix, the last file format will replace the others for that format. Otherwise the formats will be attempted in the
 	 * order given.
 	 * </p>
+	 * @param fileFormats The specific file formats to support.
 	 */
 	public AbstractFileConfigurationManager(@Nonnull final Stream<ConfigurationFileFormat> fileFormats) {
 		//use a LinkedHashMap to remember the given order of file formats

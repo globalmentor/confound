@@ -17,6 +17,7 @@
 package io.confound.config;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javax.annotation.*;
 
@@ -25,6 +26,20 @@ import javax.annotation.*;
  * @author Garret Wilson
  */
 public interface ConfigurationManager {
+
+	/**
+	 * Returns whether this configuration manager requires a configuration. If a configuration is required, attempting to load a configuration will throw an
+	 * exception if a configuration cannot be determined; otherwise, it will return {@link Optional#empty()}.
+	 * <p>
+	 * The default implementation returns <code>false</code>.
+	 * </p>
+	 * @return <code>true</code> if a configuration is required and this manager will always return a configuration and throw an exception if one cannot be
+	 *         determined.
+	 * @see #loadConfiguration(Configuration)
+	 */
+	public default boolean isRequired() { //TODO allow setting via AbstractConfigurationManager; remove default
+		return false;
+	}
 
 	/**
 	 * Loads a configuration.
@@ -40,7 +55,7 @@ public interface ConfigurationManager {
 	 * @throws IOException if an I/O error occurs loading the configuration.
 	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
 	 */
-	public Configuration loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException; //TODO decide on whether to use Optional<>
+	public Optional<Configuration> loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException;
 
 	/**
 	 * Saves the configuration.

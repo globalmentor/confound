@@ -129,6 +129,17 @@ public class Confound {
 	}
 
 	/**
+	 * Sets a configuration as the default by installing it in a default configuration concern.
+	 * @param configuration The default configuration to set.
+	 * @throws NullPointerException if the given configuration is <code>null</code>.
+	 * @see ConfigurationConcern#forConfiguration(Configuration)
+	 * @see #setDefaultConfigurationConcern(ConfigurationConcern)
+	 */
+	public static void setDefaultConfiguration(@Nonnull final Configuration configuration) {
+		setDefaultConfigurationConcern(ConfigurationConcern.forConfiguration(configuration));
+	}
+
+	/**
 	 * Returns the configured configuration concern.
 	 * <p>
 	 * If no configuration concern is configured, and no default configuration concern is registered, a configuration concern will be returned that provides
