@@ -27,13 +27,13 @@ import javax.annotation.*;
 
 import com.globalmentor.io.Filenames;
 
-import io.confound.config.ConfigurationManager;
+import io.confound.config.AbstractConfigurationManager;
 
 /**
  * A configuration manager that knows how to load a configuration by parsing some document from an input stream.
  * @author Garret Wilson
  */
-public abstract class AbstractFileConfigurationManager implements ConfigurationManager {
+public abstract class AbstractFileConfigurationManager extends AbstractConfigurationManager {
 
 	/**
 	 * Determines the default configuration file formats. This method returns those formats that have been configured as service providers for the
@@ -74,8 +74,10 @@ public abstract class AbstractFileConfigurationManager implements ConfigurationM
 	 * order given.
 	 * </p>
 	 * @param fileFormats The specific file formats to support.
+	 * @param required Whether the manager requires a configuration to be determined when loading.
 	 */
-	public AbstractFileConfigurationManager(@Nonnull final Stream<ConfigurationFileFormat> fileFormats) {
+	public AbstractFileConfigurationManager(@Nonnull final Stream<ConfigurationFileFormat> fileFormats, final boolean required) {
+		super(required);
 		//use a LinkedHashMap to remember the given order of file formats
 		final Map<String, ConfigurationFileFormat> fileFormatsById = new LinkedHashMap<>();
 		fileFormats.forEach(fileFormat -> {
@@ -84,11 +86,6 @@ public abstract class AbstractFileConfigurationManager implements ConfigurationM
 			});
 		});
 		this.fileFormatsById = unmodifiableMap(fileFormatsById);
-	}
-
-	/** Constructor using the default configuration file format registered as service providers. */
-	public AbstractFileConfigurationManager() {
-		this(defaultFileFormats());
 	}
 
 }

@@ -28,18 +28,13 @@ import javax.annotation.*;
 public interface ConfigurationManager {
 
 	/**
-	 * Returns whether this configuration manager requires a configuration. If a configuration is required, attempting to load a configuration will throw an
-	 * exception if a configuration cannot be determined; otherwise, it will return {@link Optional#empty()}.
-	 * <p>
-	 * The default implementation returns <code>false</code>.
-	 * </p>
+	 * Returns whether this configuration manager requires a configuration to be determined. If a configuration is required, attempting to load a configuration
+	 * will throw an exception if a configuration cannot be determined; otherwise, it will return {@link Optional#empty()}.
 	 * @return <code>true</code> if a configuration is required and this manager will always return a configuration and throw an exception if one cannot be
 	 *         determined.
 	 * @see #loadConfiguration(Configuration)
 	 */
-	public default boolean isRequired() { //TODO allow setting via AbstractConfigurationManager; remove default
-		return false;
-	}
+	public boolean isRequired();
 
 	/**
 	 * Loads a configuration.

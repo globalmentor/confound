@@ -25,8 +25,7 @@ import java.nio.file.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 import java.util.stream.Stream;
 
 import javax.annotation.*;
@@ -47,13 +46,26 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	private PathInfo configurationPathInfo = null;
 
 	/**
-	 * Constructor.
+	 * Constructor for an optional configuration.
 	 * <p>
 	 * The path supplier is allowed to throw {@link UncheckedIOException} when the stream is returned and during stream iteration.
 	 * </p>
 	 * @param configurationFileCandidatePathsSupplier The strategy for determining candidate paths for finding a configuration.
 	 */
 	public FileSystemConfigurationManager(@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier) {
+		this(configurationFileCandidatePathsSupplier, false);
+	}
+
+	/**
+	 * Constructor.
+	 * <p>
+	 * The path supplier is allowed to throw {@link UncheckedIOException} when the stream is returned and during stream iteration.
+	 * </p>
+	 * @param configurationFileCandidatePathsSupplier The strategy for determining candidate paths for finding a configuration.
+	 * @param required Whether the manager requires a configuration to be determined when loading.
+	 */
+	public FileSystemConfigurationManager(@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier, final boolean required) {
+		super(defaultFileFormats(), required);
 		this.configurationFileCandidatePathsSupplier = requireNonNull(configurationFileCandidatePathsSupplier);
 	}
 
@@ -184,7 +196,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
-	 * Creates a configuration manager that loads a configuration from a given path as necessary.
+	 * Creates a configuration manager that loads an optional configuration from a given path as necessary.
 	 * @param configurationPath The path at which to find the configuration file.
 	 * @return A configuration manager for the file at the given path.
 	 */
@@ -193,7 +205,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
-	 * Creates a configuration manager that discovers a configuration file from one of the given paths.
+	 * Creates a configuration manager that discovers an optional configuration file from one of the given paths.
 	 * <p>
 	 * The first configuration file with a supported format is used.
 	 * </p>
@@ -207,7 +219,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
-	 * Creates a configuration manager that discovers a configuration file using a base filename.
+	 * Creates a configuration manager that discovers an optional configuration file using a base filename.
 	 * @param directory The source directory for configuration file discovery.
 	 * @param baseFilename The base filename, such as <code>base</code>, to return files with any extension, such as <code>base.foo</code> and
 	 *          <code>base.foo.bar</code>, or no extension at all.
@@ -219,7 +231,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
-	 * Creates a configuration manager that discovers a configuration file using a filename glob.
+	 * Creates a configuration manager that discovers an optional configuration file using a filename glob.
 	 * <p>
 	 * Only a single directory level is searched, regardless of the glob.
 	 * </p>
@@ -234,7 +246,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
-	 * Creates a configuration manager that discovers a configuration file using a filename pattern.
+	 * Creates a configuration manager that discovers an optional configuration file using a filename pattern.
 	 * @param directory The source directory for configuration file discovery.
 	 * @param filenamePattern The regular expression pattern for matching files in the directory.
 	 * @return A configuration manager to use a configuration file matched by the given filename pattern.
@@ -244,9 +256,16 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		return new Builder().candidateFilenamePattern(directory, filenamePattern).build();
 	}
 
+	/**
+	 * Builder for the manager.
+	 * <p>
+	 * By default the configuration will be optional.
+	 * </p>
+	 * @author Garret Wilson
+	 */
 	public static class Builder {
 
-		protected Configuration parentConfiguration;
+		private Configuration parentConfiguration;
 
 		/**
 		 * Sets the parent configuration to use for fallback lookup.
@@ -255,6 +274,19 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public Builder parentConfiguration(@Nonnull Configuration parentConfiguration) {
 			this.parentConfiguration = requireNonNull(parentConfiguration);
+			return this;
+		}
+
+		private boolean required = false;
+
+		/**
+		 * Sets whether the configuration file is required to be discovered.
+		 * @param required <code>true</code> if a configuration is required and the manager will always return a configuration and throw an exception if one cannot
+		 *          be determined.
+		 * @return This builder.
+		 */
+		public Builder required(final boolean required) {
+			this.required = required;
 			return this;
 		}
 
@@ -348,7 +380,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public FileSystemConfigurationManager build() {
 			checkState(candidatePathsSupplier != null, "Configuration file candidate path(s) not specified.");
-			return new FileSystemConfigurationManager(candidatePathsSupplier);
+			return new FileSystemConfigurationManager(candidatePathsSupplier, required);
 		}
 
 		/**
