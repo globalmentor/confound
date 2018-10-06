@@ -70,10 +70,28 @@ public class Confound {
 	 * @see System#getenv()
 	 */
 	public static Configuration getEnvironmentConfiguration() {
-		if(environmentConfiguration == null) { //the race condition here is benign
-			environmentConfiguration = new EnvironmentConfiguration(System.getenv());
+		return getEnvironmentConfiguration(null);
+	}
+
+	/**
+	 * Retrieves a configuration based on environment variables, with an optional fallback parent configuration.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
+	 * @return Configuration based on environment variables.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to environment variables.
+	 * @see System#getenv()
+	 */
+	public static Configuration getEnvironmentConfiguration(@Nullable final Configuration parentConfiguration) {
+		Configuration configuration;
+		if(parentConfiguration != null) { //if a parent configuration was given, we can't use the cached environment configuration
+			configuration = new EnvironmentConfiguration(System.getenv(), parentConfiguration);
+		} else { //if no parent configuration is given, try to use a cached copy
+			configuration = environmentConfiguration;
+			if(configuration == null) { //the race condition here is benign
+				configuration = new EnvironmentConfiguration(System.getenv());
+				environmentConfiguration = configuration; //cache the environment configuration
+			}
 		}
-		return environmentConfiguration;
+		return configuration;
 	}
 
 	/** Cached system configuration, lazily loaded. */
@@ -89,10 +107,31 @@ public class Confound {
 	 * @see System#getenv()
 	 */
 	public static Configuration getSystemConfiguration() {
-		if(systemConfiguration == null) { //the race condition here is benign
-			systemConfiguration = new PropertiesConfiguration(System.getProperties(), getEnvironmentConfiguration());
+		return getSystemConfiguration(null);
+	}
+
+	/**
+	 * Retrieves a configuration for the system, representing system properties that fall back to environment variables, with an optional fallback parent
+	 * configuration. That is the returned configuration recognizes both environment variables and system properties, with system properties taking precedent.
+	 * Keys are normalized to match environment variable conventions, so that a request for <code>foo.bar</code> will match a system property named
+	 * <code>foo.bar</code> or, if none exists, an environment variable named <code>FOO_BAR</code>.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
+	 * @return A configuration for system properties and environment variables.
+	 * @see System#getProperties()
+	 * @see System#getenv()
+	 */
+	public static Configuration getSystemConfiguration(@Nullable final Configuration parentConfiguration) {
+		Configuration configuration;
+		if(parentConfiguration != null) { //if a parent configuration was given, we can't use the cached system configuration
+			configuration = new PropertiesConfiguration(System.getProperties(), getEnvironmentConfiguration(parentConfiguration));
+		} else { //if no parent configuration is given, try to use a cached copy
+			configuration = systemConfiguration;
+			if(configuration == null) { //the race condition here is benign
+				configuration = new PropertiesConfiguration(System.getProperties(), getEnvironmentConfiguration());
+				systemConfiguration = configuration; //cache the system configuration
+			}
 		}
-		return systemConfiguration;
+		return configuration;
 	}
 
 	/**

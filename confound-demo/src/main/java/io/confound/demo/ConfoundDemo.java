@@ -39,8 +39,11 @@ public class ConfoundDemo {
 	public static void main(@Nonnull final String[] args) {
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		final Configuration config = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config")
-				.parentConfiguration(Confound.getSystemConfiguration()).buildConfiguration();
+		//the main configuration is from a file
+		final Configuration fileConfig = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config").buildConfiguration();
+
+		//the system configuration can override the file configuration
+		final Configuration config = Confound.getSystemConfiguration(fileConfig);
 
 		setDefaultConfiguration(config);
 
