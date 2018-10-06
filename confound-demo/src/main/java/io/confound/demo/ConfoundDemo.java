@@ -37,9 +37,13 @@ public class ConfoundDemo {
 	 * @param args Command-line arguments.
 	 */
 	public static void main(@Nonnull final String[] args) {
-		final Path configPath = Paths.get(System.getProperty("user.home"), ".confound-demo", "config.properties");
+		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		final Configuration config = new ManagedConfiguration(Confound.getSystemConfiguration(), FileSystemConfigurationManager.forPath(configPath));
+		//TODO probably reverse the order of parameters and put the parent configuration second/last
+
+		final Configuration config = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config")
+				.parentConfiguration(Confound.getSystemConfiguration()).buildConfiguration();
+
 		setDefaultConfiguration(config);
 
 		System.out.println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));

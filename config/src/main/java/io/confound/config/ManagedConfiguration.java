@@ -29,18 +29,18 @@ import javax.annotation.*;
  */
 public class ManagedConfiguration extends AbstractParametersDecorator implements Configuration {
 
-	private final Optional<Configuration> parentConfiguration;
-
-	@Override
-	public Optional<Configuration> getParentConfiguration() {
-		return parentConfiguration;
-	}
-
 	private final ConfigurationManager configurationManager;
 
 	/** @return The associated configuration manager. */
 	protected ConfigurationManager getConfigurationManager() {
 		return configurationManager;
+	}
+
+	private final Optional<Configuration> parentConfiguration;
+
+	@Override
+	public Optional<Configuration> getParentConfiguration() {
+		return parentConfiguration;
 	}
 
 	/** The cached parameters serving as the decorated configuration. */
@@ -79,13 +79,13 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 
 	/**
 	 * Parent configuration constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param configurationManager The manager for loading and saving the configuration.
-	 * @throws NullPointerException if the given parent configuration is <code>null</code>.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
+	 * @throws NullPointerException if the given configuration manager <code>null</code>.
 	 */
-	public ManagedConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final ConfigurationManager configurationManager) {
-		this.parentConfiguration = Optional.ofNullable(parentConfiguration);
+	public ManagedConfiguration(@Nonnull final ConfigurationManager configurationManager, @Nullable final Configuration parentConfiguration) {
 		this.configurationManager = requireNonNull(configurationManager);
+		this.parentConfiguration = Optional.ofNullable(parentConfiguration);
 	}
 
 	/**

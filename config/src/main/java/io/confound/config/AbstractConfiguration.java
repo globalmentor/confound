@@ -39,7 +39,6 @@ public abstract class AbstractConfiguration implements Configuration {
 	/**
 	 * Parent configuration constructor.
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given parent configuration is <code>null</code>.
 	 */
 	public AbstractConfiguration(@Nullable final Configuration parentConfiguration) {
 		this.parentConfiguration = Optional.ofNullable(parentConfiguration);
