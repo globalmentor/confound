@@ -39,16 +39,16 @@ public class StringMapConfiguration extends AbstractStringConfiguration {
 	 * @throws NullPointerException if the given map is <code>null</code>.
 	 */
 	public StringMapConfiguration(@Nonnull final Map<String, String> map) {
-		this(null, map);
+		this(map, null);
 	}
 
 	/**
 	 * Parent configuration and map constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param map The map to back this configuration.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given map is <code>null</code>.
 	 */
-	public StringMapConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final Map<String, String> map) {
+	public StringMapConfiguration(@Nonnull final Map<String, String> map, @Nullable final Configuration parentConfiguration) {
 		super(parentConfiguration);
 		this.map = requireNonNull(map);
 	}

@@ -18,8 +18,7 @@ package io.confound.config.properties;
 
 import static java.util.Objects.*;
 
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import javax.annotation.*;
 
@@ -41,16 +40,16 @@ public class PropertiesConfiguration extends AbstractStringConfiguration {
 	 * @throws NullPointerException if the given properties is <code>null</code>.
 	 */
 	public PropertiesConfiguration(@Nonnull final Properties properties) {
-		this(null, properties);
+		this(properties, null);
 	}
 
 	/**
 	 * Parent configuration and properties constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param properties The properties to back this configuration.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given properties is <code>null</code>.
 	 */
-	public PropertiesConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final Properties properties) {
+	public PropertiesConfiguration(@Nonnull final Properties properties, @Nullable final Configuration parentConfiguration) {
 		super(parentConfiguration);
 		this.properties = requireNonNull(properties);
 	}

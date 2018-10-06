@@ -39,8 +39,6 @@ public class ConfoundDemo {
 	public static void main(@Nonnull final String[] args) {
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		//TODO probably reverse the order of parameters and put the parent configuration second/last
-
 		final Configuration config = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config")
 				.parentConfiguration(Confound.getSystemConfiguration()).buildConfiguration();
 

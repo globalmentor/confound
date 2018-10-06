@@ -90,7 +90,7 @@ public class Confound {
 	 */
 	public static Configuration getSystemConfiguration() {
 		if(systemConfiguration == null) { //the race condition here is benign
-			systemConfiguration = new PropertiesConfiguration(getEnvironmentConfiguration(), System.getProperties());
+			systemConfiguration = new PropertiesConfiguration(System.getProperties(), getEnvironmentConfiguration());
 		}
 		return systemConfiguration;
 	}

@@ -68,12 +68,11 @@ public class EnvironmentConfiguration extends StringMapConfiguration {
 	 * Requested keys will be normalized to match environment variable naming conventions.
 	 * </p>
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given environment map is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to environment variables.
 	 * @see System#getenv()
 	 */
 	public EnvironmentConfiguration(@Nullable final Configuration parentConfiguration) {
-		this(parentConfiguration, System.getenv());
+		this(System.getenv(), parentConfiguration);
 	}
 
 	/**
@@ -90,15 +89,15 @@ public class EnvironmentConfiguration extends StringMapConfiguration {
 
 	/**
 	 * Parent configuration with system environment constructor and normal names option.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param normalNames <code>true</code> if requested keys such as <code>foo.bar</code> should be normalized to match parameters using environment variable
 	 *          naming convention such as <code>FOO_BAR</code>.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given parent configuration and/or environment map is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to environment variables.
 	 * @see System#getenv()
 	 */
-	public EnvironmentConfiguration(@Nullable final Configuration parentConfiguration, final boolean normalNames) {
-		this(parentConfiguration, System.getenv(), normalNames);
+	public EnvironmentConfiguration(final boolean normalNames, @Nullable final Configuration parentConfiguration) {
+		this(System.getenv(), normalNames, parentConfiguration);
 	}
 
 	/**
@@ -118,12 +117,12 @@ public class EnvironmentConfiguration extends StringMapConfiguration {
 	 * <p>
 	 * Requested keys will be normalized to match environment variable naming conventions.
 	 * </p>
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param env The map representing the environment.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given environment map is <code>null</code>.
 	 */
-	public EnvironmentConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final Map<String, String> env) {
-		this(parentConfiguration, env, true);
+	public EnvironmentConfiguration(@Nonnull final Map<String, String> env, @Nullable final Configuration parentConfiguration) {
+		this(env, true, parentConfiguration);
 	}
 
 	/**
@@ -134,19 +133,19 @@ public class EnvironmentConfiguration extends StringMapConfiguration {
 	 * @throws NullPointerException if the given environment map is <code>null</code>.
 	 */
 	public EnvironmentConfiguration(@Nonnull final Map<String, String> env, final boolean normalNames) {
-		this(null, env, normalNames);
+		this(env, normalNames, null);
 	}
 
 	/**
 	 * Parent configuration and environment map constructor and normal names option.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @param env The map representing the environment.
 	 * @param normalNames <code>true</code> if requested keys such as <code>foo.bar</code> should be normalized to match parameters using environment variable
 	 *          naming convention such as <code>FOO_BAR</code>.
+	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given environment map is <code>null</code>.
 	 */
-	public EnvironmentConfiguration(@Nullable final Configuration parentConfiguration, @Nonnull final Map<String, String> env, final boolean normalNames) {
-		super(parentConfiguration, env);
+	public EnvironmentConfiguration(@Nonnull final Map<String, String> env, final boolean normalNames, @Nullable final Configuration parentConfiguration) {
+		super(env, parentConfiguration);
 		this.normalNames = normalNames;
 	}
 
