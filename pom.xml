@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.confound</groupId>
-	<artifactId>parent</artifactId>
+	<artifactId>confound_</artifactId>
 	<version>0.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
