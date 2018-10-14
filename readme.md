@@ -16,7 +16,7 @@ An application can easily integrate Confound configuration support with just a f
 
 1. Include the dependency `io.confound:confound:x.x.x`.
 2. Pass configuration information to the application using an environment variable such as `FOO_BAR` or a system property such as `foo.bar`.
-3. Call `Confound.getConfiguration().getXXX("foo.bar")` to retrieve the type of parameter you desire. _This will retrieve the system property `foo.bar` or, if not present, the environment variable `FOO\_BAR`, using the appropriate case automatically._
+3. Call `Confound.getConfiguration().getXXX("foo.bar")` to retrieve the type of parameter you desire. *This will retrieve the system property `foo.bar` or, if not present, the environment variable `FOO\_BAR`, using the appropriate case automatically.*
 
 Note: Confounded also provides a mixin interface `Confounded` that allows an instance of `MyClass` to call `getConfiguration().getXXX("foo.bar")`.  
 

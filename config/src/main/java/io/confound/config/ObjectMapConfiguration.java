@@ -24,21 +24,21 @@ import java.util.Optional;
 import javax.annotation.*;
 
 /**
- * Configuration implementation backed by a {@link Map} with string values.
+ * Configuration implementation backed by a {@link Map} with values stored as objects.
  * @author Garret Wilson
  * @see Map
  * @see Map#get(Object)
  */
-public class StringMapConfiguration extends AbstractStringConfiguration {
+public class ObjectMapConfiguration extends AbstractObjectConfiguration {
 
-	private final Map<String, String> map;
+	private final Map<String, ?> map;
 
 	/**
 	 * Map constructor.
 	 * @param map The map to back this configuration.
 	 * @throws NullPointerException if the given map is <code>null</code>.
 	 */
-	public StringMapConfiguration(@Nonnull final Map<String, String> map) {
+	public ObjectMapConfiguration(@Nonnull final Map<String, ?> map) {
 		this(map, null);
 	}
 
@@ -48,7 +48,7 @@ public class StringMapConfiguration extends AbstractStringConfiguration {
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given map is <code>null</code>.
 	 */
-	public StringMapConfiguration(@Nonnull final Map<String, String> map, @Nullable final Configuration parentConfiguration) {
+	public ObjectMapConfiguration(@Nonnull final Map<String, ?> map, @Nullable final Configuration parentConfiguration) {
 		super(parentConfiguration);
 		this.map = requireNonNull(map);
 	}
@@ -61,7 +61,7 @@ public class StringMapConfiguration extends AbstractStringConfiguration {
 
 	/** {@inheritDoc} This implementation delegates to {@link Map#get(Object)}. */
 	@Override
-	protected Optional<String> findParameterImpl(final String key) throws ConfigurationException {
+	protected Optional<Object> findParameterImpl(final String key) throws ConfigurationException {
 		return Optional.ofNullable(map.get(key));
 	}
 

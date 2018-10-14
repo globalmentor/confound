@@ -16,31 +16,31 @@
 
 package io.confound;
 
+import static java.util.Objects.*;
+
 import javax.annotation.*;
 
 import io.confound.config.*;
-import io.csar.*;
 
 /**
- * The concern for configuration.
- * <p>
- * Once this concern is acquired, it provides access to a specific {@link Configuration}.
- * </p>
+ * Default implementation of a configuration concern.
  * @author Garret Wilson
- * @see Csar
  */
-public interface ConfigurationConcern extends Concern {
+public class DefaultConfigurationConcern implements ConfigurationConcern {
 
-	@Override
-	public default Class<ConfigurationConcern> getConcernType() {
-		return ConfigurationConcern.class;
-	}
+	private final Configuration configuration;
 
 	/**
-	 * Retrieves the configured configuration.
-	 * @return The configured configuration.
-	 * @throws ConfigurationException if there is a configuration error.
+	 * Configuration constructor.
+	 * @param configuration The configuration to provide.
 	 */
-	public @Nonnull Configuration getConfiguration() throws ConfigurationException;
+	public DefaultConfigurationConcern(@Nonnull final Configuration configuration) {
+		this.configuration = requireNonNull(configuration);
+	}
+
+	@Override
+	public Configuration getConfiguration() throws ConfigurationException {
+		return configuration;
+	}
 
 }

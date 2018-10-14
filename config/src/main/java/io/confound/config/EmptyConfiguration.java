@@ -45,47 +45,47 @@ public final class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
-	public boolean hasParameter(String key) throws ConfigurationException {
-		return false;
+	public boolean hasParameter(final String key) throws ConfigurationException {
+		return getParentConfiguration().map(configuration -> Boolean.valueOf(configuration.hasParameter(key))).orElse(false);
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalParameter(String key) throws ConfigurationException {
+	public <T> Optional<T> getOptionalParameter(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalParameter(key));
 	}
 
 	@Override
-	public Optional<Double> getOptionalDouble(String key) throws ConfigurationException {
+	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key));
 	}
 
 	@Override
-	public Optional<Boolean> getOptionalBoolean(String key) throws ConfigurationException {
+	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key));
 	}
 
 	@Override
-	public Optional<Integer> getOptionalInt(String key) throws ConfigurationException {
+	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key));
 	}
 
 	@Override
-	public Optional<Long> getOptionalLong(String key) throws ConfigurationException {
+	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key));
 	}
 
 	@Override
-	public Optional<String> getOptionalString(String key) throws ConfigurationException {
+	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key));
 	}
 
 	@Override
-	public Optional<Path> getOptionalPath(String key) throws ConfigurationException {
+	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key));
 	}
 
 	@Override
-	public Optional<URI> getOptionalUri(String key) throws ConfigurationException {
+	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
 		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key));
 	}
 

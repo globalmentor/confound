@@ -36,14 +36,14 @@ public interface Parameters {
 	 * <p>
 	 * This method is primarily used to check the result of a parameter lookup call for the non-optional convenience parameter lookup versions.
 	 * </p>
-	 * @param <T> The type of parameter to check.
+	 * @param <P> The type of parameter to check.
 	 * @param parameter The retrieved parameter.
 	 * @param key The parameter key.
 	 * @return The retrieved parameter.
 	 * @throws MissingParameterException if the given parameter is not present.
 	 * @see Optional#isPresent()
 	 */
-	public default <T> T requireParameter(@Nonnull final Optional<T> parameter, @Nonnull final String key) throws MissingParameterException {
+	public default <P> P requireParameter(@Nonnull final Optional<P> parameter, @Nonnull final String key) throws MissingParameterException {
 		return parameter.orElseThrow(() -> new MissingParameterException(String.format("Missing parameter for key %s.", key), requireNonNull(key)));
 	}
 
@@ -59,7 +59,7 @@ public interface Parameters {
 
 	/**
 	 * Retrieves a general parameter.
-	 * @param <T> The type of parameter expected.
+	 * @param <P> The type of parameter expected.
 	 * @param key The parameter key.
 	 * @return The value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -67,20 +67,20 @@ public interface Parameters {
 	 * @throws MissingParameterException if no parameter is associated with the given key.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
-	public default @Nonnull <T> T getParameter(@Nonnull final String key) throws MissingParameterException, ConfigurationException {
+	public default @Nonnull <P> P getParameter(@Nonnull final String key) throws MissingParameterException, ConfigurationException {
 		return requireParameter(getOptionalParameter(key), key);
 	}
 
 	/**
 	 * Retrieves a general parameter that may not be present.
-	 * @param <T> The type of parameter expected.
+	 * @param <P> The type of parameter expected.
 	 * @param key The parameter key.
 	 * @return The optional value of the parameter associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
 	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
-	public <T> Optional<T> getOptionalParameter(@Nonnull final String key) throws ConfigurationException;
+	public <P> Optional<P> getOptionalParameter(@Nonnull final String key) throws ConfigurationException;
 
 	//Boolean
 

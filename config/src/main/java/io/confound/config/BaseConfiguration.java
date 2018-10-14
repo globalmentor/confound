@@ -25,16 +25,17 @@ import javax.annotation.*;
 /**
  * Abstract configuration implementation providing common base functionality.
  * <p>
- * An implementing subclass must override {@link #getOptionalStringImpl(String)} for local raw string retrieval.
+ * Concrete implementations must override {@link #findParameterImpl(String)}, and may also override {@link #hasParameterImpl(String)} for added efficiency.
  * </p>
  * <p>
  * This class provides a facility {@link #normalizeKey(String)} for modifying the requested key if necessary before ultimate retrieval via
- * {@link #getOptionalStringImpl(String)}. Most implementations will not need this facility, and will use the default implementation which uses the requested
- * key unmodified. In any case, the implementation must use the original key, not the normalized key, when delegating to the parent configuration, if any.
+ * {@link #findParameterImpl(String)}. Most implementations will not need this facility, and will use the default implementation which uses the requested key
+ * unmodified. In any case, the implementation must use the original key, not the normalized key, when delegating to the parent configuration, if any.
  * </p>
+ * @param <T> The type of values used in the underlying storage.
  * @author Garret Wilson
  */
-public abstract class BaseConfiguration extends AbstractConfiguration {
+public abstract class BaseConfiguration<T> extends AbstractConfiguration {
 
 	/**
 	 * Parent configuration constructor.
@@ -44,32 +45,11 @@ public abstract class BaseConfiguration extends AbstractConfiguration {
 		super(parentConfiguration);
 	}
 
-	/** {@inheritDoc} This implementation normalizes the key using {@link #normalizeKey(String)}. */
-	@Override
-	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return or(getOptionalDereferencedString(normalizeKey(key)), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
-	}
-
 	/**
-	 * Implementation for ultimately retrieving a string parameter.
+	 * Normalizes a requested key if required by this implementation.
 	 * <p>
-	 * This method must not fall back to parent configuration; only local strings must be returned.
+	 * The default implementation returns the key unmodified after checking for <code>null</code>.
 	 * </p>
-	 * <p>
-	 * This implementation delegates to {@link #getOptionalStringImpl(String)}.
-	 * </p>
-	 * @param key The parameter key.
-	 * @return The value of the string parameter associated with the given key.
-	 * @throws NullPointerException if the given key is <code>null</code>.
-	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
-	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
-	 */
-	protected final Optional<String> getOptionalDereferencedString(final String key) throws ConfigurationException {
-		return getOptionalStringImpl(key).map(this::dereferenceString); //get the string parameter and evaluate references before passing it back
-	}
-
-	/**
-	 * Normalizes a requested key if required by this implementation. The default implementation returns the key unmodified after checking for <code>null</code>.
 	 * @param key The parameter key.
 	 * @return The requested parameter key, modified as needed for lookup in this implementation.
 	 */
@@ -78,37 +58,94 @@ public abstract class BaseConfiguration extends AbstractConfiguration {
 	}
 
 	/**
-	 * Implementation for ultimately retrieving a raw string parameter.
+	 * Determines whether a parameter of some type exists for the given parameter key.
 	 * <p>
-	 * This method should usually be implemented but not called directly by other classes. Callers must invoke {@link #dereferenceString(String)} on the returned
-	 * string value.
+	 * This implementation normalizes the key and delegates to {@link #hasParameterImpl(String)}. Most subclasses should not override this method, and instead
+	 * override {@link #hasParameterImpl(String)}.
 	 * </p>
+	 * @param key The parameter key.
+	 * @return <code>true</code> if a parameter of type type could be retrieved from these parameters using the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
+	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
+	 */
+	@Override
+	public boolean hasParameter(@Nonnull final String key) throws ConfigurationException {
+		if(hasParameterImpl(normalizeKey(key))) {
+			return true;
+		}
+		//this may appear inefficient, but Boolean.valueOf() prevents new object creation so there is probably little overhead
+		return getParentConfiguration().map(configuration -> Boolean.valueOf(configuration.hasParameter(key))).orElse(false);
+	}
+
+	/**
+	 * Determines whether a parameter is present in the underlying storage.
 	 * <p>
 	 * The given parameter key is assumed to already be normalized, and should not be modified.
 	 * </p>
 	 * <p>
-	 * This method must not fall back to parent configuration; only local strings must be returned.
+	 * This method must not fall back to parent configuration; only local values must be returned.
 	 * </p>
-	 * @param key The exact parameter key.
-	 * @return The value of the parameter associated with the given key.
+	 * <p>
+	 * The default implementation delegates to {@link #findParameterImpl(String)}.
+	 * </p>
+	 * @param key The normalized parameter key.
+	 * @return <code>true</code> if a parameter of type type could be retrieved from these parameters using the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
-	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
+	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
 	 */
-	protected abstract Optional<String> getOptionalStringImpl(final String key) throws ConfigurationException;
+	protected boolean hasParameterImpl(@Nonnull final String key) throws ConfigurationException {
+		return findParameterImpl(key).isPresent();
+	}
 
 	/**
-	 * Evaluates and replaces any references in the given string.
+	 * {@inheritDoc}
 	 * <p>
-	 * This method does not need to be called if the underlying configuration implementation already supports expression replacement.
+	 * This implementation delegates to {@link #findParameter(String)}.
 	 * </p>
-	 * @param string The string for which expressions should be evaluated.
-	 * @return A string with expressions evaluated, which may be the original string.
-	 * @throws NullPointerException if the given string is <code>null</code>.
-	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
 	 */
-	protected @Nonnull String dereferenceString(@Nonnull final String string) {
-		return requireNonNull(string); //TODO implement; allow for dereference strategy
+	@Override
+	public <P> Optional<P> getOptionalParameter(final String key) throws ConfigurationException {
+		@SuppressWarnings("unchecked")
+		final Optional<P> optionalObject = (Optional<P>)findParameter(key);
+		return or(optionalObject, () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalParameter(key)));
 	}
+
+	/**
+	 * Tries to retrieves a general parameter from the underlying storage. The key need not be normalized; it will be normalized as necessary.
+	 * <p>
+	 * This method must not fall back to parent configuration; only local strings must be returned.
+	 * </p>
+	 * <p>
+	 * This is an internal API call that should be used by child classes to funnel requests to the underlying storage. Normally child classes will not override
+	 * this method, but override {@link #findParameterImpl(String)} instead.
+	 * </p>
+	 * @param key The parameter key, which may not be normalized.
+	 * @return The optional value of the parameter associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
+	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
+	 * @see #normalizeKey(String)
+	 */
+	protected Optional<T> findParameter(@Nonnull final String key) throws ConfigurationException {
+		return findParameterImpl(normalizeKey(key));
+	}
+
+	/**
+	 * Implementation to retrieves a general parameter that may not be present from the underlying storage.
+	 * <p>
+	 * The given parameter key is assumed to already be normalized, and should not be modified.
+	 * </p>
+	 * <p>
+	 * This method must not fall back to parent configuration; only local values must be returned.
+	 * </p>
+	 * @param key The normalized parameter key.
+	 * @return The optional value of the parameter associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified parameter.
+	 * @throws ConfigurationException if there is a parameter value stored in an invalid format.
+	 */
+	protected abstract Optional<T> findParameterImpl(@Nonnull final String key) throws ConfigurationException;
 
 }

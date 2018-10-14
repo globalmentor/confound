@@ -48,7 +48,6 @@ public class ConfoundDemo {
 		setDefaultConfiguration(config);
 
 		System.out.println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
-
 	}
 
 }

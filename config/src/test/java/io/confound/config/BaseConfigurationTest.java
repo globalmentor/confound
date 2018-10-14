@@ -32,15 +32,19 @@ public class BaseConfigurationTest {
 
 	/** @see BaseConfiguration#getOptionalString(String) */
 	@Test
-	public void testGetOptionalString() {
+	public void testFindOptionalParameter() {
 		//test direct configuration access
-		final BaseConfiguration parentConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
-		when(parentConfiguration.getOptionalStringImpl("foo")).thenReturn(Optional.of("bar"));
-		assertThat(parentConfiguration.getOptionalString("foo"), is(Optional.of("bar")));
+		@SuppressWarnings("unchecked")
+		final BaseConfiguration<String> parentConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
+		when(parentConfiguration.findParameterImpl("foo")).thenReturn(Optional.of("bar"));
+		assertThat(parentConfiguration.getOptionalParameter("foo"), is(Optional.of("bar")));
 		//test parent configuration fallback
-		final BaseConfiguration childConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
+		@SuppressWarnings("unchecked")
+		final BaseConfiguration<String> childConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
 		when(childConfiguration.getParentConfiguration()).thenReturn(Optional.of(parentConfiguration));
-		when(childConfiguration.getOptionalStringImpl("foo")).thenReturn(Optional.empty());
-		assertThat(childConfiguration.getOptionalString("foo"), is(Optional.of("bar")));
+		when(childConfiguration.findParameterImpl("foo")).thenReturn(Optional.empty());
+		assertThat(childConfiguration.getOptionalParameter("foo"), is(Optional.of("bar")));
 	}
+
+	//TODO add test of normalizeKey()
 }
