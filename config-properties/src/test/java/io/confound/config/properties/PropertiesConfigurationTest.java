@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
 
 import java.util.Properties;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 import static org.hamcrest.Matchers.*;
 import org.junit.*;
 
@@ -33,8 +34,14 @@ public class PropertiesConfigurationTest {
 	public void testProperties() {
 		final Properties properties = new Properties();
 		properties.setProperty("foo", "bar");
+		properties.put("flag", "true");
 		final PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration(properties);
+		assertThat(propertiesConfiguration.hasParameter("foo"), is(true));
 		assertThat(propertiesConfiguration.getString("foo"), is("bar"));
+		assertThat(propertiesConfiguration.hasParameter("flag"), is(true));
+		assertThat(propertiesConfiguration.getBoolean("flag"), is(true));
+		assertThat(propertiesConfiguration.hasParameter("none"), is(false));
+		assertThat(propertiesConfiguration.getOptionalParameter("none"), isEmpty());
 	}
 
 }

@@ -32,12 +32,11 @@ import io.confound.config.Configuration;
  * Tests of {@link XmlPropertiesConfigurationFileFormat}.
  * 
  * @author Garret Wilson
- *
  */
 public class XmlPropertiesConfigurationFileFormatTest {
 
 	/**
-	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream, Configuration)
+	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
 	@Test

@@ -44,5 +44,4 @@
 			<artifactId>hamcrest-library</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>

@@ -28,6 +28,20 @@ import io.confound.config.file.FileSystemConfigurationManager;
 
 /**
  * Demonstration of using Confound.
+ * <p>
+ * General demo of configuring and using Confound. To test Confound using this application, do one of the following:
+ * </p>
+ * <ul>
+ * <li>Set the environment variable <code>FOO</code>.</li>
+ * <li>Set the system property <code>foo</code>.</li>
+ * <li>Place a configuration file defining the <code>foo</code> parameter in <code>~/confound-demo</code> using one of the following file formats:
+ * <ul>
+ * <li>config.properties</li>
+ * <li>config.xml.properties</li>
+ * <li>config.turf</li>
+ * </ul>
+ * </li>
+ * </ul>
  * @author Garret Wilson
  */
 public class ConfoundDemo {

@@ -17,6 +17,7 @@
 package io.confound.config.file;
 
 import java.io.*;
+import java.nio.charset.CharacterCodingException;
 import java.util.Set;
 
 import javax.annotation.*;
@@ -54,6 +55,8 @@ public interface ConfigurationFileFormat {
 	 * @param inputStream The input stream from which the configuration will be loaded.
 	 * @return A new configuration, loaded from the given input stream.
 	 * @throws IOException if there is an error loading a configuration from the giving input stream.
+	 * @throws CharacterCodingException if the given input stream contains an invalid byte sequence for the charset indicated by the BOM; or if no BOM was
+	 *           present, an invalid byte sequence for the assumed charset, depending on the file format.
 	 * @see InputStream#markSupported()
 	 */
 	public default @Nonnull Configuration load(@Nonnull final InputStream inputStream) throws IOException {
@@ -72,6 +75,8 @@ public interface ConfigurationFileFormat {
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @return A new configuration, loaded from the given input stream.
 	 * @throws IOException if there is an error loading a configuration from the giving input stream.
+	 * @throws CharacterCodingException if the given input stream contains an invalid byte sequence for the charset indicated by the BOM; or if no BOM was
+	 *           present, an invalid byte sequence for the assumed charset, depending on the file format.
 	 * @see InputStream#markSupported()
 	 */
 	public @Nonnull Configuration load(@Nonnull final InputStream inputStream, @Nullable final Configuration parentConfiguration) throws IOException;

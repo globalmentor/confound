@@ -23,6 +23,10 @@
 			<groupId>io.confound</groupId>
 			<artifactId>confound-file</artifactId>
 		</dependency>
-	</dependencies>
 
+		<dependency>
+			<groupId>io.confound</groupId>
+			<artifactId>config-file-format-turf-provider</artifactId>
+		</dependency>
+	</dependencies>
 </project>
