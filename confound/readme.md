@@ -24,7 +24,7 @@ Other Confound implementations in addition to system and environment variables w
 
 ## Download
 
-This core Confound module is available in the Maven Central Repository as [io.confound:confound](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22oi.confound%22%20AND%20a%3A%22confound%22).
+This core Confound module is available in the Maven Central Repository as [io.confound:confound](https://search.maven.org/search?q=g:io.confound%20and%20a:confound).
 
 ## Issues
 

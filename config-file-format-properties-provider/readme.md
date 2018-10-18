@@ -6,7 +6,7 @@ This provider installs support for both traditional properties (`*.properties`) 
 
 ## Download
 
-Properties Configuration File Format Provider is available in the Maven Central Repository as [io.confound:config-file-format-properties](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22oi.confound%22%20AND%20a%3A%config-file-format-properties-provider%22).
+Properties Configuration File Format Provider is available in the Maven Central Repository as [io.confound:config-file-format-properties-provider](https://search.maven.org/search?q=g:io.confound%20and%20a:config-file-format-properties-provider).
 
 ## Issues
 

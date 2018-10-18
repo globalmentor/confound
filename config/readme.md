@@ -4,7 +4,7 @@ Confound's configuration module provide a base API for accessing configuration i
 
 ## Download
 
-Confound Configuration is available in the Maven Central Repository as [io.confound:config](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22oi.confound%22%20AND%20a%3A%22config%22).
+Confound Configuration is available in the Maven Central Repository as [io.confound:config](https://search.maven.org/search?q=g:io.confound%20and%20a:confound-config).
 
 ## Issues
 
