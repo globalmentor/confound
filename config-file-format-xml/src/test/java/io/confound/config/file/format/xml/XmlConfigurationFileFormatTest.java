@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.*;
 
 import io.confound.config.Configuration;
+import io.confound.config.MissingParameterException;
 import io.confound.config.file.format.xml.XmlConfigurationFileFormat;
 
 /**
@@ -39,9 +40,11 @@ public class XmlConfigurationFileFormatTest {
 	public static final String CONFIG_RESOURCE_NAME = "config.xml";
 
 	/**
+	 * Tests whether {@link XmlConfigurationFileFormat} is loading properties correctly.
+	 * 
 	 * @see XmlConfigurationFileFormat#load(InputStream, Configuration)
 	 * 
-	 * @throws IOException if there was an error preparing or loading the configuration.\
+	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
 	@Test
 	public void testLoad() throws IOException {
@@ -59,6 +62,24 @@ public class XmlConfigurationFileFormatTest {
 
 		assertThat(configuration.getString("company.address.state"), is("San Francisco"));
 		assertThat(configuration.getString("company.address.country"), is("United States of America"));
+	}
+
+	/**
+	 * Tests whether {@link XmlConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
+	 * 
+	 * @see XmlConfigurationFileFormat#load(InputStream, Configuration)
+	 * 
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test(expected = MissingParameterException.class)
+	public void testLoadNonExistingParameter() throws IOException {
+
+		final Configuration configuration;
+		try (final InputStream inputStream = getClass().getResourceAsStream("config.xml")) {
+			configuration = new XmlConfigurationFileFormat().load(inputStream);
+		}
+
+		configuration.getString("foobar");
 	}
 
 }
