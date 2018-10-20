@@ -18,9 +18,9 @@ package io.confound.config;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 import static org.hamcrest.Matchers.*;
 import org.junit.*;
 
@@ -34,8 +34,14 @@ public class StringMapConfigurationTest {
 	public void testMap() {
 		final Map<String, String> map = new HashMap<>();
 		map.put("foo", "bar");
+		map.put("flag", "true");
 		final StringMapConfiguration stringMapConfiguration = new StringMapConfiguration(map);
+		assertThat(stringMapConfiguration.hasParameter("foo"), is(true));
 		assertThat(stringMapConfiguration.getString("foo"), is("bar"));
+		assertThat(stringMapConfiguration.hasParameter("flag"), is(true));
+		assertThat(stringMapConfiguration.getBoolean("flag"), is(true));
+		assertThat(stringMapConfiguration.hasParameter("none"), is(false));
+		assertThat(stringMapConfiguration.getOptionalParameter("none"), isEmpty());
 	}
 
 }

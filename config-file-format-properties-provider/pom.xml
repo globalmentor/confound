@@ -19,5 +19,4 @@
 			<artifactId>config-file-format-properties</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>

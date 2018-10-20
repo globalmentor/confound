@@ -32,12 +32,11 @@ import io.confound.config.Configuration;
  * Tests of {@link PropertiesConfigurationFileFormat}.
  * 
  * @author Garret Wilson
- *
  */
 public class PropertiesConfigurationFileFormatTest {
 
 	/**
-	 * @see PropertiesConfigurationFileFormat#load(InputStream, Configuration)
+	 * @see PropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
 	@Test
