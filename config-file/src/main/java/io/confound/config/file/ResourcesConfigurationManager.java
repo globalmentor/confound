@@ -19,6 +19,7 @@ package io.confound.config.file;
 import static com.globalmentor.io.Filenames.*;
 import static com.globalmentor.java.Classes.*;
 import static com.globalmentor.java.Conditions.*;
+import static java.util.Collections.*;
 import static java.util.Objects.*;
 
 import java.io.*;
@@ -76,11 +77,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * @throws IllegalArgumentException if the given resource path does not include a filename.
 	 */
 	public ResourcesConfigurationManager(@Nonnull ClassLoader classLoader, @Nonnull final String resourcePath, final boolean required) {
-		super(defaultFileFormats(), required);
-		this.classLoader = requireNonNull(classLoader);
-		this.resourcePath = requireNonNull(resourcePath);
-		checkArgument(getResourceName(resourcePath).isPresent(), "Resource path %s does not contain a filename.", resourcePath);
-		this.resourceBaseName = null;
+		this(defaultFileFormats(), classLoader, resourcePath, null, required);
 	}
 
 	/**
@@ -105,11 +102,33 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 */
 	public ResourcesConfigurationManager(@Nonnull ClassLoader classLoader, @Nonnull final String resourceBasePath, @Nonnull final String resourceBaseName,
 			final boolean required) {
-		super(defaultFileFormats(), required);
+		this(defaultFileFormats(), classLoader, resourceBasePath, resourceBaseName, required);
+	}
+
+	/**
+	 * File formats, class loader, resource (base) path, resource base name, and optional required constructor.
+	 * @param fileFormats The file formats to support.
+	 * @param classLoader The class loader to use for loading a configuration resource.
+	 * @param resourcePath The configuration resource base path, relative to the classpath, not including configuration filename; or if no resource base name is
+	 *          specified, the full configuration resource path, relative to the classpath, including configuration filename.
+	 * @param resourceBaseName The base filename to use for the resource, not including extension, or <code>null</code> if the resource path should be considered
+	 *          the full configuration path.
+	 * @param required Whether the manager requires a configuration to be determined when loading.
+	 * @throws IllegalArgumentException if a resource base name is given and the given resource path includes a filename, or if a resource base name is not given
+	 *           and the resource path does not contain a filename.
+	 */
+	protected ResourcesConfigurationManager(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats, @Nonnull ClassLoader classLoader,
+			@Nonnull final String resourcePath, @Nonnull final String resourceBaseName, final boolean required) {
+		super(fileFormats, required);
 		this.classLoader = requireNonNull(classLoader);
-		this.resourcePath = requireNonNull(resourceBasePath);
-		checkArgument(!getResourceName(resourceBasePath).isPresent(), "Resource base path %s must end in a slash and cannot contain a filename.", resourcePath);
-		this.resourceBaseName = requireNonNull(resourceBaseName);
+		this.resourcePath = requireNonNull(resourcePath);
+		this.resourceBaseName = resourceBaseName;
+		final boolean resourcePathContainsName = getResourceName(resourcePath).isPresent();
+		if(resourceBaseName != null) {
+			checkArgument(!resourcePathContainsName, "Resource base path %s must end in a slash and cannot contain a filename.", resourcePath);
+		} else {
+			checkArgument(resourcePathContainsName, "Resource path %s does not contain a filename.", resourcePath);
+		}
 	}
 
 	/**
@@ -272,7 +291,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	/**
 	 * Builder for the manager.
 	 * <p>
-	 * By default the configuration will be required.
+	 * By default the configuration will be required. By default the file formats installed from their providers will be used if none are specified.
 	 * </p>
 	 * @author Garret Wilson
 	 */
@@ -290,7 +309,28 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 			return this;
 		}
 
-		private boolean required = false;
+		private Iterable<ConfigurationFileFormat> fileFormats = AbstractFileConfigurationManager.defaultFileFormats();
+
+		/**
+		 * Sets a single file format to be supported by the configuration manager.
+		 * @param fileFormat The file format to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormat(@Nonnull final ConfigurationFileFormat fileFormat) {
+			return fileFormats(singleton(requireNonNull(fileFormat)));
+		}
+
+		/**
+		 * Sets the file formats to be supported by the configuration manager.
+		 * @param fileFormats The file formats to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormats(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats) {
+			this.fileFormats = requireNonNull(fileFormats);
+			return this;
+		}
+
+		private boolean required = true;
 
 		/**
 		 * Sets whether the configuration file is required to be discovered.
@@ -413,9 +453,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 			}
 			assert resourcePath != null;
 
-			//the specified path will either be a base path and a base filename, or a complete path
-			return resourceBaseName != null ? new ResourcesConfigurationManager(classLoader, resourcePath, resourceBaseName, required)
-					: new ResourcesConfigurationManager(classLoader, resourcePath, required);
+			return new ResourcesConfigurationManager(fileFormats, classLoader, resourcePath, resourceBaseName, required);
 		}
 
 		/**

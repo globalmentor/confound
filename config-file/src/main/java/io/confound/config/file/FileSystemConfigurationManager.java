@@ -18,6 +18,7 @@ package io.confound.config.file;
 
 import static com.globalmentor.java.Conditions.*;
 import static java.nio.file.Files.*;
+import static java.util.Collections.*;
 import static java.util.Objects.*;
 
 import java.io.*;
@@ -65,7 +66,21 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * @param required Whether the manager requires a configuration to be determined when loading.
 	 */
 	public FileSystemConfigurationManager(@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier, final boolean required) {
-		super(defaultFileFormats(), required);
+		this(defaultFileFormats(), configurationFileCandidatePathsSupplier, required);
+	}
+
+	/**
+	 * File formats, candidate paths supplier, and optional required constructor.
+	 * <p>
+	 * The path supplier is allowed to throw {@link UncheckedIOException} when the stream is returned and during stream iteration.
+	 * </p>
+	 * @param fileFormats The file formats to support.
+	 * @param configurationFileCandidatePathsSupplier The strategy for determining candidate paths for finding a configuration.
+	 * @param required Whether the manager requires a configuration to be determined when loading.
+	 */
+	protected FileSystemConfigurationManager(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats,
+			@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier, final boolean required) {
+		super(fileFormats, required);
 		this.configurationFileCandidatePathsSupplier = requireNonNull(configurationFileCandidatePathsSupplier);
 	}
 
@@ -259,7 +274,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	/**
 	 * Builder for the manager.
 	 * <p>
-	 * By default the configuration will be optional.
+	 * By default the configuration will be optional. By default the file formats installed from their providers will be used if none are specified.
 	 * </p>
 	 * @author Garret Wilson
 	 */
@@ -274,6 +289,27 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public Builder parentConfiguration(@Nonnull Configuration parentConfiguration) {
 			this.parentConfiguration = requireNonNull(parentConfiguration);
+			return this;
+		}
+
+		/**
+		 * Sets a single file format to be supported by the configuration manager.
+		 * @param fileFormat The file format to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormat(@Nonnull final ConfigurationFileFormat fileFormat) {
+			return fileFormats(singleton(requireNonNull(fileFormat)));
+		}
+
+		private Iterable<ConfigurationFileFormat> fileFormats = AbstractFileConfigurationManager.defaultFileFormats();
+
+		/**
+		 * Sets the file formats to be supported by the configuration manager.
+		 * @param fileFormats The file formats to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormats(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats) {
+			this.fileFormats = requireNonNull(fileFormats);
 			return this;
 		}
 
@@ -380,7 +416,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public FileSystemConfigurationManager build() {
 			checkState(candidatePathsSupplier != null, "Configuration file candidate path(s) not specified.");
-			return new FileSystemConfigurationManager(candidatePathsSupplier, required);
+			return new FileSystemConfigurationManager(fileFormats, candidatePathsSupplier, required);
 		}
 
 		/**

@@ -68,6 +68,14 @@
 
 			<dependency>
 				<groupId>io.confound</groupId>
+				<artifactId>config</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
 				<artifactId>config-env</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
 			</dependency>
