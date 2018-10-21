@@ -18,10 +18,8 @@ package io.confound.config.file;
 
 import static java.util.Collections.*;
 import static java.util.Objects.*;
-import static java.util.stream.StreamSupport.*;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import javax.annotation.*;
 
@@ -40,12 +38,17 @@ public abstract class AbstractFileConfigurationManager extends AbstractConfigura
 	 * {@link ConfigurationFileFormat} class using the {@link ServiceLoader} mechanism.
 	 * @return The default configured configuration file formats.
 	 */
-	protected static Stream<ConfigurationFileFormat> defaultFileFormats() {
-		return stream(ServiceLoader.load(ConfigurationFileFormat.class).spliterator(), false);
+	protected static Iterable<ConfigurationFileFormat> defaultFileFormats() {
+		return ServiceLoader.load(ConfigurationFileFormat.class);
 	}
 
 	/** The map of registered file formats, associated with their filename extension suffixes. */
 	private Map<String, ConfigurationFileFormat> fileFormatsById;
+
+	/** @return The available file extensions, in no particular order, paired with the supporting file format. */
+	public Set<Map.Entry<String, ConfigurationFileFormat>> getFileFormatsByExtension() {
+		return fileFormatsById.entrySet();
+	}
 
 	/**
 	 * Determines the file format to use for the given filename extension.
@@ -76,7 +79,7 @@ public abstract class AbstractFileConfigurationManager extends AbstractConfigura
 	 * @param fileFormats The specific file formats to support.
 	 * @param required Whether the manager requires a configuration to be determined when loading.
 	 */
-	public AbstractFileConfigurationManager(@Nonnull final Stream<ConfigurationFileFormat> fileFormats, final boolean required) {
+	public AbstractFileConfigurationManager(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats, final boolean required) {
 		super(required);
 		//use a LinkedHashMap to remember the given order of file formats
 		final Map<String, ConfigurationFileFormat> fileFormatsById = new LinkedHashMap<>();

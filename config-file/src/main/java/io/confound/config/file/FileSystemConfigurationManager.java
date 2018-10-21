@@ -34,7 +34,7 @@ import io.clogr.Clogged;
 import io.confound.config.*;
 
 /**
- * A configuration factory that can load and parse a configuration from the file system.
+ * A configuration manager that can load and parse a configuration from the file system.
  * @author Garret Wilson
  */
 public class FileSystemConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
@@ -42,7 +42,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	/** The strategy for determining candidate paths for finding a configuration. */
 	private final Supplier<Stream<Path>> configurationFileCandidatePathsSupplier;
 
-	/** Information about the determined configuration path, or <code>null</code> if the configuration path has not been determined or has been validated. */
+	/** Information about the determined configuration path, or <code>null</code> if the configuration path has not been determined or has been invalidated. */
 	private PathInfo configurationPathInfo = null;
 
 	/**
@@ -93,6 +93,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		Path configurationPath = this.configurationPathInfo != null ? this.configurationPathInfo.getPath().orElse(null) : null;
 		ConfigurationFileFormat fileFormat = null; //we may determine the file format during searching the candidate paths, or directly
 		if(configurationPath == null || !isRegularFile(configurationPath)) { //find a configuration path if we don't already have one, or it doesn't exist anymore
+			configurationPath = null; //assume we can't find it (in case we had one and it no longer exists)
 			try {
 				try (final Stream<Path> candidatePaths = configurationFileCandidatePathsSupplier.get()) { //be sure to close the stream of paths
 					for(final Path candidatePath : (Iterable<Path>)candidatePaths::iterator) {
@@ -134,7 +135,6 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		}
 		this.configurationPathInfo = new PathInfo(configurationPath); //save our current configuration path; we are now no longer stale
 		return Optional.ofNullable(configuration);
-
 	}
 
 	/** {@inheritDoc} This implementation does not yet support saving configurations, and will throw an exception. */
