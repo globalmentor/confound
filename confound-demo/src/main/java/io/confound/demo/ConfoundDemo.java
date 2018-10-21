@@ -57,13 +57,11 @@ public class ConfoundDemo {
 	public static void main(@Nonnull final String[] args) {
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		//the main configuration is from resources
-		final Configuration resourcesConfig = new ResourcesConfigurationManager.Builder().contextClass(ConfoundDemo.class).candidateResourceBaseName("config")
-				.buildConfiguration();
+		//the main configuration is from resources with default base name "config.*"
+		final Configuration resourcesConfig = new ManagedConfiguration(ResourcesConfigurationManager.forClass(ConfoundDemo.class));
 
-		//the secondary configuration is from a file
-		final Configuration fileConfig = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config")
-				.parentConfiguration(resourcesConfig).buildConfiguration();
+		//the secondary configuration is from a file with default base filename "config.*"
+		final Configuration fileConfig = new ManagedConfiguration(FileSystemConfigurationManager.forDirectory(configDirectory), resourcesConfig);
 
 		//the system configuration can override the file configuration
 		final Configuration config = Confound.getSystemConfiguration(fileConfig);

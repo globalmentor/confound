@@ -42,6 +42,9 @@ import io.confound.config.*;
  */
 public class ResourcesConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
+	/** The default base name to use for determining a configuration resource. */
+	public static final String DEFAULT_BASE_NAME = "config";
+
 	/** The class loader to use in loading the configuration resource. */
 	private final ClassLoader classLoader;
 
@@ -277,6 +280,19 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	}
 
 	/**
+	 * Creates a configuration manager that loads a required configuration using the default base filename {@value #DEFAULT_BASE_NAME} relative to a class, using
+	 * the class' resource loader.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @return A configuration manager for determining a resource with the default base filename.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @see #forCandidateResourceBaseName(Class, String)
+	 * @see #DEFAULT_BASE_NAME
+	 */
+	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass) {
+		return forCandidateResourceBaseName(contextClass, DEFAULT_BASE_NAME);
+	}
+
+	/**
 	 * Creates a configuration manager that loads a required configuration using a resource base filename relative to a class, using the class' resource loader.
 	 * @param contextClass The class providing the resource context for loading.
 	 * @param resourceBaseName The base filename, such as <code>base</code>, to locate resources with extensions, such as <code>base.foo</code>, supported by
@@ -291,7 +307,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	/**
 	 * Builder for the manager.
 	 * <p>
-	 * By default the configuration will be required. By default the file formats installed from their providers will be used if none are specified.
+	 * By default the configuration will be required. The file formats installed from their providers will be used if none are specified.
 	 * </p>
 	 * @author Garret Wilson
 	 */

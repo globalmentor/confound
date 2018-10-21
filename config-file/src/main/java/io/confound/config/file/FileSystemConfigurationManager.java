@@ -40,6 +40,9 @@ import io.confound.config.*;
  */
 public class FileSystemConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
+	/** The default base filename to use for determining a file system resource. */
+	public static final String DEFAULT_BASE_FILENAME = "config";
+
 	/** The strategy for determining candidate paths for finding a configuration. */
 	private final Supplier<Stream<Path>> configurationFileCandidatePathsSupplier;
 
@@ -234,6 +237,18 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	}
 
 	/**
+	 * Creates a configuration manager that discovers an optional configuration file using the default base filename {@value #DEFAULT_BASE_FILENAME}.
+	 * @param directory The source directory for configuration file discovery.
+	 * @return A configuration manager to use a configuration file with the given base name.
+	 * @throws NullPointerException if the directory is <code>null</code>.
+	 * @see #forCandidateBaseFilename(Path, String)
+	 * @see #DEFAULT_BASE_FILENAME
+	 */
+	public static FileSystemConfigurationManager forDirectory(@Nonnull final Path directory) {
+		return forCandidateBaseFilename(directory, DEFAULT_BASE_FILENAME);
+	}
+
+	/**
 	 * Creates a configuration manager that discovers an optional configuration file using a base filename.
 	 * @param directory The source directory for configuration file discovery.
 	 * @param baseFilename The base filename, such as <code>base</code>, to return files with any extension, such as <code>base.foo</code> and
@@ -274,7 +289,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	/**
 	 * Builder for the manager.
 	 * <p>
-	 * By default the configuration will be optional. By default the file formats installed from their providers will be used if none are specified.
+	 * By default the configuration will be optional. The file formats installed from their providers will be used if none are specified.
 	 * </p>
 	 * @author Garret Wilson
 	 */
