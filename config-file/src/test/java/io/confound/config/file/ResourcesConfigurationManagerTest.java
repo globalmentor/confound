@@ -51,7 +51,7 @@ public class ResourcesConfigurationManagerTest {
 	@Test
 	public void testConfigResourceBaseName() throws IOException {
 		final Configuration configuration = new ResourcesConfigurationManager.Builder().fileFormat(new TestConfigurationFileFormat()).contextClass(getClass())
-				.candidateResourceBaseName(CONFIG_RESOURCE_BASE_NAME).buildConfiguration();
+				.resourceBaseName(CONFIG_RESOURCE_BASE_NAME).buildConfiguration();
 		assertThat(configuration.getString("test"), is("resources"));
 	}
 

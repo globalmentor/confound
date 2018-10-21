@@ -285,11 +285,11 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * @param contextClass The class providing the resource context for loading.
 	 * @return A configuration manager for determining a resource with the default base filename.
 	 * @throws NullPointerException if the context class is <code>null</code>.
-	 * @see #forCandidateResourceBaseName(Class, String)
+	 * @see #forResourceBaseName(Class, String)
 	 * @see #DEFAULT_BASE_NAME
 	 */
 	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass) {
-		return forCandidateResourceBaseName(contextClass, DEFAULT_BASE_NAME);
+		return forResourceBaseName(contextClass, DEFAULT_BASE_NAME);
 	}
 
 	/**
@@ -300,8 +300,8 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * @return A configuration manager for determining a resource with the given base filename.
 	 * @throws NullPointerException if the context class and/or resource base filename is <code>null</code>.
 	 */
-	public static ResourcesConfigurationManager forCandidateResourceBaseName(@Nonnull final Class<?> contextClass, @Nonnull final String resourceBaseName) {
-		return new Builder().contextClass(contextClass).candidateResourceBaseName(resourceBaseName).build();
+	public static ResourcesConfigurationManager forResourceBaseName(@Nonnull final Class<?> contextClass, @Nonnull final String resourceBaseName) {
+		return new Builder().contextClass(contextClass).resourceBaseName(resourceBaseName).build();
 	}
 
 	/**
@@ -394,7 +394,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		/**
 		 * Uses a complete path to a configuration resource relative to the classpath.
 		 * <p>
-		 * Overrides any resource candidate base filename or resource filename.
+		 * Overrides any resource base filename or resource filename.
 		 * </p>
 		 * @param resourcePath The complete resource path such as <code>com/example/foo.bar</code>, relative to the classpath, for loading a configuration file from
 		 *          class resources.
@@ -411,7 +411,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		/**
 		 * Uses a complete resource filename. A context class must be specified separately.
 		 * <p>
-		 * Overrides any resource path or resource candidate base filename.
+		 * Overrides any resource path or resource base filename.
 		 * </p>
 		 * @param resourceName The resource filename, such as <code>foo.bar</code> for loading a configuration resource relative to the given class.
 		 * @return This builder.
@@ -424,16 +424,16 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		}
 
 		/**
-		 * Uses a resource candidate base filename.
+		 * Uses a resource base filename.
 		 * <p>
-		 * Overrides any resource path or resource candidate base filename.
+		 * Overrides any resource path or resource base filename.
 		 * </p>
 		 * @param resourceBaseName The base filename, such as <code>base</code>, to locate resources with extensions, such as <code>base.foo</code>, supported by
 		 *          installed configuration file formats.
 		 * @return This builder.
 		 * @throws NullPointerException if the resource base filename is <code>null</code>.
 		 */
-		public Builder candidateResourceBaseName(@Nonnull final String resourceBaseName) {
+		public Builder resourceBaseName(@Nonnull final String resourceBaseName) {
 			this.resourcePath = null;
 			this.resourceName = null;
 			this.resourceBaseName = requireNonNull(resourceBaseName);
@@ -443,7 +443,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		/**
 		 * Builds a configuration manager.
 		 * @return A new manager built to these specifications.
-		 * @throws IllegalStateException if no candidate path(s) have been specified.
+		 * @throws IllegalStateException if no class loader could be determined and/or no path information has been specified.
 		 */
 		public ResourcesConfigurationManager build() {
 			//determine class loader
@@ -475,7 +475,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		/**
 		 * Builds a manage configured, managed by new resources configuration manager, and using the specified parent configuration, if any.
 		 * @return A new configuration managed by a manager built to these specifications.
-		 * @throws IllegalStateException if no candidate path(s) have been specified.
+		 * @throws IllegalStateException if no class loader could be determined and/or no path information has been specified.
 		 * @see #parentConfiguration(Configuration)
 		 */
 		public ManagedConfiguration buildConfiguration() {
