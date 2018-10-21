@@ -16,9 +16,11 @@
 
 package io.confound.config.urf;
 
+import static com.globalmentor.java.Conditions.*;
 import static java.util.Objects.*;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import javax.annotation.*;
 
@@ -56,16 +58,33 @@ public class UrfConfiguration extends AbstractObjectConfiguration {
 
 	//TODO override hasParameterImpl() if can be made more efficient
 
+	/** The delimiter for hierarchical keys. */
+	private static final char KEY_HIERARCHY_DELIMITER = '.'; //TODO consolidate; provide more Confound infrastructure for hierarchical configurations
+
+	/** The pattern for splitting out the segments of a potentially hierarchical key. */
+	private static final Pattern KEY_HIERARCHY_DELIMITER_PATTERN = Pattern.compile(Pattern.quote(String.valueOf(KEY_HIERARCHY_DELIMITER)));
+
+	/**
+	 * {@inheritDoc}
+	 * @throws IllegalArgumentException if the given key has subsequent delimiters, such as <code>"foo..bar"</code>.
+	 */
 	@Override
 	protected Optional<Object> findParameterImpl(final String key) throws ConfigurationException {
-		//TODO add support for hierarchical keys
-		if(root instanceof UrfObject) {
-			return ((UrfObject)root).getPropertyValue(key);
-		} else if(root instanceof Map) {
-			return Optional.ofNullable(((Map<?, ?>)root).get(requireNonNull(key)));
-		} else {
-			return Optional.empty();
+		Object object = root;
+		for(final String keySegment : KEY_HIERARCHY_DELIMITER_PATTERN.split(key, -1)) { //use -1 to subsequent delimiters by not discarding empty strings
+			checkArgument(!keySegment.isEmpty(), "Configuration key %s cannot have an empty hiararchy segment.", key);
+			if(object == null) { //if we can't go down further, continue validating the rest of the key before returning the value
+				continue;
+			}
+			if(object instanceof UrfObject) {
+				object = ((UrfObject)object).getPropertyValue(keySegment).orElse(null);
+			} else if(object instanceof Map) {
+				object = ((Map<?, ?>)object).get(requireNonNull(keySegment));
+			} else {
+				object = null;
+			}
 		}
+		return Optional.ofNullable(object);
 	}
 
 }
