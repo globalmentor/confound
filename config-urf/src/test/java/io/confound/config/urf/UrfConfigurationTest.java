@@ -37,6 +37,18 @@ public class UrfConfigurationTest {
 		final UrfObject urfObject = new UrfObject("Configuration");
 		urfObject.setPropertyValue("foo", "bar");
 		urfObject.setPropertyValue("flag", Boolean.TRUE);
+
+		final UrfObject org = new UrfObject("Company");
+		org.setPropertyValue("name", "Acme Company");
+		org.setPropertyValue("size", 123);
+
+		final UrfObject address = new UrfObject();
+		address.setPropertyValue("state", "NY");
+		address.setPropertyValue("country", "USA");
+
+		org.setPropertyValue("address", address);
+		urfObject.setPropertyValue("organization", org);
+
 		final UrfConfiguration urfConfiguration = new UrfConfiguration(urfObject);
 		assertThat(urfConfiguration.hasParameter("foo"), is(true));
 		assertThat(urfConfiguration.getString("foo"), is("bar"));
@@ -44,6 +56,12 @@ public class UrfConfigurationTest {
 		assertThat(urfConfiguration.getBoolean("flag"), is(true));
 		assertThat(urfConfiguration.hasParameter("none"), is(false));
 		assertThat(urfConfiguration.getOptionalParameter("none"), isEmpty());
+
+		assertThat(urfConfiguration.getString("organization.name"), is("Acme Company"));
+		assertThat(urfConfiguration.getInt("organization.size"), is(123));
+		assertThat(urfConfiguration.getString("organization.address.state"), is("NY"));
+		assertThat(urfConfiguration.hasParameter("organization.address.country"), is(true));
+		assertThat(urfConfiguration.getString("organization.address.country"), is("USA"));
 	}
 
 	@Test
@@ -58,6 +76,14 @@ public class UrfConfigurationTest {
 		assertThat(urfConfiguration.getBoolean("flag"), is(true));
 		assertThat(urfConfiguration.hasParameter("none"), is(false));
 		assertThat(urfConfiguration.getOptionalParameter("none"), isEmpty());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testEmptyKeySegmentError() {
+		final Map<String, Object> map = new HashMap<>();
+		map.put("foo", "bar");
+		final UrfConfiguration urfConfiguration = new UrfConfiguration(map);
+		urfConfiguration.getString("foo..bar");
 	}
 
 }
