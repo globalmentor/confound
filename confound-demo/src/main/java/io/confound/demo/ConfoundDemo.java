@@ -24,7 +24,7 @@ import javax.annotation.*;
 
 import io.confound.Confound;
 import io.confound.config.*;
-import io.confound.config.file.FileSystemConfigurationManager;
+import io.confound.config.file.*;
 
 /**
  * Demonstration of using Confound.
@@ -42,6 +42,10 @@ import io.confound.config.file.FileSystemConfigurationManager;
  * </ul>
  * </li>
  * </ul>
+ * <p>
+ * If no overriding configuration is given, this demo falls back to the built-in configuration file in the resources, which has <code>foo</code> set to
+ * <code>bar</code>.
+ * </p>
  * @author Garret Wilson
  */
 public class ConfoundDemo {
@@ -53,8 +57,13 @@ public class ConfoundDemo {
 	public static void main(@Nonnull final String[] args) {
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		//the main configuration is from a file
-		final Configuration fileConfig = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config").buildConfiguration();
+		//the main configuration is from resources
+		final Configuration resourcesConfig = new ResourcesConfigurationManager.Builder().contextClass(ConfoundDemo.class).candidateResourceBaseName("config")
+				.buildConfiguration();
+
+		//the secondary configuration is from a file
+		final Configuration fileConfig = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config")
+				.parentConfiguration(resourcesConfig).buildConfiguration();
 
 		//the system configuration can override the file configuration
 		final Configuration config = Confound.getSystemConfiguration(fileConfig);
