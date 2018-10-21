@@ -100,7 +100,7 @@ public class AppConfigurationConcernBuilder {
 		}
 		final Path directory = baseDirectory.resolve(appDataDirectory); //the app data directory can be relative or absolute
 
-		final Configuration fileSystemConfiguration = new FileSystemConfigurationManager.Builder().candidateBaseFilename(directory, configBaseFilename)
+		final Configuration fileSystemConfiguration = new FileSystemConfigurationManager.Builder().baseFilename(directory, configBaseFilename)
 				.buildConfiguration();
 
 		//TODO should we allow the system configuration to override the file system configuration?

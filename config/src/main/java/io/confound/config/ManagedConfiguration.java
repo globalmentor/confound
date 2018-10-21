@@ -78,7 +78,16 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 	}
 
 	/**
-	 * Parent configuration constructor.
+	 * Configuration manager constructor.
+	 * @param configurationManager The manager for loading and saving the configuration.
+	 * @throws NullPointerException if the given configuration manager <code>null</code>.
+	 */
+	public ManagedConfiguration(@Nonnull final ConfigurationManager configurationManager) {
+		this(configurationManager, null);
+	}
+
+	/**
+	 * Configuration manager and parent configuration constructor.
 	 * @param configurationManager The manager for loading and saving the configuration.
 	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @throws NullPointerException if the given configuration manager <code>null</code>.

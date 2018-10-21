@@ -18,6 +18,7 @@ package io.confound.config.file;
 
 import static com.globalmentor.java.Conditions.*;
 import static java.nio.file.Files.*;
+import static java.util.Collections.*;
 import static java.util.Objects.*;
 
 import java.io.*;
@@ -34,15 +35,18 @@ import io.clogr.Clogged;
 import io.confound.config.*;
 
 /**
- * A configuration factory that can load and parse a configuration from the file system.
+ * A configuration manager that can load and parse a configuration from the file system.
  * @author Garret Wilson
  */
 public class FileSystemConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
+	/** The default base filename to use for determining a file system resource. */
+	public static final String DEFAULT_BASE_FILENAME = "config";
+
 	/** The strategy for determining candidate paths for finding a configuration. */
 	private final Supplier<Stream<Path>> configurationFileCandidatePathsSupplier;
 
-	/** Information about the determined configuration path, or <code>null</code> if the configuration path has not been determined or has been validated. */
+	/** Information about the determined configuration path, or <code>null</code> if the configuration path has not been determined or has been invalidated. */
 	private PathInfo configurationPathInfo = null;
 
 	/**
@@ -65,7 +69,21 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * @param required Whether the manager requires a configuration to be determined when loading.
 	 */
 	public FileSystemConfigurationManager(@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier, final boolean required) {
-		super(defaultFileFormats(), required);
+		this(defaultFileFormats(), configurationFileCandidatePathsSupplier, required);
+	}
+
+	/**
+	 * File formats, candidate paths supplier, and optional required constructor.
+	 * <p>
+	 * The path supplier is allowed to throw {@link UncheckedIOException} when the stream is returned and during stream iteration.
+	 * </p>
+	 * @param fileFormats The file formats to support.
+	 * @param configurationFileCandidatePathsSupplier The strategy for determining candidate paths for finding a configuration.
+	 * @param required Whether the manager requires a configuration to be determined when loading.
+	 */
+	protected FileSystemConfigurationManager(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats,
+			@Nonnull Supplier<Stream<Path>> configurationFileCandidatePathsSupplier, final boolean required) {
+		super(fileFormats, required);
 		this.configurationFileCandidatePathsSupplier = requireNonNull(configurationFileCandidatePathsSupplier);
 	}
 
@@ -93,6 +111,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		Path configurationPath = this.configurationPathInfo != null ? this.configurationPathInfo.getPath().orElse(null) : null;
 		ConfigurationFileFormat fileFormat = null; //we may determine the file format during searching the candidate paths, or directly
 		if(configurationPath == null || !isRegularFile(configurationPath)) { //find a configuration path if we don't already have one, or it doesn't exist anymore
+			configurationPath = null; //assume we can't find it (in case we had one and it no longer exists)
 			try {
 				try (final Stream<Path> candidatePaths = configurationFileCandidatePathsSupplier.get()) { //be sure to close the stream of paths
 					for(final Path candidatePath : (Iterable<Path>)candidatePaths::iterator) {
@@ -134,7 +153,6 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		}
 		this.configurationPathInfo = new PathInfo(configurationPath); //save our current configuration path; we are now no longer stale
 		return Optional.ofNullable(configuration);
-
 	}
 
 	/** {@inheritDoc} This implementation does not yet support saving configurations, and will throw an exception. */
@@ -211,11 +229,23 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * </p>
 	 * @param configurationCandidatePaths The potential paths at which to find the configuration file.
 	 * @return A configuration manager for one of the files at the given paths.
-	 * @throws NullPointerException if one of the candidate paths is <code>null</code>.
+	 * @throws NullPointerException if one of the paths is <code>null</code>.
 	 * @throws IllegalArgumentException if no paths are given, or if one of the given paths has no filename.
 	 */
 	public static FileSystemConfigurationManager forCandidatePaths(@Nonnull final Path... configurationCandidatePaths) {
 		return new Builder().candidatePaths(configurationCandidatePaths).build();
+	}
+
+	/**
+	 * Creates a configuration manager that discovers an optional configuration file using the default base filename {@value #DEFAULT_BASE_FILENAME}.
+	 * @param directory The source directory for configuration file discovery.
+	 * @return A configuration manager to use a configuration file with the given base name.
+	 * @throws NullPointerException if the directory is <code>null</code>.
+	 * @see #forBaseFilename(Path, String)
+	 * @see #DEFAULT_BASE_FILENAME
+	 */
+	public static FileSystemConfigurationManager forDirectory(@Nonnull final Path directory) {
+		return forBaseFilename(directory, DEFAULT_BASE_FILENAME);
 	}
 
 	/**
@@ -226,8 +256,8 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * @return A configuration manager to use a configuration file with the given base name.
 	 * @throws NullPointerException if the directory and/or base filename is <code>null</code>.
 	 */
-	public static FileSystemConfigurationManager forCandidateBaseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename) {
-		return new Builder().candidateBaseFilename(directory, baseFilename).build();
+	public static FileSystemConfigurationManager forBaseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename) {
+		return new Builder().baseFilename(directory, baseFilename).build();
 	}
 
 	/**
@@ -241,8 +271,8 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * @return A configuration manager to use a configuration file matched by the given filename glob.
 	 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
 	 */
-	public static FileSystemConfigurationManager forCandidateFilenameGlob(@Nonnull final Path directory, @Nonnull final String filenameGlob) {
-		return new Builder().candidateFilenameGlob(directory, filenameGlob).build();
+	public static FileSystemConfigurationManager forFilenameGlob(@Nonnull final Path directory, @Nonnull final String filenameGlob) {
+		return new Builder().filenameGlob(directory, filenameGlob).build();
 	}
 
 	/**
@@ -252,14 +282,14 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * @return A configuration manager to use a configuration file matched by the given filename pattern.
 	 * @throws NullPointerException if the directory and/or filename pattern is <code>null</code>.
 	 */
-	public static FileSystemConfigurationManager forCandidateFilenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern) {
-		return new Builder().candidateFilenamePattern(directory, filenamePattern).build();
+	public static FileSystemConfigurationManager forFilenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern) {
+		return new Builder().filenamePattern(directory, filenamePattern).build();
 	}
 
 	/**
 	 * Builder for the manager.
 	 * <p>
-	 * By default the configuration will be optional.
+	 * By default the configuration will be optional. The file formats installed from their providers will be used if none are specified.
 	 * </p>
 	 * @author Garret Wilson
 	 */
@@ -274,6 +304,27 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public Builder parentConfiguration(@Nonnull Configuration parentConfiguration) {
 			this.parentConfiguration = requireNonNull(parentConfiguration);
+			return this;
+		}
+
+		/**
+		 * Sets a single file format to be supported by the configuration manager.
+		 * @param fileFormat The file format to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormat(@Nonnull final ConfigurationFileFormat fileFormat) {
+			return fileFormats(singleton(requireNonNull(fileFormat)));
+		}
+
+		private Iterable<ConfigurationFileFormat> fileFormats = AbstractFileConfigurationManager.defaultFileFormats();
+
+		/**
+		 * Sets the file formats to be supported by the configuration manager.
+		 * @param fileFormats The file formats to support.
+		 * @return This builder.
+		 */
+		public Builder fileFormats(@Nonnull final Iterable<ConfigurationFileFormat> fileFormats) {
+			this.fileFormats = requireNonNull(fileFormats);
 			return this;
 		}
 
@@ -321,8 +372,8 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 * @return This builder.
 		 * @throws NullPointerException if the directory and/or base filename is <code>null</code>.
 		 */
-		public Builder candidateBaseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename) {
-			return candidateFilenamePattern(directory, Pattern.compile(Pattern.quote(baseFilename) + "\\..+"));
+		public Builder baseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename) {
+			return filenamePattern(directory, Pattern.compile(Pattern.quote(baseFilename) + "\\..+"));
 		}
 
 		/**
@@ -336,7 +387,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 * @return This builder.
 		 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
 		 */
-		public Builder candidateFilenameGlob(@Nonnull final Path directory, @Nonnull final String filenameGlob) {
+		public Builder filenameGlob(@Nonnull final Path directory, @Nonnull final String filenameGlob) {
 			final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + filenameGlob);
 			candidatePathsSupplier = () -> {
 				try {
@@ -358,7 +409,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 * @return This builder.
 		 * @throws NullPointerException if the directory and/or filename pattern is <code>null</code>.
 		 */
-		public Builder candidateFilenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern) {
+		public Builder filenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern) {
 			final Matcher filenamePatternMatcher = filenamePattern.matcher(""); //create a reusable matcher TODO make more efficient using a wrapper class
 			candidatePathsSupplier = () -> {
 				try {
@@ -380,7 +431,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 */
 		public FileSystemConfigurationManager build() {
 			checkState(candidatePathsSupplier != null, "Configuration file candidate path(s) not specified.");
-			return new FileSystemConfigurationManager(candidatePathsSupplier, required);
+			return new FileSystemConfigurationManager(fileFormats, candidatePathsSupplier, required);
 		}
 
 		/**
