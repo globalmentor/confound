@@ -19,15 +19,18 @@ package io.confound.demo;
 import static io.confound.Confound.*;
 
 import java.nio.file.*;
+import java.util.*;
 
 import javax.annotation.*;
 
-import io.confound.Confound;
+import io.confound.*;
 import io.confound.config.*;
 import io.confound.config.file.*;
+import io.csar.Csar;
 
 /**
- * Demonstration of using Confound.
+ * Demonstration of using Confound for system properties, environment variables, class resources, and files; as well as creating separate configuration contexts
+ * using Csar.
  * <p>
  * General demo of configuring and using Confound. To test Confound using this application, do one of the following:
  * </p>
@@ -55,6 +58,8 @@ public class ConfoundDemo {
 	 * @param args Command-line arguments.
 	 */
 	public static void main(@Nonnull final String[] args) {
+
+		//#default configuration
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
 		//the main configuration is from resources with default base name "config.*"
@@ -68,7 +73,20 @@ public class ConfoundDemo {
 
 		setDefaultConfiguration(config);
 
-		System.out.println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		//#local configuration
+		final Map<String, Object> localConfigMap = new HashMap<String, Object>(); //TODO use Java 9 Map.of()
+		localConfigMap.put("foo", "some other value");
+		final Configuration localConfig = new ObjectMapConfiguration(localConfigMap);
+		//Java 9+: final Configuration localConfig = new ObjectMapConfiguration(Map.of("foo", "some other value"));
+		final ConfigurationConcern localConfigConcern = new DefaultConfigurationConcern(localConfig);
+
+		//#print "foo" value in two separate contexts
+		System.out.println(String.format("By default foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+
+		Csar.run(localConfigConcern, () -> {
+			System.out.println(String.format("In another context foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		});
+
 	}
 
 }
