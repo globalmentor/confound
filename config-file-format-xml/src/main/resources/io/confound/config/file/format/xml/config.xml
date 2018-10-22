@@ -1,0 +1,12 @@
+<config>
+	<name>Jane</name>
+	<lastName>Doe</lastName>
+	<alias>JDoe</alias>
+	<company>
+		<name>GlobalMentor, Inc.</name>
+		<address>
+			<state>San Francisco</state>
+			<country>United States of America</country>
+		</address>
+	</company>
+</config>
