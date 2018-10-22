@@ -38,6 +38,13 @@
 			<organization>GlobalMentor, Inc.</organization>
 			<organizationUrl>http://www.globalmentor.com/</organizationUrl>
 		</developer>
+
+		<developer>
+			<name>Magno N A Cruz</name>
+			<email>magno@globalmentor.com</email>
+			<organization>GlobalMentor, Inc.</organization>
+			<organizationUrl>http://www.globalmentor.com/</organizationUrl>
+		</developer>
 	</developers>
 
 	<scm>
