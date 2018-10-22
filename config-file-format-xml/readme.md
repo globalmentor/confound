@@ -4,7 +4,7 @@ File format implementation for XML files.
 
 ## Download
 
-Properties Configuration File Format is available in the Maven Central Repository as [io.confound:config-file-format-xml](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22oi.confound%22%20AND%20a%3A%config-file-format-xml%22).
+Properties Configuration File Format is available in the Maven Central Repository as [io.confound:config-file-format-xml](https://search.maven.org/search?q=g:io.confound%20and%20a:config-file-format-xml).
 
 ## Issues
 

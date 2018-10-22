@@ -18,6 +18,28 @@
 	<url>https://confound.io/</url>
 	<inceptionYear>2018</inceptionYear>
 
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>GlobalMentor, Inc.</name>
+		<url>http://www.globalmentor.com/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Garret Wilson</name>
+			<email>garret@globalmentor.com</email>
+			<organization>GlobalMentor, Inc.</organization>
+			<organizationUrl>http://www.globalmentor.com/</organizationUrl>
+		</developer>
+	</developers>
+
 	<scm>
 		<connection>scm:git:https://bitbucket.org/globalmentor/confound.git</connection>
 		<developerConnection>scm:git:https://bitbucket.org/globalmentor/confound.git</developerConnection>

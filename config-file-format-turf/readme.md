@@ -12,4 +12,4 @@ Issues tracked by [JIRA](https://globalmentor.atlassian.net/projects/CONFOUND).
 
 ## Changelog
 
-- 0.5.0: First release.
+- 0.6.0: First release.

@@ -6,7 +6,7 @@ This provider installs support for XML file formats.
 
 ## Download
 
-XML Configuration File Format Provider is available in the Maven Central Repository as [io.confound:config-file-format-xml](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22oi.confound%22%20AND%20a%3A%config-file-format-xml-provider%22).
+XML Configuration File Format Provider is available in the Maven Central Repository as [io.confound:config-file-format-xml-provider](https://search.maven.org/search?q=g:io.confound%20and%20a:config-file-format-xml-provider).
 
 ## Issues
 
