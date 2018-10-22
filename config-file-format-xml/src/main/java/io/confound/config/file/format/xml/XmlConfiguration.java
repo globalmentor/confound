@@ -64,25 +64,24 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 	}
 
 	@Override
-	protected Optional<String> findParameterImpl(@Nonnull String key) throws ConfigurationException {
+	protected Optional<String> findParameterImpl(@Nonnull final String key) throws ConfigurationException {
 		requireNonNull(key, "The key for the object to be looked up cannot be null.");
 
 		Node parentNode = xmlDocument.getDocumentElement();
 
-		while(key.contains(HIERARCHY_DELIMITER)) {
-			final String currentKey = key.substring(0, key.indexOf(HIERARCHY_DELIMITER));
+		String keySegment = key;
+
+		// TODO improve key splitting algorithm.
+
+		while(keySegment.contains(HIERARCHY_DELIMITER)) {
+			final String currentKey = keySegment.substring(0, keySegment.indexOf(HIERARCHY_DELIMITER));
 
 			parentNode = getChildNode(parentNode, currentKey);
 
-			key = key.substring(key.indexOf(HIERARCHY_DELIMITER) + 1, key.length());
+			keySegment = keySegment.substring(keySegment.indexOf(HIERARCHY_DELIMITER) + 1);
 		}
 
-		// if the key does have a hierarchy, then we pass it the last level, as we already traversed to its closest parent node.
-		// if the key does not have a hierarchy, then we just pass it the key itself.
-		final Node childNode = getChildNode(parentNode,
-				key.contains(HIERARCHY_DELIMITER) ? key.substring(key.lastIndexOf(HIERARCHY_DELIMITER), key.length()) : key);
-
-		return Optional.ofNullable(childNode).map(Node::getTextContent);
+		return Optional.ofNullable(getChildNode(parentNode, keySegment)).map(Node::getTextContent);
 	}
 
 	/**
