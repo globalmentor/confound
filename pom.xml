@@ -47,7 +47,7 @@
 	</scm>
 
 	<properties>
-		<urf.version>0.3.0-SNAPSHOT</urf.version>
+		<urf.version>0.2.0</urf.version>
 	</properties>
 
 	<modules>
