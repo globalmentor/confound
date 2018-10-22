@@ -22,6 +22,15 @@ import javax.annotation.*;
 
 /**
  * Demonstration of using Confound in an application.
+ * <p>
+ * This application demonstrates using a single <code>confound-app-provider</code> dependency to automatically discover an application data directory in
+ * <code>app.data.dir</code>, indicated as a system property or as an environment variable. The directory can be absolute or relative to the user home
+ * directory. The configuration file will be discovered in that directory with the base filename <code>config</code> and an extension based upon the file format
+ * providers installed.
+ * </p>
+ * <p>
+ * By default properties files and XML properties files are supported.
+ * </p>
  * @author Garret Wilson
  */
 public class ConfoundAppDemo {

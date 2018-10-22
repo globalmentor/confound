@@ -24,10 +24,28 @@ import javax.annotation.*;
 
 import io.confound.Confound;
 import io.confound.config.*;
-import io.confound.config.file.FileSystemConfigurationManager;
+import io.confound.config.file.*;
 
 /**
  * Demonstration of using Confound.
+ * <p>
+ * General demo of configuring and using Confound. To test Confound using this application, do one of the following:
+ * </p>
+ * <ul>
+ * <li>Set the environment variable <code>FOO</code>.</li>
+ * <li>Set the system property <code>foo</code>.</li>
+ * <li>Place a configuration file defining the <code>foo</code> parameter in <code>~/.confound-demo</code> using one of the following file formats:
+ * <ul>
+ * <li>config.properties</li>
+ * <li>config.xml.properties</li>
+ * <li>config.turf</li>
+ * </ul>
+ * </li>
+ * </ul>
+ * <p>
+ * If no overriding configuration is given, this demo falls back to the built-in configuration file in the resources, which has <code>foo</code> set to
+ * <code>bar</code>.
+ * </p>
  * @author Garret Wilson
  */
 public class ConfoundDemo {
@@ -39,8 +57,11 @@ public class ConfoundDemo {
 	public static void main(@Nonnull final String[] args) {
 		final Path configDirectory = Paths.get(System.getProperty("user.home"), ".confound-demo");
 
-		//the main configuration is from a file
-		final Configuration fileConfig = new FileSystemConfigurationManager.Builder().candidateBaseFilename(configDirectory, "config").buildConfiguration();
+		//the main configuration is from resources with default base name "config.*"
+		final Configuration resourcesConfig = new ManagedConfiguration(ResourcesConfigurationManager.forClass(ConfoundDemo.class));
+
+		//the secondary configuration is from a file with default base filename "config.*"
+		final Configuration fileConfig = new ManagedConfiguration(FileSystemConfigurationManager.forDirectory(configDirectory), resourcesConfig);
 
 		//the system configuration can override the file configuration
 		final Configuration config = Confound.getSystemConfiguration(fileConfig);

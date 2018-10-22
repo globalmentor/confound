@@ -24,7 +24,7 @@ Other Confound implementations in addition to system and environment variables w
 
 ## Download
 
-Confound is available in the Maven Central Repository in group [io.confoud](https://search.maven.org/#search|ga|1|g%3A%22io.confound%22).
+Confound is available in the Maven Central Repository in group [io.confoud](https://search.maven.org/search?q=g:io.confound).
 
 ## Issues
 

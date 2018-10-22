@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.globalmentor</groupId>
 		<artifactId>globalmentor-parent</artifactId>
-		<version>8.0.0</version>
+		<version>8.1.0</version>
 	</parent>
 
 	<groupId>io.confound</groupId>
@@ -26,6 +24,10 @@
 		<url>https://bitbucket.org/globalmentor/confound</url>
 	</scm>
 
+	<properties>
+		<urf.version>0.3.0-SNAPSHOT</urf.version>
+	</properties>
+
 	<modules>
 		<module>config</module>
 		<module>config-env</module>
@@ -34,7 +36,10 @@
 		<module>config-file-format-properties-provider</module>
 		<module>config-file-format-xml</module>
 		<module>config-file-format-xml-provider</module>
+		<module>config-file-format-turf</module>
+		<module>config-file-format-turf-provider</module>
 		<module>config-properties</module>
+		<module>config-urf</module>
 		<module>confound</module>
 		<module>confound-app</module>
 		<module>confound-app-provider</module>
@@ -48,7 +53,7 @@
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-core</artifactId>
-				<version>0.5.6-SNAPSHOT</version>
+				<version>0.5.6</version>
 			</dependency>
 
 			<dependency>
@@ -61,6 +66,14 @@
 				<groupId>io.confound</groupId>
 				<artifactId>config</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
+				<artifactId>config</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+				<type>test-jar</type>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>
@@ -101,7 +114,25 @@
 
 			<dependency>
 				<groupId>io.confound</groupId>
+				<artifactId>config-file-format-turf</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
+				<artifactId>config-file-format-turf-provider</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
 				<artifactId>config-properties</artifactId>
+				<version>0.6.0-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
+				<artifactId>config-urf</artifactId>
 				<version>0.6.0-SNAPSHOT</version>
 			</dependency>
 
@@ -134,7 +165,18 @@
 				<artifactId>csar</artifactId>
 				<version>0.7.0</version>
 			</dependency>
+
+			<dependency>
+				<groupId>io.urf</groupId>
+				<artifactId>urf-model</artifactId>
+				<version>${urf.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.urf</groupId>
+				<artifactId>turf</artifactId>
+				<version>${urf.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 </project>

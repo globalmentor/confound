@@ -20,11 +20,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>io.clogr</groupId>
 			<artifactId>clogr</artifactId>
 		</dependency>
@@ -49,5 +44,4 @@
 			<artifactId>hamcrest-library</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>

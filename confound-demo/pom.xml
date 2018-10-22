@@ -15,13 +15,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
+			<groupId>io.confound</groupId>
+			<artifactId>confound-file</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>io.confound</groupId>
-			<artifactId>confound-file</artifactId>
+			<artifactId>config-file-format-turf-provider</artifactId>
 		</dependency>
 
 		<dependency>
@@ -29,5 +29,4 @@
 			<artifactId>config-file-format-xml-provider</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>

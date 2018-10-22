@@ -15,11 +15,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>io.confound</groupId>
 			<artifactId>config</artifactId>
 		</dependency>
@@ -74,5 +69,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

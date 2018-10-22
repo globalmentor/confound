@@ -55,7 +55,7 @@ public class AppConfigurationConcernBuilder {
 	public static final String CONFIG_KEY_APP_DATA_DIR = "app.data.dir";
 
 	/** The base filename to use if none is specified. */
-	public static final String DEFAULT_CONFIG_BASE_FILENAME = "config";
+	public static final String DEFAULT_CONFIG_BASE_FILENAME = "config"; //TODO consolidate with new defaults in FileSystemConfigurationManager and elsewhere 
 
 	private Path baseDirectory = Paths.get(System.getProperty("user.home"));
 
@@ -100,8 +100,7 @@ public class AppConfigurationConcernBuilder {
 		}
 		final Path directory = baseDirectory.resolve(appDataDirectory); //the app data directory can be relative or absolute
 
-		final Configuration fileSystemConfiguration = new FileSystemConfigurationManager.Builder().candidateBaseFilename(directory, configBaseFilename)
-				.buildConfiguration();
+		final Configuration fileSystemConfiguration = new FileSystemConfigurationManager.Builder().baseFilename(directory, configBaseFilename).buildConfiguration();
 
 		//TODO should we allow the system configuration to override the file system configuration?
 
