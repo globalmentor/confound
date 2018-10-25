@@ -37,6 +37,9 @@ import io.confound.config.StringMapConfiguration;
  */
 public class XmlPropertiesConfigurationFileFormatTest {
 
+	/** The name of the test configuration file in the Java test resources. */
+	private static final String CONFIG_RESOURCE_NAME = "config.properties.xml";
+
 	/**
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
@@ -45,7 +48,7 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	public void testLoad() throws IOException {
 		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream);
 		}
 
@@ -67,7 +70,7 @@ public class XmlPropertiesConfigurationFileFormatTest {
 
 		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream, parentConfiguration);
 		}
 
@@ -85,7 +88,7 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	public void testLoadNonExistingParameter() throws IOException {
 		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream);
 		}
 

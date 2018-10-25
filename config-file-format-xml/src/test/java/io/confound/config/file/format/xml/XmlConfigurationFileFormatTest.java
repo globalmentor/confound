@@ -40,7 +40,7 @@ import io.confound.config.file.format.xml.XmlConfigurationFileFormat;
 public class XmlConfigurationFileFormatTest {
 
 	/** The name of the test configuration file in the Java test resources. */
-	public static final String CONFIG_RESOURCE_NAME = "config.xml";
+	private static final String CONFIG_RESOURCE_NAME = "config.xml";
 
 	/**
 	 * Tests whether {@link XmlConfigurationFileFormat} is loading properties correctly.
@@ -53,7 +53,7 @@ public class XmlConfigurationFileFormatTest {
 	public void testLoad() throws IOException {
 
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = new XmlConfigurationFileFormat().load(inputStream);
 		}
 
@@ -84,7 +84,7 @@ public class XmlConfigurationFileFormatTest {
 		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
 
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = new XmlConfigurationFileFormat().load(inputStream, parentConfiguration);
 		}
 
@@ -111,7 +111,7 @@ public class XmlConfigurationFileFormatTest {
 	public void testLoadNonExistingParameter() throws IOException {
 
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.xml")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = new XmlConfigurationFileFormat().load(inputStream);
 		}
 

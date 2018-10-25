@@ -37,6 +37,9 @@ import io.confound.config.StringMapConfiguration;
  */
 public class PropertiesConfigurationFileFormatTest {
 
+	/** The name of the test configuration file in the Java test resources. */
+	private static final String CONFIG_RESOURCE_NAME = "config.properties";
+
 	/**
 	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading correctly a value.
 	 * 
@@ -47,7 +50,7 @@ public class PropertiesConfigurationFileFormatTest {
 	public void testLoad() throws IOException {
 		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream);
 		}
 
@@ -71,7 +74,7 @@ public class PropertiesConfigurationFileFormatTest {
 
 		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream, parentConfiguration);
 		}
 
@@ -91,7 +94,7 @@ public class PropertiesConfigurationFileFormatTest {
 	public void testLoadNonExistingParameter() throws IOException {
 		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream);
 		}
 
