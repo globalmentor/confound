@@ -19,14 +19,16 @@ package io.confound.config.file.format.properties;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
+import io.confound.config.MissingParameterException;
+import io.confound.config.StringMapConfiguration;
 
 /**
  * Tests of {@link XmlPropertiesConfigurationFileFormat}.
@@ -35,31 +37,67 @@ import io.confound.config.Configuration;
  */
 public class XmlPropertiesConfigurationFileFormatTest {
 
+	/** The name of the test configuration file in the Java test resources. */
+	private static final String CONFIG_RESOURCE_NAME = "config.properties.xml";
+
 	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is loading correctly a value.
+	 * 
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
 	@Test
 	public void testLoad() throws IOException {
-		final Properties properties = new Properties();
-		properties.setProperty("foo", "bar");
-		properties.setProperty("test", "123");
-
-		final byte[] contents;
-		try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-			properties.storeToXML(outputStream, "test", UTF_8.name());
-			contents = outputStream.toByteArray();
-		}
-
 		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = new ByteArrayInputStream(contents)) {
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
 			configuration = format.load(inputStream);
 		}
 
 		assertThat(configuration.getString("foo"), is("bar"));
 		assertThat(configuration.getInt("test"), is(123));
-
 	}
 
+	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is loading properties correctly when a parent {@link Configuration} is provided.
+	 * 
+	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test
+	public void testLoadWithParentConfiguration() throws IOException {
+		//TODO use Java 9 Map.of()
+		final Map<String, String> parentConfigurationMap = new HashMap<>();
+		parentConfigurationMap.put("foobar", "foo+bar");
+
+		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
+
+		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
+			configuration = format.load(inputStream, parentConfiguration);
+		}
+
+		assertThat(configuration.getString("foo"), is("bar"));
+		assertThat(configuration.getInt("test"), is(123));
+
+		assertThat(configuration.getString("foobar"), is("foo+bar"));
+	}
+
+	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
+	 * 
+	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test(expected = MissingParameterException.class)
+	public void testLoadNonExistingParameter() throws IOException {
+		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
+			configuration = format.load(inputStream);
+		}
+
+		configuration.getString("foobar");
+	}
 }

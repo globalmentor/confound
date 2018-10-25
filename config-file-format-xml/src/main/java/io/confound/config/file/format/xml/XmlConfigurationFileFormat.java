@@ -49,7 +49,7 @@ public class XmlConfigurationFileFormat implements ConfigurationFileFormat {
 	public Configuration load(@Nonnull final InputStream inputStream, @Nullable final Configuration parentConfiguration) throws IOException {
 
 		try {
-			return new XmlConfiguration(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream));
+			return new XmlConfiguration(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream), parentConfiguration);
 		} catch(final SAXException | ParserConfigurationException exception) {
 			throw new IOException(exception);
 		}

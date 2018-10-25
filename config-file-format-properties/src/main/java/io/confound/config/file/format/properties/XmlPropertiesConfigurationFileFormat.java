@@ -54,7 +54,7 @@ public class XmlPropertiesConfigurationFileFormat implements ConfigurationFileFo
 	public Configuration load(final InputStream inputStream, final Configuration parentConfiguration) throws IOException {
 		final Properties properties = new Properties();
 		properties.loadFromXML(inputStream);
-		return new PropertiesConfiguration(properties);
+		return new PropertiesConfiguration(properties, parentConfiguration);
 	}
 
 }
