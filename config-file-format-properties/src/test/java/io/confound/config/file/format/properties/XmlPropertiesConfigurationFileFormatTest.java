@@ -41,6 +41,8 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	private static final String CONFIG_RESOURCE_NAME = "config.properties.xml";
 
 	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is loading correctly a value.
+	 * 
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
@@ -57,6 +59,8 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	}
 
 	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is loading properties correctly when a parent {@link Configuration} is provided.
+	 * 
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
@@ -81,6 +85,8 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	}
 
 	/**
+	 * Tests whether {@link XmlPropertiesConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
+	 * 
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */

@@ -59,7 +59,7 @@ public class PropertiesConfigurationFileFormatTest {
 	}
 
 	/**
-	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading correctly a value.
+	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading properties correctly when a parent {@link Configuration} is provided.
 	 * 
 	 * @see PropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
