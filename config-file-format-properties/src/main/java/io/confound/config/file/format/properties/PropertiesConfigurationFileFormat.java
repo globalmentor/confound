@@ -56,7 +56,7 @@ public class PropertiesConfigurationFileFormat implements ConfigurationFileForma
 	public Configuration load(final InputStream inputStream, final Configuration parentConfiguration) throws IOException {
 		final Properties properties = new Properties();
 		properties.load(new BOMInputStreamReader(inputStream, UTF_8)); //detect and default to UTF-8 
-		return new PropertiesConfiguration(properties);
+		return new PropertiesConfiguration(properties, parentConfiguration);
 	}
 
 }

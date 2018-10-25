@@ -19,12 +19,16 @@ package io.confound.config.file.format.turf;
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
+import io.confound.config.MissingParameterException;
+import io.confound.config.StringMapConfiguration;
 
 /**
  * Tests of {@link TurfConfigurationFileFormat}.
@@ -37,6 +41,8 @@ public class TurfConfigurationFileFormatTest {
 	public static final String CONFIG_RESOURCE_NAME = "config.turf";
 
 	/**
+	 * Tests whether {@link TurfConfigurationFileFormat} is loading correctly a value.
+	 * 
 	 * @see TurfConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
@@ -50,6 +56,48 @@ public class TurfConfigurationFileFormatTest {
 		assertThat(configuration.getString("foo"), is("bar"));
 		assertThat(configuration.getInt("test"), is(123));
 		assertThat(configuration.getBoolean("flag"), is(true));
+	}
+
+	/**
+	 * Tests whether {@link TurfConfigurationFileFormat} is loading correctly a value from its parent configuration, when not present in the given one.
+	 * 
+	 * @see TurfConfigurationFileFormat#load(InputStream, Configuration)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test
+	public void testLoadWithParentConfiguration() throws IOException {
+		//TODO use Java 9 Map.of()
+		final Map<String, String> parentConfigurationMap = new HashMap<>();
+		parentConfigurationMap.put("foobar", "foo+bar");
+
+		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
+
+		final TurfConfigurationFileFormat format = new TurfConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = new BufferedInputStream(getClass().getResourceAsStream(CONFIG_RESOURCE_NAME))) {
+			configuration = format.load(inputStream, parentConfiguration);
+		}
+		assertThat(configuration.getString("foo"), is("bar"));
+		assertThat(configuration.getInt("test"), is(123));
+		assertThat(configuration.getBoolean("flag"), is(true));
+
+		assertThat(configuration.getString("foobar"), is("foo+bar"));
+	}
+
+	/**
+	 * Tests whether {@link TurfConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
+	 * 
+	 * @see TurfConfigurationFileFormat#load(InputStream)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test(expected = MissingParameterException.class)
+	public void testLoadNonExistingParameter() throws IOException {
+		final TurfConfigurationFileFormat format = new TurfConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = new BufferedInputStream(getClass().getResourceAsStream(CONFIG_RESOURCE_NAME))) {
+			configuration = format.load(inputStream);
+		}
+		configuration.getString("foobar");
 	}
 
 }

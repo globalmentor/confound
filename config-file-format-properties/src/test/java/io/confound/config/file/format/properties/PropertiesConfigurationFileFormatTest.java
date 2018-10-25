@@ -19,14 +19,16 @@ package io.confound.config.file.format.properties;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.*;
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
+import io.confound.config.MissingParameterException;
+import io.confound.config.StringMapConfiguration;
 
 /**
  * Tests of {@link PropertiesConfigurationFileFormat}.
@@ -36,30 +38,64 @@ import io.confound.config.Configuration;
 public class PropertiesConfigurationFileFormatTest {
 
 	/**
+	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading correctly a value.
+	 * 
 	 * @see PropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
 	@Test
 	public void testLoad() throws IOException {
-		final Properties properties = new Properties();
-		properties.setProperty("foo", "bar");
-		properties.setProperty("test", "123");
-
-		final byte[] contents;
-		try (final StringWriter writer = new StringWriter()) {
-			properties.store(writer, "test");
-			contents = writer.toString().getBytes(UTF_8);
-		}
-
 		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
 		final Configuration configuration;
-		try (final InputStream inputStream = new ByteArrayInputStream(contents)) {
+		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
 			configuration = format.load(inputStream);
 		}
 
 		assertThat(configuration.getString("foo"), is("bar"));
 		assertThat(configuration.getInt("test"), is(123));
+	}
 
+	/**
+	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading correctly a value.
+	 * 
+	 * @see PropertiesConfigurationFileFormat#load(InputStream)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test
+	public void testLoadWithParentConfiguration() throws IOException {
+		//TODO use Java 9 Map.of()
+		final Map<String, String> parentConfigurationMap = new HashMap<>();
+		parentConfigurationMap.put("foobar", "foo+bar");
+
+		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
+
+		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
+			configuration = format.load(inputStream, parentConfiguration);
+		}
+
+		assertThat(configuration.getString("foo"), is("bar"));
+		assertThat(configuration.getInt("test"), is(123));
+
+		assertThat(configuration.getString("foobar"), is("foo+bar"));
+	}
+
+	/**
+	 * Tests whether {@link PropertiesConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
+	 * 
+	 * @see PropertiesConfigurationFileFormat#load(InputStream)
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 */
+	@Test(expected = MissingParameterException.class)
+	public void testLoadNonExistingParameter() throws IOException {
+		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
+		final Configuration configuration;
+		try (final InputStream inputStream = getClass().getResourceAsStream("config.properties")) {
+			configuration = format.load(inputStream);
+		}
+
+		configuration.getString("foobar");
 	}
 
 }
