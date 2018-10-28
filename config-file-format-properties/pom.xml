@@ -33,15 +33,5 @@
 			<groupId>io.confound</groupId>
 			<artifactId>config-properties</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-		</dependency>
 	</dependencies>
 </project>
