@@ -73,9 +73,7 @@ public interface ConfigurationManager {
 
 	/**
 	 * Invalidates any cached information about the managed configuration.
-	 * <p>
-	 * The default implementation does nothing.
-	 * </p>
+	 * @implSpec The default implementation does nothing.
 	 */
 	public default void invalidate() {
 	}

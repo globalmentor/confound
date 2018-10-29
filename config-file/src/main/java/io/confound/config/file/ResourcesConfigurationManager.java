@@ -148,10 +148,8 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation uses the existing configuration path if it has been determined. If the configuration path has not been determined, such as if this
-	 * manager has been invalidated using {@link #invalidate()}, it determines a new configuration path and updates the record.
-	 * </p>
+	 * @implSpec This implementation uses the existing configuration path if it has been determined. If the configuration path has not been determined, such as if
+	 *           this manager has been invalidated using {@link #invalidate()}, it determines a new configuration path and updates the record.
 	 */
 	@Override
 	public synchronized Optional<Configuration> loadConfiguration() throws IOException, ConfigurationException {

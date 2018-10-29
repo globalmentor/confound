@@ -50,10 +50,8 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation normalizes the key, delegates to {@link #findConfigurationValue(String)}, and then dereferences the string using
-	 * {@link #dereferenceString(String)}.
-	 * </p>
+	 * @implSpec This implementation normalizes the key, delegates to {@link #findConfigurationValue(String)}, and then dereferences the string using
+	 *           {@link #dereferenceString(String)}.
 	 * @see #dereferenceString(String)
 	 */
 	protected Optional<String> findConfigurationValue(@Nonnull final String key) throws ConfigurationException {
@@ -62,9 +60,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link Boolean#valueOf(String)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link Boolean#valueOf(String)}.
 	 */
 	@Override
 	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
@@ -73,9 +69,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link Double#valueOf(String)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link Double#valueOf(String)}.
 	 */
 	@Override
 	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
@@ -88,9 +82,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link Integer#valueOf(String)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link Integer#valueOf(String)}.
 	 */
 	@Override
 	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
@@ -103,9 +95,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link Long#valueOf(long)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link Long#valueOf(long)}.
 	 */
 	@Override
 	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
@@ -118,9 +108,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link URI#create(String)} and then resolves the path using {@link #resolvePath(Path)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link URI#create(String)} and then resolves the path using {@link #resolvePath(Path)}.
 	 */
 	@Override
 	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
@@ -133,9 +121,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation delegates to {@link #findConfigurationValue(String)}.
-	 * </p>
+	 * @implSpec This implementation delegates to {@link #findConfigurationValue(String)}.
 	 */
 	@Override
 	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
@@ -144,9 +130,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation parses the value using {@link URI#create(String)}.
-	 * </p>
+	 * @implSpec This implementation parses the value using {@link URI#create(String)}.
 	 */
 	@Override
 	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {

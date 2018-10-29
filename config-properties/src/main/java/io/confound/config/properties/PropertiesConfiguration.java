@@ -43,13 +43,19 @@ public class PropertiesConfiguration extends AbstractStringConfiguration {
 		this.properties = requireNonNull(properties);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Properties#contains(Object)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Properties#contains(Object)}.
+	 */
 	@Override
 	protected boolean hasConfigurationValueImpl(final String key) throws ConfigurationException {
 		return properties.containsKey(key);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Properties#getProperty(String)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Properties#getProperty(String)}.
+	 */
 	@Override
 	protected Optional<String> findConfigurationValueImpl(String key) throws ConfigurationException {
 		return Optional.ofNullable(properties.getProperty(key));

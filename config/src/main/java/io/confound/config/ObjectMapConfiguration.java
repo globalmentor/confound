@@ -42,13 +42,19 @@ public class ObjectMapConfiguration extends AbstractObjectConfiguration {
 		this.map = requireNonNull(map);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Map#containsKey(Object)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Map#containsKey(Object)}.
+	 */
 	@Override
 	protected boolean hasConfigurationValueImpl(final String key) throws ConfigurationException {
 		return map.containsKey(key);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Map#get(Object)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Map#get(Object)}.
+	 */
 	@Override
 	protected Optional<Object> findConfigurationValueImpl(final String key) throws ConfigurationException {
 		return Optional.ofNullable(map.get(key));

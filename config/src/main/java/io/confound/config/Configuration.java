@@ -228,9 +228,7 @@ public interface Configuration {
 	 * Resolves the given path as appropriate. Absolute paths should not be modified. Relative paths may be resolved to some standard or configured absolute path,
 	 * depending on the implementation. A common base path may be configured separately, stored elsewhere in the configuration, or encoded in the path string
 	 * itself for example.
-	 * <p>
-	 * The default implementation merely returns the given path.
-	 * </p>
+	 * @implSpec The default implementation merely returns the given path.
 	 * @param path The path to resolve.
 	 * @return A resolved form of the path if appropriate.
 	 */

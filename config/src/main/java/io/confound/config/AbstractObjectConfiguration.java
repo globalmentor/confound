@@ -53,9 +53,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
@@ -64,9 +62,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
@@ -75,9 +71,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
@@ -86,9 +80,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
@@ -97,10 +89,8 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation normalizes the key using {@link #normalizeKey(String)}, converts the value using {@link #convertValue(Optional, Class)}, and then
-	 * resolves the path using {@link #resolvePath(Path)}.
-	 * </p>
+	 * @implSpec This implementation normalizes the key using {@link #normalizeKey(String)}, converts the value using {@link #convertValue(Optional, Class)}, and
+	 *           then resolves the path using {@link #resolvePath(Path)}.
 	 */
 	@Override
 	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
@@ -109,9 +99,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
@@ -120,9 +108,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
-	 * </p>
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
 	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {

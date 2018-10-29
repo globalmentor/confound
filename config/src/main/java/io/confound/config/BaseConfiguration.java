@@ -41,9 +41,7 @@ public abstract class BaseConfiguration<T> extends AbstractConfiguration {
 
 	/**
 	 * Normalizes a requested key if required by this implementation.
-	 * <p>
-	 * The default implementation returns the key unmodified after checking for <code>null</code>.
-	 * </p>
+	 * @implSpec The default implementation returns the key unmodified after checking for <code>null</code>.
 	 * @param key The configuration key.
 	 * @return The requested configuration key, modified as needed for lookup in this implementation.
 	 */
