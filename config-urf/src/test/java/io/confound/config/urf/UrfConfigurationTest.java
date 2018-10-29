@@ -50,17 +50,17 @@ public class UrfConfigurationTest {
 		urfObject.setPropertyValue("organization", org);
 
 		final UrfConfiguration urfConfiguration = new UrfConfiguration(urfObject);
-		assertThat(urfConfiguration.hasParameter("foo"), is(true));
+		assertThat(urfConfiguration.hasConfigurationValue("foo"), is(true));
 		assertThat(urfConfiguration.getString("foo"), is("bar"));
-		assertThat(urfConfiguration.hasParameter("flag"), is(true));
+		assertThat(urfConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(urfConfiguration.getBoolean("flag"), is(true));
-		assertThat(urfConfiguration.hasParameter("none"), is(false));
-		assertThat(urfConfiguration.getOptionalParameter("none"), isEmpty());
+		assertThat(urfConfiguration.hasConfigurationValue("none"), is(false));
+		assertThat(urfConfiguration.getOptionalObject("none"), isEmpty());
 
 		assertThat(urfConfiguration.getString("organization.name"), is("Acme Company"));
 		assertThat(urfConfiguration.getInt("organization.size"), is(123));
 		assertThat(urfConfiguration.getString("organization.address.state"), is("NY"));
-		assertThat(urfConfiguration.hasParameter("organization.address.country"), is(true));
+		assertThat(urfConfiguration.hasConfigurationValue("organization.address.country"), is(true));
 		assertThat(urfConfiguration.getString("organization.address.country"), is("USA"));
 	}
 
@@ -70,12 +70,12 @@ public class UrfConfigurationTest {
 		map.put("foo", "bar");
 		map.put("flag", Boolean.TRUE);
 		final UrfConfiguration urfConfiguration = new UrfConfiguration(map);
-		assertThat(urfConfiguration.hasParameter("foo"), is(true));
+		assertThat(urfConfiguration.hasConfigurationValue("foo"), is(true));
 		assertThat(urfConfiguration.getString("foo"), is("bar"));
-		assertThat(urfConfiguration.hasParameter("flag"), is(true));
+		assertThat(urfConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(urfConfiguration.getBoolean("flag"), is(true));
-		assertThat(urfConfiguration.hasParameter("none"), is(false));
-		assertThat(urfConfiguration.getOptionalParameter("none"), isEmpty());
+		assertThat(urfConfiguration.hasConfigurationValue("none"), is(false));
+		assertThat(urfConfiguration.getOptionalObject("none"), isEmpty());
 	}
 
 	@Test(expected = IllegalArgumentException.class)

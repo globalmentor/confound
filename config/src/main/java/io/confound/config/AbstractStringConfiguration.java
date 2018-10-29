@@ -27,20 +27,12 @@ import javax.annotation.*;
 /**
  * Abstract configuration implementation for which the underlying storage is based solely on strings.
  * <p>
- * An implementing subclass must override {@link #findParameterImpl(String)} for local raw string retrieval. This class retrieves all parameters as stored in
- * string format accessed via {@link #findParameterImpl(String)}, and afterwards dereferenced using {@link #dereferenceString(String)}.
+ * An implementing subclass must override {@link #findConfigurationValueImpl(String)} for local raw string retrieval. This class retrieves all values as stored
+ * in string format accessed via {@link #findConfigurationValueImpl(String)}, and afterwards dereferenced using {@link #dereferenceString(String)}.
  * </p>
  * @author Garret Wilson
  */
 public abstract class AbstractStringConfiguration extends BaseConfiguration<String> {
-
-	/**
-	 * Parent configuration constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 */
-	public AbstractStringConfiguration(@Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
-	}
 
 	/**
 	 * Evaluates and replaces any references in the given string.
@@ -50,7 +42,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @param string The string for which expressions should be evaluated.
 	 * @return A string with expressions evaluated, which may be the original string.
 	 * @throws NullPointerException if the given string is <code>null</code>.
-	 * @throws ConfigurationException if an expression is not in the correct format, or if no parameter is associated with a key in an expression.
+	 * @throws ConfigurationException if an expression is not in the correct format, or if no value is associated with a key in an expression.
 	 */
 	protected @Nonnull String dereferenceString(@Nonnull final String string) {
 		return requireNonNull(string); //TODO implement; allow for dereference strategy
@@ -59,13 +51,13 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation normalizes the key, delegates to {@link #findParameter(String)}, and then dereferences the string using
+	 * This implementation normalizes the key, delegates to {@link #findConfigurationValue(String)}, and then dereferences the string using
 	 * {@link #dereferenceString(String)}.
 	 * </p>
 	 * @see #dereferenceString(String)
 	 */
-	protected Optional<String> findParameter(@Nonnull final String key) throws ConfigurationException {
-		return findParameterImpl(normalizeKey(key)).map(this::dereferenceString); //find the string parameter and evaluate references before passing it back
+	protected Optional<String> findConfigurationValue(@Nonnull final String key) throws ConfigurationException {
+		return findConfigurationValueImpl(normalizeKey(key)).map(this::dereferenceString); //find the string value and evaluate references before passing it back
 	}
 
 	/**
@@ -76,7 +68,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 */
 	@Override
 	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
-		return or(findParameter(key).map(Boolean::valueOf), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key)));
+		return findConfigurationValue(key).map(Boolean::valueOf);
 	}
 
 	/**
@@ -88,7 +80,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	@Override
 	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
 		try {
-			return or(findParameter(key).map(Double::valueOf), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key)));
+			return findConfigurationValue(key).map(Double::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}
@@ -103,7 +95,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	@Override
 	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
 		try {
-			return or(findParameter(key).map(Integer::valueOf), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key)));
+			return findConfigurationValue(key).map(Integer::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}
@@ -118,7 +110,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	@Override
 	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
 		try {
-			return or(findParameter(key).map(Long::valueOf), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key)));
+			return findConfigurationValue(key).map(Long::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}
@@ -133,8 +125,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	@Override
 	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
 		try {
-			return or(findParameter(key).map(Paths::get).map(this::resolvePath),
-					() -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key)));
+			return findConfigurationValue(key).map(Paths::get).map(this::resolvePath);
 		} catch(final IllegalArgumentException illegalArgumentException) {
 			throw new ConfigurationException(illegalArgumentException);
 		}
@@ -143,12 +134,12 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation delegates to {@link #findParameter(String)}.
+	 * This implementation delegates to {@link #findConfigurationValue(String)}.
 	 * </p>
 	 */
 	@Override
 	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return or(findParameter(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
+		return findConfigurationValue(key);
 	}
 
 	/**
@@ -160,7 +151,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	@Override
 	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
 		try {
-			return or(findParameter(key).map(URI::create), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key)));
+			return findConfigurationValue(key).map(URI::create);
 		} catch(final IllegalArgumentException illegalArgumentException) {
 			throw new ConfigurationException(illegalArgumentException);
 		}

@@ -37,7 +37,7 @@ import io.csar.Csar;
  * <ul>
  * <li>Set the environment variable <code>FOO</code>.</li>
  * <li>Set the system property <code>foo</code>.</li>
- * <li>Place a configuration file defining the <code>foo</code> parameter in <code>~/.confound-demo</code> using one of the following file formats:
+ * <li>Place a configuration file defining the <code>foo</code> key in <code>~/.confound-demo</code> using one of the following file formats:
  * <ul>
  * <li>config.properties</li>
  * <li>config.xml.properties</li>

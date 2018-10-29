@@ -33,27 +33,19 @@ import javax.annotation.*;
 public abstract class AbstractObjectConfiguration extends BaseConfiguration<Object> {
 
 	/**
-	 * Parent configuration constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 */
-	public AbstractObjectConfiguration(@Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
-	}
-
-	/**
-	 * Converts a parameter from its actual type in the underlying storage to the requested type.
+	 * Converts a configuration value from its actual type in the underlying storage to the requested type.
 	 * <p>
-	 * The current implementation merely checked to see if the parameter can be cast to the requested type; otherwise, an exception is thrown.
+	 * The current implementation merely checked to see if the value can be cast to the requested type; otherwise, an exception is thrown.
 	 * </p>
-	 * @param <C> The requested conversion type.
-	 * @param parameter The parameter to convert.
+	 * @param <T> The requested conversion type.
+	 * @param value The value to convert.
 	 * @param convertClass The class indicating the requested conversion type.
-	 * @return The parameter converted to the requested type.
-	 * @throws ConfigurationException if the parameter is present and cannot be converted to the requested type.
+	 * @return The value converted to the requested type.
+	 * @throws ConfigurationException if the value is present and cannot be converted to the requested type.
 	 */
-	protected <C> Optional<C> convertParameter(@Nonnull final Optional<Object> parameter, @Nonnull final Class<C> convertClass) throws ConfigurationException {
+	protected <T> Optional<T> convertValue(@Nonnull final Optional<Object> value, @Nonnull final Class<T> convertClass) throws ConfigurationException {
 		try {
-			return parameter.map(convertClass::cast);
+			return value.map(convertClass::cast);
 		} catch(final ClassCastException classCastException) {
 			throw new ConfigurationException(classCastException.getMessage(), classCastException);
 		}
@@ -62,83 +54,79 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), Boolean.class),
-				() -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key)));
+		return convertValue(findConfigurationValue(key), Boolean.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), Double.class),
-				() -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key)));
+		return convertValue(findConfigurationValue(key), Double.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), Integer.class), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key)));
+		return convertValue(findConfigurationValue(key), Integer.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), Long.class), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key)));
+		return convertValue(findConfigurationValue(key), Long.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation normalizes the key using {@link #normalizeKey(String)}, converts the value using {@link #convertParameter(Optional, Class)}, and then
+	 * This implementation normalizes the key using {@link #normalizeKey(String)}, converts the value using {@link #convertValue(Optional, Class)}, and then
 	 * resolves the path using {@link #resolvePath(Path)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), Path.class).map(this::resolvePath),
-				() -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key)));
+		return convertValue(findConfigurationValue(key), Path.class).map(this::resolvePath);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), String.class),
-				() -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
+		return convertValue(findConfigurationValue(key), String.class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * This implementation converts the value using {@link #convertParameter(Optional, Class)}.
+	 * This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 * </p>
 	 */
 	@Override
 	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
-		return or(convertParameter(findParameter(key), URI.class), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key)));
+		return convertValue(findConfigurationValue(key), URI.class);
 	}
 
 }

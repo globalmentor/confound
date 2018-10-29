@@ -45,12 +45,12 @@ public class TestConfigurationFileFormat implements ConfigurationFileFormat {
 	}
 
 	@Override
-	public Configuration load(final InputStream inputStream, final Configuration parentConfiguration) throws IOException {
+	public Configuration load(final InputStream inputStream) throws IOException {
 		final String line;
 		try (final BufferedReader bufferedReader = new BufferedReader(new BOMInputStreamReader(inputStream))) {
 			line = bufferedReader.readLine();
 		}
 		final String testValue = line != null ? line : ""; //account for an empty file
-		return new TestConfiguration(testValue, parentConfiguration);
+		return new TestConfiguration(testValue);
 	}
 }

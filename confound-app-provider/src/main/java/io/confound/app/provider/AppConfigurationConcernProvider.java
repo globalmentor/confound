@@ -25,7 +25,7 @@ import io.csar.ConcernProvider;
 /**
  * Automatically creates a configuration concern that loads a configuration file for an application.
  * <p>
- * The configuration manager will discover the configuration file in an <dfn>application data directory</dfn> indicated by a configuration parameter
+ * The configuration manager will discover the configuration file in an <dfn>application data directory</dfn> indicated by a configuration base filename
  * {@value AppConfigurationConcernBuilder#DEFAULT_CONFIG_BASE_FILENAME} indicated as a system property or as an environment variable. The indicated application
  * data directory may be absolute, or relative to the user home directory.
  * </p>

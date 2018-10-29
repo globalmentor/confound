@@ -42,28 +42,6 @@ public interface ConfigurationFileFormat {
 	public Set<String> getFilenameExtensionSuffixes();
 
 	/**
-	 * Loads a configuration from the given input stream with no parent configuration.
-	 * <p>
-	 * The given input stream is guaranteed to support {@link InputStream#mark(int)} and {@link InputStream#reset()}.
-	 * </p>
-	 * <p>
-	 * The input stream must <em>not</em> be closed by this method.
-	 * </p>
-	 * <p>
-	 * The default implementation delegates to {@link #load(InputStream, Configuration)} and shuld normally not be overridden.
-	 * </p>
-	 * @param inputStream The input stream from which the configuration will be loaded.
-	 * @return A new configuration, loaded from the given input stream.
-	 * @throws IOException if there is an error loading a configuration from the giving input stream.
-	 * @throws CharacterCodingException if the given input stream contains an invalid byte sequence for the charset indicated by the BOM; or if no BOM was
-	 *           present, an invalid byte sequence for the assumed charset, depending on the file format.
-	 * @see InputStream#markSupported()
-	 */
-	public default @Nonnull Configuration load(@Nonnull final InputStream inputStream) throws IOException {
-		return load(inputStream, null);
-	}
-
-	/**
 	 * Loads a configuration from the given input stream.
 	 * <p>
 	 * The given input stream is guaranteed to support {@link InputStream#mark(int)} and {@link InputStream#reset()}.
@@ -72,13 +50,12 @@ public interface ConfigurationFileFormat {
 	 * The input stream must <em>not</em> be closed by this method.
 	 * </p>
 	 * @param inputStream The input stream from which the configuration will be loaded.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @return A new configuration, loaded from the given input stream.
 	 * @throws IOException if there is an error loading a configuration from the giving input stream.
-	 * @throws CharacterCodingException if the given input stream contains an invalid byte sequence for the charset indicated by the BOM; or if no BOM was
-	 *           present, an invalid byte sequence for the assumed charset, depending on the file format.
+	 * @throws CharacterCodingException if the given input stream is for a text document and contains an invalid byte sequence for the charset indicated by the
+	 *           BOM; or if no BOM was present, an invalid byte sequence for the assumed charset, depending on the file format.
 	 * @see InputStream#markSupported()
 	 */
-	public @Nonnull Configuration load(@Nonnull final InputStream inputStream, @Nullable final Configuration parentConfiguration) throws IOException;
+	public @Nonnull Configuration load(@Nonnull final InputStream inputStream) throws IOException;
 
 }

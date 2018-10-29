@@ -29,7 +29,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import io.confound.config.AbstractStringConfiguration;
-import io.confound.config.Configuration;
 import io.confound.config.ConfigurationException;
 
 /**
@@ -49,22 +48,11 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 	 * @param xmlDocument The XML tree node to be used as the configuration.
 	 */
 	public XmlConfiguration(@Nonnull final Document xmlDocument) {
-		this(xmlDocument, null);
-	}
-
-	/**
-	 * Constructor of the configuration.
-	 * 
-	 * @param xmlDocument The XML tree node to be used as the configuration.
-	 * @param parentConfiguration The parent configuration.
-	 */
-	public XmlConfiguration(@Nonnull final Document xmlDocument, @Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
 		this.xmlDocument = requireNonNull(xmlDocument);
 	}
 
 	@Override
-	protected Optional<String> findParameterImpl(@Nonnull final String key) throws ConfigurationException {
+	protected Optional<String> findConfigurationValueImpl(@Nonnull final String key) throws ConfigurationException {
 		requireNonNull(key, "The key for the object to be looked up cannot be null.");
 
 		Node parentNode = xmlDocument.getDocumentElement();

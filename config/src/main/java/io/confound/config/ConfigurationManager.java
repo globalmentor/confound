@@ -32,7 +32,7 @@ public interface ConfigurationManager {
 	 * will throw an exception if a configuration cannot be determined; otherwise, it will return {@link Optional#empty()}.
 	 * @return <code>true</code> if a configuration is required and this manager will always return a configuration and throw an exception if one cannot be
 	 *         determined.
-	 * @see #loadConfiguration(Configuration)
+	 * @see #loadConfiguration()
 	 */
 	public boolean isRequired();
 
@@ -43,32 +43,31 @@ public interface ConfigurationManager {
 	 * resolution will work.
 	 * </p>
 	 * <p>
-	 * After this method has been called, it is expected that {@link #isStale(Parameters)} would return <code>false</code> barring concurrent changes.
+	 * After this method has been called, it is expected that {@link #isStale(Configuration)} would return <code>false</code> barring concurrent changes.
 	 * </p>
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @return The loaded configuration.
 	 * @throws IOException if an I/O error occurs loading the configuration.
 	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
 	 */
-	public Optional<Configuration> loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException;
+	public Optional<Configuration> loadConfiguration() throws IOException, ConfigurationException;
 
 	/**
 	 * Saves the configuration.
-	 * @param parameters The configuration parameters to save.
+	 * @param configuration The configuration to save.
 	 * @throws IOException if an error occurs saving the configuration.
 	 */
-	public void saveConfiguration(@Nonnull final Parameters parameters) throws IOException;
+	public void saveConfiguration(@Nonnull final Configuration configuration) throws IOException;
 
 	/**
 	 * Determines whether the currently managed configuration is stale.
 	 * <p>
 	 * If this method returns <code>false</code>, the caller should call {@link #invalidate()} before reloading the configuration.
 	 * </p>
-	 * @param parameters The currently loaded parameters.
-	 * @return Whether the currently loaded parameters are stale and need to be reloaded.
+	 * @param configuration The currently loaded configuration.
+	 * @return Whether the currently loaded configuration is stale and needs to be reloaded.
 	 * @throws IOException if an error occurs checking the configuration.
 	 */
-	public default boolean isStale(@Nonnull final Parameters parameters) throws IOException {
+	public default boolean isStale(@Nonnull final Configuration configuration) throws IOException {
 		return false;
 	}
 

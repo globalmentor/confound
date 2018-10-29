@@ -19,16 +19,13 @@ package io.confound.config.file.format.xml;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
-import io.confound.config.MissingParameterException;
-import io.confound.config.StringMapConfiguration;
+import io.confound.config.MissingConfigurationKeyException;
 import io.confound.config.file.format.xml.XmlConfigurationFileFormat;
 
 /**
@@ -68,47 +65,14 @@ public class XmlConfigurationFileFormatTest {
 	}
 
 	/**
-	 * Tests whether {@link XmlConfigurationFileFormat} is loading properties correctly when a parent {@link Configuration} is provided.
+	 * Tests whether {@link XmlConfigurationFileFormat} is failing when retrieving a value with a non-existent configuration key in the file.
 	 * 
 	 * @see XmlConfigurationFileFormat#load(InputStream, Configuration)
 	 * 
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
-	@Test
-	public void testLoadWithParentConfiguration() throws IOException {
-
-		//TODO use Java 9 Map.of()
-		final Map<String, String> parentConfigurationMap = new HashMap<>();
-		parentConfigurationMap.put("foo", "bar");
-
-		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
-
-		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
-			configuration = new XmlConfigurationFileFormat().load(inputStream, parentConfiguration);
-		}
-
-		assertThat(configuration.getString("name"), is("Jane"));
-		assertThat(configuration.getString("lastName"), is("Doe"));
-		assertThat(configuration.getString("alias"), is("JDoe"));
-
-		assertThat(configuration.getString("company.name"), is("GlobalMentor, Inc."));
-
-		assertThat(configuration.getString("company.address.state"), is("San Francisco"));
-		assertThat(configuration.getString("company.address.country"), is("United States of America"));
-
-		assertThat(configuration.getString("foo"), is("bar"));
-	}
-
-	/**
-	 * Tests whether {@link XmlConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
-	 * 
-	 * @see XmlConfigurationFileFormat#load(InputStream, Configuration)
-	 * 
-	 * @throws IOException if there was an error preparing or loading the configuration.
-	 */
-	@Test(expected = MissingParameterException.class)
-	public void testLoadNonExistingParameter() throws IOException {
+	@Test(expected = MissingConfigurationKeyException.class)
+	public void testLoadNonExistingConfigurationKey() throws IOException {
 
 		final Configuration configuration;
 		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {

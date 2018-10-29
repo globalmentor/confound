@@ -40,29 +40,18 @@ public class PropertiesConfiguration extends AbstractStringConfiguration {
 	 * @throws NullPointerException if the given properties is <code>null</code>.
 	 */
 	public PropertiesConfiguration(@Nonnull final Properties properties) {
-		this(properties, null);
-	}
-
-	/**
-	 * Parent configuration and properties constructor.
-	 * @param properties The properties to back this configuration.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given properties is <code>null</code>.
-	 */
-	public PropertiesConfiguration(@Nonnull final Properties properties, @Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
 		this.properties = requireNonNull(properties);
 	}
 
 	/** {@inheritDoc} This implementation delegates to {@link Properties#contains(Object)}. */
 	@Override
-	protected boolean hasParameterImpl(final String key) throws ConfigurationException {
+	protected boolean hasConfigurationValueImpl(final String key) throws ConfigurationException {
 		return properties.containsKey(key);
 	}
 
 	/** {@inheritDoc} This implementation delegates to {@link Properties#getProperty(String)}. */
 	@Override
-	protected Optional<String> findParameterImpl(String key) throws ConfigurationException {
+	protected Optional<String> findConfigurationValueImpl(String key) throws ConfigurationException {
 		return Optional.ofNullable(properties.getProperty(key));
 	}
 

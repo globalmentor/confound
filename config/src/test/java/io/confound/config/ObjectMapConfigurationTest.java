@@ -36,12 +36,12 @@ public class ObjectMapConfigurationTest {
 		map.put("foo", "bar");
 		map.put("flag", Boolean.TRUE);
 		final ObjectMapConfiguration objectMapConfiguration = new ObjectMapConfiguration(map);
-		assertThat(objectMapConfiguration.hasParameter("foo"), is(true));
+		assertThat(objectMapConfiguration.hasConfigurationValue("foo"), is(true));
 		assertThat(objectMapConfiguration.getString("foo"), is("bar"));
-		assertThat(objectMapConfiguration.hasParameter("flag"), is(true));
+		assertThat(objectMapConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(objectMapConfiguration.getBoolean("flag"), is(true));
-		assertThat(objectMapConfiguration.hasParameter("none"), is(false));
-		assertThat(objectMapConfiguration.getOptionalParameter("none"), isEmpty());
+		assertThat(objectMapConfiguration.hasConfigurationValue("none"), is(false));
+		assertThat(objectMapConfiguration.getOptionalObject("none"), isEmpty());
 	}
 
 }

@@ -107,7 +107,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * </p>
 	 */
 	@Override
-	public synchronized Optional<Configuration> loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException {
+	public synchronized Optional<Configuration> loadConfiguration() throws IOException, ConfigurationException {
 		Path configurationPath = this.configurationPathInfo != null ? this.configurationPathInfo.getPath().orElse(null) : null;
 		ConfigurationFileFormat fileFormat = null; //we may determine the file format during searching the candidate paths, or directly
 		if(configurationPath == null || !isRegularFile(configurationPath)) { //find a configuration path if we don't already have one, or it doesn't exist anymore
@@ -143,7 +143,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 			}
 			assert fileFormat != null : "We expect to have determined the configuration file format.";
 			try (final InputStream inputStream = new BufferedInputStream(newInputStream(configurationPath))) {
-				configuration = fileFormat.load(inputStream, parentConfiguration);
+				configuration = fileFormat.load(inputStream);
 			}
 		} else { //if we couldn't determine a configuration path
 			if(isRequired()) {
@@ -157,14 +157,14 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 
 	/** {@inheritDoc} This implementation does not yet support saving configurations, and will throw an exception. */
 	@Override
-	public void saveConfiguration(final Parameters parameters) throws IOException {
+	public void saveConfiguration(final Configuration configuration) throws IOException {
 		throw new UnsupportedOperationException("Saving configurations not yet supported.");
 	}
 
 	/** {@inheritDoc} This version additionally checks to see if whether there is a cached configuration path. */
 	@Override
-	public boolean isStale(final Parameters parameters) throws IOException {
-		if(super.isStale(parameters)) {
+	public boolean isStale(final Configuration configuration) throws IOException {
+		if(super.isStale(configuration)) {
 			return true;
 		}
 		if(configurationPathInfo == null) {

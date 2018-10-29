@@ -29,29 +29,10 @@ import javax.annotation.*;
  */
 public abstract class AbstractConfiguration implements Configuration {
 
-	private final Optional<Configuration> parentConfiguration;
-
-	@Override
-	public Optional<Configuration> getParentConfiguration() {
-		return parentConfiguration;
-	}
-
-	/**
-	 * Parent configuration constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 */
-	public AbstractConfiguration(@Nullable final Configuration parentConfiguration) {
-		this.parentConfiguration = Optional.ofNullable(parentConfiguration);
-	}
-
 	/**
 	 * Returns another another optional from a supplier if the given optional is not present.
-	 * <p>
-	 * This method is also found in <code>com.globalmentor.util.Optionals</code> and is repeated here to prevent an additional dependency.
-	 * </p>
-	 * <p>
-	 * This method duplicates functionality in Java 9.
-	 * </p>
+	 * @apiNote This method is also found in <code>com.globalmentor.util.Optionals</code> and is repeated here to prevent an additional dependency.
+	 * @apiNote This method duplicates functionality in Java 9.
 	 * @param <T> The type of value contained in the optional.
 	 * @param optional The optional to check
 	 * @param supplier The supplier of an alternative optional if the value of the given optional is not present.

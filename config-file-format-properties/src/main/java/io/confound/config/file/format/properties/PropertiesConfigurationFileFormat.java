@@ -20,7 +20,6 @@ import static java.nio.charset.StandardCharsets.*;
 import static java.util.Collections.*;
 
 import java.io.*;
-import java.nio.charset.CharacterCodingException;
 import java.util.*;
 
 import com.globalmentor.io.BOMInputStreamReader;
@@ -47,16 +46,11 @@ public class PropertiesConfigurationFileFormat implements ConfigurationFileForma
 		return singleton(EXTENSION_SUFFIX);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * @throws CharacterCodingException if the given input stream contains an invalid byte sequence for the charset indicated by the BOM; or if no BOM was
-	 *           present, an invalid byte sequence for the UTF-8 charset.
-	 */
 	@Override
-	public Configuration load(final InputStream inputStream, final Configuration parentConfiguration) throws IOException {
+	public Configuration load(final InputStream inputStream) throws IOException {
 		final Properties properties = new Properties();
 		properties.load(new BOMInputStreamReader(inputStream, UTF_8)); //detect and default to UTF-8 
-		return new PropertiesConfiguration(properties, parentConfiguration);
+		return new PropertiesConfiguration(properties);
 	}
 
 }
