@@ -42,21 +42,10 @@ public class UrfConfiguration extends AbstractObjectConfiguration {
 	 * @throws NullPointerException if the given object is <code>null</code>.
 	 */
 	public UrfConfiguration(@Nonnull final Object root) {
-		this(root, null);
-	}
-
-	/**
-	 * Parent configuration and map constructor.
-	 * @param root The root object of the URF object graph.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given object is <code>null</code>.
-	 */
-	public UrfConfiguration(@Nonnull final Object root, @Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
 		this.root = requireNonNull(root);
 	}
 
-	//TODO override hasParameterImpl() if can be made more efficient
+	//TODO override hasConfigurationKeyImpl() if can be made more efficient
 
 	/** The delimiter for hierarchical keys. */
 	private static final char KEY_HIERARCHY_DELIMITER = '.'; //TODO consolidate; provide more Confound infrastructure for hierarchical configurations
@@ -69,7 +58,7 @@ public class UrfConfiguration extends AbstractObjectConfiguration {
 	 * @throws IllegalArgumentException if the given key has subsequent delimiters, such as <code>"foo..bar"</code>.
 	 */
 	@Override
-	protected Optional<Object> findParameterImpl(final String key) throws ConfigurationException {
+	protected Optional<Object> findConfigurationValueImpl(final String key) throws ConfigurationException {
 		Object object = root;
 		for(final String keySegment : KEY_HIERARCHY_DELIMITER_PATTERN.split(key, -1)) { //use -1 to subsequent delimiters by not discarding empty strings
 			checkArgument(!keySegment.isEmpty(), "Configuration key %s cannot have an empty hiararchy segment.", key);

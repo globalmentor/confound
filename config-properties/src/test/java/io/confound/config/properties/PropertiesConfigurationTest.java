@@ -36,12 +36,12 @@ public class PropertiesConfigurationTest {
 		properties.setProperty("foo", "bar");
 		properties.put("flag", "true");
 		final PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration(properties);
-		assertThat(propertiesConfiguration.hasParameter("foo"), is(true));
+		assertThat(propertiesConfiguration.hasConfigurationValue("foo"), is(true));
 		assertThat(propertiesConfiguration.getString("foo"), is("bar"));
-		assertThat(propertiesConfiguration.hasParameter("flag"), is(true));
+		assertThat(propertiesConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(propertiesConfiguration.getBoolean("flag"), is(true));
-		assertThat(propertiesConfiguration.hasParameter("none"), is(false));
-		assertThat(propertiesConfiguration.getOptionalParameter("none"), isEmpty());
+		assertThat(propertiesConfiguration.hasConfigurationValue("none"), is(false));
+		assertThat(propertiesConfiguration.getOptionalObject("none"), isEmpty());
 	}
 
 }

@@ -42,15 +42,15 @@ public class TurfConfigurationFileFormat implements ConfigurationFileFormat {
 	}
 
 	@Override
-	public Configuration load(final InputStream inputStream, final Configuration parentConfiguration) throws IOException {
+	public Configuration load(final InputStream inputStream) throws IOException {
 		final TurfParser turfParser = new TurfParser(new SimpleGraphUrfProcessor()); //create a parser to parse TURF into a graph
 		return turfParser.parse(inputStream) //parse the TURF document TODO decide about TURF BOM support
 				//map any object wrappers to their wrapped objects TODO make sure the wrappers have no description
 				.map(object -> object instanceof ObjectUrfResource ? ((ObjectUrfResource<?>)object).getObject() : object)
 				//create an URF configuration backed by the object graph
-				.<Configuration>map(root -> new UrfConfiguration(root, parentConfiguration))
+				.<Configuration>map(root -> new UrfConfiguration(root))
 				//if the TURF document was empty
-				.orElseGet(() -> new EmptyConfiguration(parentConfiguration));
+				.orElse(Configuration.empty());
 	}
 
 }

@@ -148,13 +148,11 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 
 	/**
 	 * {@inheritDoc}
-	 * <p>
-	 * This implementation uses the existing configuration path if it has been determined. If the configuration path has not been determined, such as if this
-	 * manager has been invalidated using {@link #invalidate()}, it determines a new configuration path and updates the record.
-	 * </p>
+	 * @implSpec This implementation uses the existing configuration path if it has been determined. If the configuration path has not been determined, such as if
+	 *           this manager has been invalidated using {@link #invalidate()}, it determines a new configuration path and updates the record.
 	 */
 	@Override
-	public synchronized Optional<Configuration> loadConfiguration(@Nullable final Configuration parentConfiguration) throws IOException, ConfigurationException {
+	public synchronized Optional<Configuration> loadConfiguration() throws IOException, ConfigurationException {
 		ConfigurationFileFormat fileFormat = null; //we may determine the file format during searching the candidate paths, or directly
 		String configurationPath = this.configurationResourceInfo != null ? this.configurationResourceInfo.getPath().orElse(null) : null;
 		URL configurationResourceUrl = configurationPath != null ? classLoader.getResource(configurationPath) : null; //we retrieve a URL to the resource to determine if it exists
@@ -193,7 +191,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 			assert configurationResourceUrl != null : "We expect to have determined the configuration resource URL.";
 			assert fileFormat != null : "We expect to have determined the configuration file format.";
 			try (final InputStream inputStream = new BufferedInputStream(configurationResourceUrl.openStream())) {
-				configuration = fileFormat.load(inputStream, parentConfiguration);
+				configuration = fileFormat.load(inputStream);
 			}
 		} else { //if we couldn't determine a configuration path
 			if(isRequired()) {
@@ -207,14 +205,14 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 
 	/** {@inheritDoc} This implementation does not yet support saving configurations, and will throw an exception. */
 	@Override
-	public void saveConfiguration(final Parameters parameters) throws IOException {
+	public void saveConfiguration(final Configuration configuration) throws IOException {
 		throw new UnsupportedOperationException("Saving configurations not yet supported.");
 	}
 
 	/** {@inheritDoc} This version additionally checks to see if whether there is a cached configuration resource path. */
 	@Override
-	public boolean isStale(final Parameters parameters) throws IOException {
-		if(super.isStale(parameters)) {
+	public boolean isStale(final Configuration configuration) throws IOException {
+		if(super.isStale(configuration)) {
 			return true;
 		}
 		if(configurationResourceInfo == null) {

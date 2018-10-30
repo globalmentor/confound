@@ -20,73 +20,62 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import javax.annotation.*;
-
 /**
  * A configuration implementation that contains no definitions.
- * <p>
- * This implementation will automatically delegate to the parent configuration, if any.
- * </p>
  * @author Garret Wilson
  */
-public final class EmptyConfiguration extends AbstractConfiguration {
+final class EmptyConfiguration extends AbstractConfiguration {
 
-	/** No-argument constructor. */
-	public EmptyConfiguration() {
-		this(null);
-	}
+	/** The singleton instance of an empty configuration. */
+	public static final Configuration INSTANCE = new EmptyConfiguration();
 
-	/**
-	 * Optional parent configuration constructor.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 */
-	public EmptyConfiguration(@Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
+	/** This class cannot be publicly instantiated. */
+	private EmptyConfiguration() {
 	}
 
 	@Override
-	public boolean hasParameter(final String key) throws ConfigurationException {
-		return getParentConfiguration().map(configuration -> Boolean.valueOf(configuration.hasParameter(key))).orElse(false);
+	public boolean hasConfigurationValue(final String key) throws ConfigurationException {
+		return false;
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalParameter(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalParameter(key));
+	public <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key));
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
-		return getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key));
+		return Optional.empty();
 	}
 
 }

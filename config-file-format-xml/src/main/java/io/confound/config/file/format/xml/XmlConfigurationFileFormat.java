@@ -46,10 +46,10 @@ public class XmlConfigurationFileFormat implements ConfigurationFileFormat {
 	}
 
 	@Override
-	public Configuration load(@Nonnull final InputStream inputStream, @Nullable final Configuration parentConfiguration) throws IOException {
+	public Configuration load(@Nonnull final InputStream inputStream) throws IOException {
 
 		try {
-			return new XmlConfiguration(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream), parentConfiguration);
+			return new XmlConfiguration(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(inputStream));
 		} catch(final SAXException | ParserConfigurationException exception) {
 			throw new IOException(exception);
 		}
