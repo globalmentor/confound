@@ -39,29 +39,24 @@ public class StringMapConfiguration extends AbstractStringConfiguration {
 	 * @throws NullPointerException if the given map is <code>null</code>.
 	 */
 	public StringMapConfiguration(@Nonnull final Map<String, String> map) {
-		this(map, null);
-	}
-
-	/**
-	 * Parent configuration and map constructor.
-	 * @param map The map to back this configuration.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given map is <code>null</code>.
-	 */
-	public StringMapConfiguration(@Nonnull final Map<String, String> map, @Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
 		this.map = requireNonNull(map);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Map#containsKey(Object)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Map#containsKey(Object)}.
+	 */
 	@Override
-	protected boolean hasParameterImpl(final String key) throws ConfigurationException {
+	protected boolean hasConfigurationValueImpl(final String key) throws ConfigurationException {
 		return map.containsKey(key);
 	}
 
-	/** {@inheritDoc} This implementation delegates to {@link Map#get(Object)}. */
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation delegates to {@link Map#get(Object)}.
+	 */
 	@Override
-	protected Optional<String> findParameterImpl(final String key) throws ConfigurationException {
+	protected Optional<String> findConfigurationValueImpl(final String key) throws ConfigurationException {
 		return Optional.ofNullable(map.get(key));
 	}
 

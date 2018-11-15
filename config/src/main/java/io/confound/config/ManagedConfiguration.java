@@ -27,7 +27,7 @@ import javax.annotation.*;
  * A configuration that wraps manages a cached configuration, reloading when needed.
  * @author Garret Wilson
  */
-public class ManagedConfiguration extends AbstractParametersDecorator implements Configuration {
+public class ManagedConfiguration extends AbstractChildConfigurationDecorator implements Configuration {
 
 	private final ConfigurationManager configurationManager;
 
@@ -43,38 +43,38 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 		return parentConfiguration;
 	}
 
-	/** The cached parameters serving as the decorated configuration. */
-	private volatile Parameters parameters = null;
+	/** The cached, decorated configuration. */
+	private volatile Configuration configuration = null;
 
 	/**
 	 * Determines if the current configuration stale.
 	 * <p>
-	 * This method also calls {@link ConfigurationManager#isStale(Parameters)}.
+	 * This method also calls {@link ConfigurationManager#isStale(Configuration)}.
 	 * </p>
-	 * @param parameters The current parameters as last known, or <code>null</code> if the configuration is not loaded.
-	 * @return <code>true</code> if the given parameters are stale and need to be reloaded.
+	 * @param configuration The current configuration as last known, or <code>null</code> if the configuration is not loaded.
+	 * @return <code>true</code> if the given configuration is stale and needs to be reloaded.
 	 * @throws IOException if there is an I/O exception checking to see if the current configuration is stale.
 	 */
-	protected boolean isStale(@Nullable final Parameters parameters) throws IOException {
-		if(parameters == null) {
+	protected boolean isStale(@Nullable final Configuration configuration) throws IOException {
+		if(configuration == null) {
 			return true;
 		}
-		return getConfigurationManager().isStale(parameters);
+		return getConfigurationManager().isStale(configuration);
 	}
 
 	@Override
-	protected Parameters getParameters() throws ConfigurationException {
-		Parameters parameters = this.parameters;
+	protected Configuration getConfiguration() throws ConfigurationException {
+		Configuration configuration = this.configuration;
 		try {
-			if(isStale(parameters)) {
+			if(isStale(configuration)) {
 				//TODO improve so that multiple threads don't trigger reloading at the same time
-				parameters = reload();
-				assert parameters != null : "Parameters should have been loaded at this point.";
+				configuration = reload(); //reloading will update the cached configuration
+				assert configuration != null : "Configuration should have been loaded at this point.";
 			}
 		} catch(final IOException ioException) {
-			throw new ConfigurationException("Error loading configuration parameters.", ioException);
+			throw new ConfigurationException("Error loading configuration.", ioException);
 		}
-		return parameters;
+		return configuration;
 	}
 
 	/**
@@ -112,11 +112,9 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 	 */
 	public synchronized Configuration reload() throws IOException, ConfigurationException {
 		invalidate();
-		final Configuration parentConfiguration = getParentConfiguration().orElse(null);
 		//if no configuration could be determined, use an empty configuration
-		final Configuration configuration = getConfigurationManager().loadConfiguration(parentConfiguration)
-				.orElseGet(() -> new EmptyConfiguration(parentConfiguration));
-		this.parameters = configuration; //save the local configuration cache, which will be used until it is stale again
+		final Configuration configuration = getConfigurationManager().loadConfiguration().orElse(Configuration.empty());
+		this.configuration = configuration; //save the local configuration cache, which will be used until it is stale again
 		return configuration;
 	}
 
@@ -128,7 +126,7 @@ public class ManagedConfiguration extends AbstractParametersDecorator implements
 	 * @see ConfigurationManager#invalidate()
 	 */
 	public void invalidate() {
-		parameters = null;
+		configuration = null;
 		getConfigurationManager().invalidate();
 	}
 

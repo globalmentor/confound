@@ -21,53 +21,53 @@ import static java.util.Objects.*;
 import javax.annotation.*;
 
 /**
- * A configuration exception indicating that a configuration parameter was not found.
+ * A configuration exception indicating that a configuration key was not found.
  * @author Garret Wilson
  */
-public class MissingParameterException extends ConfigurationException {
+public class MissingConfigurationKeyException extends ConfigurationException {
 
 	private static final long serialVersionUID = 6748106646702212490L;
 
 	private final String key;
 
-	/** @return The key for the missing parameter. */
+	/** @return The key for the missing configuration. */
 	public String getKey() {
 		return key;
 	}
 
 	/**
 	 * Key constructor.
-	 * @param key The key of the configuration parameter that was not found.
+	 * @param key The key of the configuration configuration that was not found.
 	 */
-	public MissingParameterException(@Nonnull final String key) {
+	public MissingConfigurationKeyException(@Nonnull final String key) {
 		this(null, key);
 	}
 
 	/**
 	 * Message and key constructor.
 	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
-	 * @param key The key of the configuration parameter that was not found.
+	 * @param key The key of the configuration configuration that was not found.
 	 */
-	public MissingParameterException(@Nullable final String message, @Nonnull final String key) {
+	public MissingConfigurationKeyException(@Nullable final String message, @Nonnull final String key) {
 		this(message, key, null);
 	}
 
 	/**
 	 * Cause constructor.
-	 * @param key The key of the configuration parameter that was not found.
+	 * @param key The key of the configuration configuration that was not found.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */
-	public MissingParameterException(@Nonnull final String key, @Nullable final Throwable cause) {
+	public MissingConfigurationKeyException(@Nonnull final String key, @Nullable final Throwable cause) {
 		this(null, key, cause);
 	}
 
 	/**
 	 * Message and cause constructor.
 	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
-	 * @param key The key of the configuration parameter that was not found.
+	 * @param key The key of the configuration configuration that was not found.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */
-	public MissingParameterException(@Nullable final String message, @Nonnull final String key, @Nullable final Throwable cause) {
+	public MissingConfigurationKeyException(@Nullable final String message, @Nonnull final String key, @Nullable final Throwable cause) {
 		super(message, cause);
 		this.key = requireNonNull(key);
 	}

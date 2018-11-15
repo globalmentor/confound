@@ -19,16 +19,13 @@ package io.confound.config.file.format.properties;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.hamcrest.Matchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
-import io.confound.config.MissingParameterException;
-import io.confound.config.StringMapConfiguration;
+import io.confound.config.MissingConfigurationKeyException;
 
 /**
  * Tests of {@link PropertiesConfigurationFileFormat}.
@@ -59,39 +56,13 @@ public class PropertiesConfigurationFileFormatTest {
 	}
 
 	/**
-	 * Tests whether {@link PropertiesConfigurationFileFormat} is loading properties correctly when a parent {@link Configuration} is provided.
+	 * Tests whether {@link PropertiesConfigurationFileFormat} is failing when retrieving a value with a non-existent configuration in the file.
 	 * 
 	 * @see PropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
-	@Test
-	public void testLoadWithParentConfiguration() throws IOException {
-		//TODO use Java 9 Map.of()
-		final Map<String, String> parentConfigurationMap = new HashMap<>();
-		parentConfigurationMap.put("foobar", "foo+bar");
-
-		final Configuration parentConfiguration = new StringMapConfiguration(parentConfigurationMap);
-
-		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
-		final Configuration configuration;
-		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {
-			configuration = format.load(inputStream, parentConfiguration);
-		}
-
-		assertThat(configuration.getString("foo"), is("bar"));
-		assertThat(configuration.getInt("test"), is(123));
-
-		assertThat(configuration.getString("foobar"), is("foo+bar"));
-	}
-
-	/**
-	 * Tests whether {@link PropertiesConfigurationFileFormat} is failing when retrieving a value with a non-existent parameter on the file.
-	 * 
-	 * @see PropertiesConfigurationFileFormat#load(InputStream)
-	 * @throws IOException if there was an error preparing or loading the configuration.
-	 */
-	@Test(expected = MissingParameterException.class)
-	public void testLoadNonExistingParameter() throws IOException {
+	@Test(expected = MissingConfigurationKeyException.class)
+	public void testLoadNonExistingConfigurationKey() throws IOException {
 		final PropertiesConfigurationFileFormat format = new PropertiesConfigurationFileFormat();
 		final Configuration configuration;
 		try (final InputStream inputStream = getClass().getResourceAsStream(CONFIG_RESOURCE_NAME)) {

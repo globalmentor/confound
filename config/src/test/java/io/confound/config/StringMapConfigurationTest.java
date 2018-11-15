@@ -36,12 +36,12 @@ public class StringMapConfigurationTest {
 		map.put("foo", "bar");
 		map.put("flag", "true");
 		final StringMapConfiguration stringMapConfiguration = new StringMapConfiguration(map);
-		assertThat(stringMapConfiguration.hasParameter("foo"), is(true));
+		assertThat(stringMapConfiguration.hasConfigurationValue("foo"), is(true));
 		assertThat(stringMapConfiguration.getString("foo"), is("bar"));
-		assertThat(stringMapConfiguration.hasParameter("flag"), is(true));
+		assertThat(stringMapConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(stringMapConfiguration.getBoolean("flag"), is(true));
-		assertThat(stringMapConfiguration.hasParameter("none"), is(false));
-		assertThat(stringMapConfiguration.getOptionalParameter("none"), isEmpty());
+		assertThat(stringMapConfiguration.hasConfigurationValue("none"), is(false));
+		assertThat(stringMapConfiguration.getOptionalObject("none"), isEmpty());
 	}
 
 }

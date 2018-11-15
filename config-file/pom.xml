@@ -33,6 +33,7 @@
 			<groupId>io.confound</groupId>
 			<artifactId>config</artifactId>
 			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

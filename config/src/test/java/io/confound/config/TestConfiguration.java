@@ -53,31 +53,11 @@ public class TestConfiguration extends AbstractStringConfiguration {
 	 * @param value The value to return if for the key {@value #TEST_KEY}.
 	 */
 	public TestConfiguration(@Nonnull final String value) {
-		this(value, null);
-	}
-
-	/**
-	 * Parent configuration constructor. The test value {@value #DEFAULT_TEST_VALUE} will be used.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @see #DEFAULT_TEST_VALUE
-	 */
-	public TestConfiguration(@Nullable final Configuration parentConfiguration) {
-		this(DEFAULT_TEST_VALUE, parentConfiguration);
-	}
-
-	/**
-	 * Parent configuration and test value constructor.
-	 * @param value The value to return if for the key {@value #TEST_KEY}.
-	 * @param parentConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
-	 * @throws NullPointerException if the given value is <code>null</code>.
-	 */
-	public TestConfiguration(@Nonnull final String value, @Nullable final Configuration parentConfiguration) {
-		super(parentConfiguration);
 		this.testValue = requireNonNull(value);
 	}
 
 	@Override
-	protected Optional<String> findParameterImpl(String key) throws ConfigurationException {
+	protected Optional<String> findConfigurationValueImpl(String key) throws ConfigurationException {
 		return key.equals(TEST_KEY) ? Optional.of(testValue) : Optional.empty();
 	}
 

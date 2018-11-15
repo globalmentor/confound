@@ -25,25 +25,19 @@ import java.util.Optional;
 import org.junit.*;
 
 /**
- * Test base implemented methods of {@link BaseConfiguration}.
+ * Tests base implemented methods of {@link BaseConfiguration}.
  * @author Garret Wilson
  */
 public class BaseConfigurationTest {
 
-	/** @see BaseConfiguration#getOptionalString(String) */
+	/** @see BaseConfiguration#getOptionalObject(String) */
 	@Test
-	public void testFindOptionalParameter() {
+	public void testFindOptionalConfigurationValues() {
 		//test direct configuration access
 		@SuppressWarnings("unchecked")
 		final BaseConfiguration<String> parentConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
-		when(parentConfiguration.findParameterImpl("foo")).thenReturn(Optional.of("bar"));
-		assertThat(parentConfiguration.getOptionalParameter("foo"), is(Optional.of("bar")));
-		//test parent configuration fallback
-		@SuppressWarnings("unchecked")
-		final BaseConfiguration<String> childConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
-		when(childConfiguration.getParentConfiguration()).thenReturn(Optional.of(parentConfiguration));
-		when(childConfiguration.findParameterImpl("foo")).thenReturn(Optional.empty());
-		assertThat(childConfiguration.getOptionalParameter("foo"), is(Optional.of("bar")));
+		when(parentConfiguration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("bar"));
+		assertThat(parentConfiguration.getOptionalObject("foo"), is(Optional.of("bar")));
 	}
 
 	//TODO add test of normalizeKey()
