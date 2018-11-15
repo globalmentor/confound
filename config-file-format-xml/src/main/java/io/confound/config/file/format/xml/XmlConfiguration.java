@@ -53,7 +53,7 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 	}
 
 	/**
-	 * Constructor of the configuration.
+	 * Constructor of the configuration providing a fallback parent configuration.
 	 * 
 	 * @param xmlDocument The XML tree node to be used as the configuration.
 	 * @param parentConfiguration The parent configuration.
