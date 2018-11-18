@@ -16,10 +16,9 @@
 
 package io.confound.config.jndi;
 
-import java.util.Hashtable;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -39,20 +38,20 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 	private final Context context;
 
 	/**
-	 * Constructor of the JNDI Configuration without any JNDI environment properties.
+	 * Constructor of the JNDI Configuration. A new initial context will be created automatically.
 	 * @throws NamingException If an error occur while creating an initial JNDI context.
 	 */
 	public JndiConfiguration() throws NamingException {
-		this(null);
+		this(new InitialContext());
 	}
 
 	/**
-	 * Constructor of the JNDI Configuration providing environment properties but no fallback parent configuration.
-	 * @param environment The JNDI environment properties to be used.
+	 * Constructor of the JNDI Configuration providing an initial context.
+	 * @param initialContext The JNDI initial context to be used.
 	 * @throws NamingException If an error occur while creating an initial JNDI context.
 	 */
-	public JndiConfiguration(@Nullable Hashtable<String, String> environment) throws NamingException {
-		this.context = (Context)(environment == null ? new InitialContext() : new InitialContext(environment));
+	public JndiConfiguration(@Nonnull final InitialContext initialContext) throws NamingException {
+		this.context = initialContext;
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 		try {
 			return Optional.ofNullable(((Context)context.lookup(JNDI_NAMESPACE)).lookup(key)).map(Object::toString);
 		} catch(final NamingException namingException) {
-			throw new ConfigurationException("The parameter could not be found on the JNDI context.", namingException);
+			throw new ConfigurationException(String.format("The parameter \"%s\" could not be found on the JNDI context.", key), namingException);
 		}
 	}
 

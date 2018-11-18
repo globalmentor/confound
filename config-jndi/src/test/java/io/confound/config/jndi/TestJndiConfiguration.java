@@ -25,11 +25,11 @@ import javax.naming.*;
 import javax.naming.spi.*;
 
 import static org.hamcrest.Matchers.*;
-import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 
 import org.junit.*;
 
 import io.confound.config.Configuration;
+import io.confound.config.ConfigurationException;
 
 /**
  * Tests of the {@link JndiConfiguration} class.
@@ -46,12 +46,22 @@ public class TestJndiConfiguration {
 	 */
 	@Test
 	public void testFindParameter() throws IOException, NamingException {
-		setupInitialContext();
-
 		final Configuration configuration = new JndiConfiguration();
 
 		assertThat(configuration.getString("foo"), is("bar"));
-		assertThat(configuration.getOptionalString("bar"), isEmpty());
+	}
+
+	/**
+	 * Tests whether {@link JndiConfiguration} is throwing an exception when a property key not existing on JNDI context is provided.
+	 * 
+	 * @throws IOException if there was an error preparing or loading the configuration.
+	 * @throws NamingException If an error occur while handling with JNDI.
+	 */
+	@Test(expected = ConfigurationException.class)
+	public void testFindParameterNotExisting() throws IOException, NamingException {
+		final Configuration configuration = new JndiConfiguration();
+
+		configuration.getOptionalString("bar");
 	}
 
 	/**
@@ -59,7 +69,8 @@ public class TestJndiConfiguration {
 	 * 
 	 * @throws NamingException If an error occur while setting the initial context.
 	 */
-	private static void setupInitialContext() throws NamingException {
+	@BeforeClass
+	public static void setupInitialContext() throws NamingException {
 		NamingManager.setInitialContextFactoryBuilder(new InitialContextFactoryBuilder() {
 
 			@Override
@@ -71,24 +82,31 @@ public class TestJndiConfiguration {
 						return new InitialContext() {
 
 							@Override
-							public Object lookup(String name) throws NamingException {
+							public Object lookup(final String name) throws NamingException {
+								if(name.isEmpty()) {
+									return this; // made just to fulfill the contract for Context.lookup(...).
+								}
 
 								if(name.equals(JndiConfiguration.JNDI_NAMESPACE)) {
 									return new InitialContext() {
 
 										@Override
-										public Object lookup(String name) throws NamingException {
+										public Object lookup(final String name) throws NamingException {
+											if(name.isEmpty()) {
+												return this; // made just to fulfill the contract for Context.lookup(...).
+											}
+
 											if(name.equals("foo")) {
 												return "bar";
 											}
 
-											return null;
+											throw new NamingException(String.format("The property %s could not be found in the current JNDI context.", name));
 										}
 
 									};
 								}
 
-								return null;
+								throw new NamingException(String.format("The property %s could not be found in the current JNDI context.", name));
 							}
 						};
 					}
