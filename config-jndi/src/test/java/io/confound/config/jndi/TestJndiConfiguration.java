@@ -66,6 +66,10 @@ public class TestJndiConfiguration {
 
 	/**
 	 * Sets the custom initial context for testing.
+	 * <p>
+	 * The base implementation for realizing this version was gotten on <a href="https://stackoverflow.com/a/21733896">Scott Nelson answers for Initialcontext in
+	 * a standalone Java program</a> (<a href="https://stackoverflow.com">Stack Overflow</a>).
+	 * </p>
 	 * 
 	 * @throws NamingException If an error occur while setting the initial context.
 	 */
