@@ -21,6 +21,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
 import io.confound.config.AbstractStringConfiguration;
@@ -39,6 +40,7 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 
 	/**
 	 * Constructor of the JNDI Configuration. A new initial context will be created automatically.
+	 * 
 	 * @throws NamingException If an error occur while creating an initial JNDI context.
 	 */
 	public JndiConfiguration() throws NamingException {
@@ -47,6 +49,7 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 
 	/**
 	 * Constructor of the JNDI Configuration providing an initial context.
+	 * 
 	 * @param initialContext The JNDI initial context to be used.
 	 * @throws NamingException If an error occur while creating an initial JNDI context.
 	 */
@@ -57,7 +60,9 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 	@Override
 	protected Optional<String> findConfigurationValueImpl(String key) throws ConfigurationException {
 		try {
-			return Optional.ofNullable(((Context)context.lookup(JNDI_NAMESPACE)).lookup(key)).map(Object::toString);
+			return Optional.of(((Context)context.lookup(JNDI_NAMESPACE)).lookup(key)).map(Object::toString);
+		} catch(final NameNotFoundException nameNotFoundException) {
+			return Optional.empty();
 		} catch(final NamingException namingException) {
 			throw new ConfigurationException(String.format("The parameter \"%s\" could not be found on the JNDI context.", key), namingException);
 		}

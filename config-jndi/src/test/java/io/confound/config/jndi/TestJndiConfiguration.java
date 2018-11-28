@@ -25,6 +25,7 @@ import javax.naming.*;
 import javax.naming.spi.*;
 
 import static org.hamcrest.Matchers.*;
+import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 
 import org.junit.*;
 
@@ -49,6 +50,7 @@ public class TestJndiConfiguration {
 		final Configuration configuration = new JndiConfiguration();
 
 		assertThat(configuration.getString("foo"), is("bar"));
+		assertThat(configuration.getOptionalString("bar"), isEmpty());
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class TestJndiConfiguration {
 	public void testFindParameterNotExisting() throws IOException, NamingException {
 		final Configuration configuration = new JndiConfiguration();
 
-		configuration.getOptionalString("bar");
+		configuration.getString("bar");
 	}
 
 	/**
@@ -104,13 +106,13 @@ public class TestJndiConfiguration {
 												return "bar";
 											}
 
-											throw new NamingException(String.format("The property %s could not be found in the current JNDI context.", name));
+											throw new NameNotFoundException(String.format("The property %s could not be found in the current JNDI context.", name));
 										}
 
 									};
 								}
 
-								throw new NamingException(String.format("The property %s could not be found in the current JNDI context.", name));
+								throw new NameNotFoundException(String.format("The property %s could not be found in the current JNDI context.", name));
 							}
 						};
 					}
