@@ -1,6 +1,6 @@
-# JNDI Context Configuration
+# Confound System JNDI Provider
 
-Confound configuration implementation backed by JNDI context variables.
+Csar concern provider for a JNDI configuration, with overriding system properties or environment variables.
 
 One way JNDI context variables could be configured would be in a `WEB-INF/web.xml` file, for example:
 
@@ -14,7 +14,7 @@ One way JNDI context variables could be configured would be in a `WEB-INF/web.xm
 
 ## Download
 
-JNDI Context Configuration is available in the Maven Central Repository as [io.confound:config-jndi](https://search.maven.org/search?q=g:io.confound%20and%20a:config-jndi).
+Confound JNDI System Provider is available in the Maven Central Repository as [io.confound:confound-system-jndi-provider](https://search.maven.org/search?q=g:io.confound%20and%20a:confound-system-jndi-provider).
 
 ## Issues
 
@@ -22,4 +22,4 @@ Issues tracked by [JIRA](https://globalmentor.atlassian.net/projects/CONFOUND).
 
 ## Changelog
 
-- 0.5.0: First release.
+- 0.6.0: First release.
