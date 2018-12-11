@@ -30,7 +30,7 @@ import io.csar.ConcernProvider;
  * data directory may be absolute, or relative to the user home directory.
  * </p>
  * <p>
- * If no application directory can be determine, a configuration exception is thrown.
+ * If no application directory can be determined, a configuration exception is thrown.
  * </p>
  * @author Garret Wilson
  * @see AppConfigurationConcernBuilder
