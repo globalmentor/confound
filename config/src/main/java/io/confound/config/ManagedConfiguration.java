@@ -27,7 +27,7 @@ import javax.annotation.*;
  * A configuration that wraps manages a cached configuration, reloading when needed.
  * @author Garret Wilson
  */
-public class ManagedConfiguration extends AbstractChildConfigurationDecorator implements Configuration {
+public class ManagedConfiguration extends AbstractChildConfigurationDecorator<Configuration> implements Configuration {
 
 	private final ConfigurationManager configurationManager;
 

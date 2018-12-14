@@ -87,7 +87,7 @@ public class Confound {
 			environmentConfiguration = configuration; //cache the environment configuration
 		}
 		if(fallbackfiguration != null) {
-			configuration = configuration.withFallback(fallbackfiguration);
+			configuration = configuration.withFallbackConfiguration(fallbackfiguration);
 		}
 		return configuration;
 	}
@@ -121,11 +121,11 @@ public class Confound {
 	public static Configuration getSystemConfiguration(@Nullable final Configuration fallbackConfiguration) {
 		Configuration configuration = systemConfiguration;
 		if(configuration == null) { //the race condition here is benign
-			configuration = new PropertiesConfiguration(System.getProperties()).withFallback(getEnvironmentConfiguration());
+			configuration = new PropertiesConfiguration(System.getProperties()).withFallbackConfiguration(getEnvironmentConfiguration());
 			systemConfiguration = configuration; //cache the system configuration
 		}
 		if(fallbackConfiguration != null) {
-			configuration = configuration.withFallback(fallbackConfiguration);
+			configuration = configuration.withFallbackConfiguration(fallbackConfiguration);
 		}
 		return configuration;
 	}

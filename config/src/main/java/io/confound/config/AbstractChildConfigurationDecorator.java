@@ -28,19 +28,20 @@ import javax.annotation.*;
  * If this is configuration has a parent configuration, each configuration lookup method such as {@link #getString(String)} is expected to attempt to look up
  * the value in the parent configuration if the key is not found in this configuration instance.
  * </p>
+ * @param <C> The type of configuration being decorated.
  * @author Garret Wilson
  */
-public abstract class AbstractChildConfigurationDecorator extends AbstractConfiguration {
+public abstract class AbstractChildConfigurationDecorator<C extends Configuration> extends AbstractConfiguration {
 
 	/** @return The parent configuration for fallback lookup. */
-	protected abstract Optional<Configuration> getParentConfiguration();
+	protected abstract Optional<C> getParentConfiguration();
 
 	/**
 	 * Returns the wrapped configuration.
 	 * @return The decorated configuration delegate instance.
 	 * @throws ConfigurationException if there is an error retrieving the configuration.
 	 */
-	protected abstract Configuration getConfiguration() throws ConfigurationException;
+	protected abstract C getConfiguration() throws ConfigurationException;
 
 	/**
 	 * {@inheritDoc}
@@ -55,6 +56,8 @@ public abstract class AbstractChildConfigurationDecorator extends AbstractConfig
 		//this may appear inefficient, but Boolean.valueOf() prevents new object creation so there is probably little overhead
 		return getParentConfiguration().map(configuration -> Boolean.valueOf(configuration.hasConfigurationValue(key))).orElse(false);
 	}
+
+	//TODO do we need to forward the default methods as well?
 
 	@Override
 	public <T> Optional<T> getOptionalObject(@Nonnull final String key) throws ConfigurationException {

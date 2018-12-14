@@ -297,13 +297,24 @@ public interface Configuration {
 	public Optional<URI> getOptionalUri(@Nonnull final String key) throws ConfigurationException;
 
 	/**
+	 * Returns a configuration equivalent to this configuration but that will fall back to an optional parent configuration if a value is not present. This
+	 * configuration will remain unmodified.
+	 * @param fallbackConfiguration The optional fallback configuration.
+	 * @return A version of this configuration that uses fallback lookup or, if no fallback is present, this configuration.
+	 * @throws NullPointerException if the given optional fallback configuration is <code>null</code>.
+	 */
+	public default Configuration withFallbackConfiguration(@Nonnull final Optional<Configuration> fallbackConfiguration) {
+		return fallbackConfiguration.isPresent() ? withFallbackConfiguration(fallbackConfiguration.get()) : this;
+	}
+
+	/**
 	 * Returns a configuration equivalent to this configuration but that will fall back to a specified parent configuration if a value is not present. This
 	 * configuration will remain unmodified.
 	 * @param fallbackConfiguration The fallback configuration.
 	 * @return A version of this configuration that uses fallback lookup.
 	 * @throws NullPointerException if the given fallback configuration is <code>null</code>.
 	 */
-	public default Configuration withFallback(@Nonnull final Configuration fallbackConfiguration) {
+	public default Configuration withFallbackConfiguration(@Nonnull final Configuration fallbackConfiguration) {
 		return new ChildConfigurationDecorator(this, fallbackConfiguration);
 	}
 
