@@ -50,7 +50,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * @implSpec This implementation normalizes the key, delegates to {@link #findConfigurationValue(String)}, and then dereferences the string using
+	 * @implSpec This implementation normalizes the key, delegates to {@link #findConfigurationValueImpl(String)}, and then dereferences the string using
 	 *           {@link #dereferenceString(String)}.
 	 * @see #dereferenceString(String)
 	 */
@@ -124,7 +124,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation delegates to {@link #findConfigurationValue(String)}.
 	 */
 	@Override
-	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
+	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
 		return findConfigurationValue(key);
 	}
 
