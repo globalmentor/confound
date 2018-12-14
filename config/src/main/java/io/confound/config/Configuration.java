@@ -304,7 +304,7 @@ public interface Configuration {
 	 * @throws NullPointerException if the given optional fallback configuration is <code>null</code>.
 	 */
 	public default Configuration withFallbackConfiguration(@Nonnull final Optional<Configuration> fallbackConfiguration) {
-		return fallbackConfiguration.isPresent() ? withFallbackConfiguration(fallbackConfiguration.get()) : this;
+		return fallbackConfiguration.map(this::withFallbackConfiguration).orElse(this);
 	}
 
 	/**
