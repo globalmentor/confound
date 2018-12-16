@@ -307,25 +307,27 @@ public interface Configuration {
 	public Optional<URI> getOptionalUri(@Nonnull final String key) throws ConfigurationException;
 
 	/**
-	 * Returns a configuration equivalent to this configuration but that will fall back to an optional parent configuration if a value is not present. This
-	 * configuration will remain unmodified.
-	 * @param fallbackConfiguration The optional fallback configuration.
-	 * @return A version of this configuration that uses fallback lookup or, if no fallback is present, this configuration.
-	 * @throws NullPointerException if the given optional fallback configuration is <code>null</code>.
-	 */
-	public default Configuration withFallbackConfiguration(@Nonnull final Optional<Configuration> fallbackConfiguration) {
-		return fallbackConfiguration.map(this::withFallbackConfiguration).orElse(this);
-	}
-
-	/**
 	 * Returns a configuration equivalent to this configuration but that will fall back to a specified parent configuration if a value is not present. This
 	 * configuration will remain unmodified.
 	 * @param fallbackConfiguration The fallback configuration.
 	 * @return A version of this configuration that uses fallback lookup.
 	 * @throws NullPointerException if the given fallback configuration is <code>null</code>.
 	 */
-	public default Configuration withFallbackConfiguration(@Nonnull final Configuration fallbackConfiguration) {
+	public default Configuration withFallback(@Nonnull final Configuration fallbackConfiguration) {
 		return new ChildConfigurationDecorator(this, fallbackConfiguration);
+	}
+
+	/**
+	 * Utility method that returns a configuration equivalent to the given configuration but that will fall back to an optional parent configuration if a value is
+	 * not present. The given configuration will remain unmodified.
+	 * @param configuration The configuration to optionally be given a fallback.
+	 * @param fallbackConfiguration The optional fallback configuration.
+	 * @return A version of the configuration that uses fallback lookup or, if no fallback is present, the given configuration.
+	 * @throws NullPointerException if the given configuration and/or optional fallback configuration is <code>null</code>.
+	 * @see #withFallback(Configuration)
+	 */
+	public static Configuration withFallback(@Nonnull final Configuration configuration, @Nonnull final Optional<Configuration> fallbackConfiguration) {
+		return fallbackConfiguration.map(configuration::withFallback).orElse(configuration);
 	}
 
 }

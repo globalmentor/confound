@@ -42,7 +42,7 @@ public class SystemJndiConfigurationConcernProvider implements ConcernProvider {
 		} catch(final NamingException namingException) {
 			throw new ConfigurationException(namingException);
 		}
-		return Stream.of(new DefaultConfigurationConcern(jndiConfiguration.withFallbackConfiguration(getSystemConfiguration())));
+		return Stream.of(new DefaultConfigurationConcern(jndiConfiguration.withFallback(getSystemConfiguration())));
 	}
 
 }
