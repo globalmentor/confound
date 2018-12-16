@@ -39,6 +39,7 @@ public interface Configuration {
 	/**
 	 * Retrieves a required configuration from an {@link Optional}, throwing a {@link MissingConfigurationKeyException} if the configuration key was not present.
 	 * @apiNote This method is primarily used to check the result of a configuration lookup call for the non-optional convenience configuration lookup versions.
+	 * @implSpec The default implementation delegates to {@link #createMissingConfigurationKeyException(String)}.
 	 * @param <T> The type of configuration value to check.
 	 * @param value The retrieved value.
 	 * @param key The configuration key.
@@ -47,7 +48,16 @@ public interface Configuration {
 	 * @see Optional#isPresent()
 	 */
 	public default <T> T requireConfiguration(@Nonnull final Optional<T> value, @Nonnull final String key) throws MissingConfigurationKeyException {
-		return value.orElseThrow(() -> new MissingConfigurationKeyException(String.format("Missing configuration for key %s.", key), requireNonNull(key)));
+		return value.orElseThrow(() -> createMissingConfigurationKeyException(key));
+	}
+
+	/**
+	 * Creates an exception indicating that a given configuration key could not be found.
+	 * @param key The configuration key.
+	 * @return The new exception.
+	 */
+	public default MissingConfigurationKeyException createMissingConfigurationKeyException(@Nonnull final String key) {
+		return new MissingConfigurationKeyException(String.format("Missing configuration for key %s.", key), requireNonNull(key));
 	}
 
 	/**

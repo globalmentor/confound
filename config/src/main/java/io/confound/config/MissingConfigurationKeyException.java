@@ -62,7 +62,7 @@ public class MissingConfigurationKeyException extends ConfigurationException {
 	}
 
 	/**
-	 * Message and cause constructor.
+	 * Message, key, and cause constructor.
 	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
 	 * @param key The key of the configuration configuration that was not found.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
