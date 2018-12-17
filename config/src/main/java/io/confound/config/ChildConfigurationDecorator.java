@@ -16,44 +16,13 @@
 
 package io.confound.config;
 
-import static java.util.Objects.*;
-
-import java.util.Optional;
-
 import javax.annotation.*;
 
 /**
  * A wrapper configuration that forwards calls to the decorated configuration, falling back to a parent configuration.
  * @author Garret Wilson
  */
-public class ChildConfigurationDecorator extends AbstractChildConfigurationDecorator {
-
-	private final Optional<Configuration> parentConfiguration;
-
-	/**
-	 * {@inheritDoc}
-	 * @implSpec This version will never return {@link Optional#empty()}.
-	 */
-	@Override
-	protected Optional<Configuration> getParentConfiguration() {
-		return parentConfiguration;
-	}
-
-	private final Configuration configuration;
-
-	@Override
-	protected Configuration getConfiguration() throws ConfigurationException {
-		return configuration;
-	}
-
-	/**
-	 * Wrapped configuration constructor.
-	 * @param configuration The configuration to decorate.
-	 * @throws NullPointerException if the given configuration is <code>null</code>.
-	 */
-	public ChildConfigurationDecorator(@Nonnull final Configuration configuration) {
-		this(configuration, null);
-	}
+public class ChildConfigurationDecorator extends BaseChildConfigurationDecorator<Configuration> {
 
 	/**
 	 * Wrapped configuration and parent configuration constructor.
@@ -62,8 +31,7 @@ public class ChildConfigurationDecorator extends AbstractChildConfigurationDecor
 	 * @throws NullPointerException if the given configuration and/or parent configuration is <code>null</code>.
 	 */
 	public ChildConfigurationDecorator(@Nonnull Configuration configuration, @Nonnull final Configuration parentConfiguration) {
-		this.configuration = requireNonNull(configuration);
-		this.parentConfiguration = Optional.of(requireNonNull(parentConfiguration));
+		super(configuration, parentConfiguration);
 	}
 
 }

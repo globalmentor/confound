@@ -20,27 +20,28 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import javax.annotation.*;
-
 /**
  * Wrapper configuration that forwards calls to the decorated configuration, falling back to an optional parent configuration.
  * <p>
  * If this is configuration has a parent configuration, each configuration lookup method such as {@link #getString(String)} is expected to attempt to look up
  * the value in the parent configuration if the key is not found in this configuration instance.
  * </p>
+ * @implNote This class does not permit <code>getXXX()</code> methods from being overridden, as their default implementation is required to call local methods
+ *           in order for fallback to work correctly.
+ * @param <C> The type of configuration being decorated.
  * @author Garret Wilson
  */
-public abstract class AbstractChildConfigurationDecorator extends AbstractConfiguration {
+public abstract class AbstractChildConfigurationDecorator<C extends Configuration> extends AbstractConfiguration {
 
 	/** @return The parent configuration for fallback lookup. */
-	protected abstract Optional<Configuration> getParentConfiguration();
+	protected abstract Optional<C> getParentConfiguration();
 
 	/**
 	 * Returns the wrapped configuration.
 	 * @return The decorated configuration delegate instance.
 	 * @throws ConfigurationException if there is an error retrieving the configuration.
 	 */
-	protected abstract Configuration getConfiguration() throws ConfigurationException;
+	protected abstract C getConfiguration() throws ConfigurationException;
 
 	/**
 	 * {@inheritDoc}
@@ -48,7 +49,7 @@ public abstract class AbstractChildConfigurationDecorator extends AbstractConfig
 	 *           for the key in this instance.
 	 */
 	@Override
-	public boolean hasConfigurationValue(@Nonnull final String key) throws ConfigurationException {
+	public boolean hasConfigurationValue(final String key) throws ConfigurationException {
 		if(getConfiguration().hasConfigurationValue(key)) {
 			return true;
 		}
@@ -56,57 +57,99 @@ public abstract class AbstractChildConfigurationDecorator extends AbstractConfig
 		return getParentConfiguration().map(configuration -> Boolean.valueOf(configuration.hasConfigurationValue(key))).orElse(false);
 	}
 
+	//Object
+
 	@Override
-	public <T> Optional<T> getOptionalObject(@Nonnull final String key) throws ConfigurationException {
+	public final <T> T getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getObject(key);
+	}
+
+	@Override
+	public <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalObject(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalObject(key)));
 	}
 
 	//Boolean
 
 	@Override
-	public Optional<Boolean> getOptionalBoolean(@Nonnull final String key) throws ConfigurationException {
+	public final boolean getBoolean(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getBoolean(key);
+	}
+
+	@Override
+	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalBoolean(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key)));
 	}
 
 	//double
 
 	@Override
-	public Optional<Double> getOptionalDouble(@Nonnull final String key) throws ConfigurationException {
+	public final double getDouble(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getDouble(key);
+	}
+
+	@Override
+	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalDouble(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key)));
 	}
 
 	//int
 
 	@Override
-	public Optional<Integer> getOptionalInt(@Nonnull final String key) throws ConfigurationException {
+	public final int getInt(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getInt(key);
+	}
+
+	@Override
+	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalInt(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key)));
 	}
 
 	//long
 
 	@Override
-	public Optional<Long> getOptionalLong(@Nonnull final String key) throws ConfigurationException {
+	public final int getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getLong(key);
+	}
+
+	@Override
+	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalLong(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key)));
 	}
 
 	//Path
 
 	@Override
-	public Optional<Path> getOptionalPath(@Nonnull final String key) throws ConfigurationException {
+	public final Path getPath(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getPath(key);
+	}
+
+	@Override
+	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalPath(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key)));
 	}
 
 	//String
 
 	@Override
-	public Optional<String> getOptionalString(@Nonnull final String key) throws ConfigurationException {
+	public final String getString(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getString(key);
+	}
+
+	@Override
+	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalString(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
 	}
 
 	//URI
 
 	@Override
-	public Optional<URI> getOptionalUri(@Nonnull final String key) throws ConfigurationException {
+	public final URI getUri(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getUri(key);
+	}
+
+	@Override
+	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
 		return or(getConfiguration().getOptionalUri(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key)));
 	}
 

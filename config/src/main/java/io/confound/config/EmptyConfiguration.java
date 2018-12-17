@@ -24,57 +24,57 @@ import java.util.Optional;
  * A configuration implementation that contains no definitions.
  * @author Garret Wilson
  */
-final class EmptyConfiguration extends AbstractConfiguration {
+public class EmptyConfiguration extends AbstractConfiguration {
 
 	/** The singleton instance of an empty configuration. */
 	public static final Configuration INSTANCE = new EmptyConfiguration();
 
-	/** This class cannot be publicly instantiated. */
-	private EmptyConfiguration() {
+	/** This class cannot be publicly instantiated; only by subclasses. */
+	protected EmptyConfiguration() {
 	}
 
 	@Override
-	public boolean hasConfigurationValue(final String key) throws ConfigurationException {
+	public final boolean hasConfigurationValue(final String key) throws ConfigurationException {
 		return false;
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
+	public final <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
+	public final Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
+	public final Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
+	public final Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
+	public final Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
+	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
+	public final Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
+	public final Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
