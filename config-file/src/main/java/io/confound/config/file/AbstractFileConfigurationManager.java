@@ -25,7 +25,7 @@ import javax.annotation.*;
 
 import com.globalmentor.io.Filenames;
 
-import io.confound.config.AbstractConfigurationManager;
+import io.confound.config.*;
 
 /**
  * A configuration manager that knows how to load a configuration by parsing some document from an input stream.
@@ -89,6 +89,14 @@ public abstract class AbstractFileConfigurationManager extends AbstractConfigura
 			});
 		});
 		this.fileFormatsById = unmodifiableMap(fileFormatsById);
+	}
+
+	/**
+	 * Utility factory method for creating a configuration exception indicating that no supported configuration file could be found.
+	 * @return A new configuration exception indicating no configuration file found.
+	 */
+	public static ConfigurationException createConfigurationNotFoundException() {
+		throw new ConfigurationException("No supported configuration file found.");
 	}
 
 }

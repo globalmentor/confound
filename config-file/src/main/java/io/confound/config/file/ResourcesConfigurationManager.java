@@ -42,8 +42,11 @@ import io.confound.config.*;
  */
 public class ResourcesConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
-	/** The default base name to use for determining a configuration resource. */
-	public static final String DEFAULT_BASE_NAME = "config";
+	/** The default base name to use for determining a configuration resource for a context package. */
+	public static final String DEFAULT_PACKAGE_BASE_NAME = "config";
+
+	/** The default base name suffix to use for determining a configuration resource for a context class. */
+	public static final String DEFAULT_CLASS_BASE_NAME_SUFFIX = "-" + DEFAULT_PACKAGE_BASE_NAME;
 
 	/** The class loader to use in loading the configuration resource. */
 	private final ClassLoader classLoader;
@@ -195,7 +198,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 			}
 		} else { //if we couldn't determine a configuration path
 			if(isRequired()) {
-				throw new ConfigurationException("No supported configuration resource found.");
+				throw createConfigurationNotFoundException();
 			}
 			configuration = null;
 		}
@@ -252,6 +255,8 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 
 	}
 
+	//static factory methods
+
 	/**
 	 * Creates a configuration manager that loads a required configuration from a complete path to a configuration resource, relative to a class, using the class'
 	 * resource loader.
@@ -278,16 +283,31 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	}
 
 	/**
-	 * Creates a configuration manager that loads a required configuration using the default base filename {@value #DEFAULT_BASE_NAME} relative to a class, using
-	 * the class' resource loader.
+	 * Creates a configuration manager that loads a required configuration using the base filename suffix {@value #DEFAULT_CLASS_BASE_NAME_SUFFIX} appended to a
+	 * class' name, relative to the class, using the class' resource loader. For example calling this method with the class <code>FooBar.class</code> will look
+	 * for a resource with the base name <code>FooBar-config.properties</code>.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @return A configuration manager for determining a resource with the base filename and suffix.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @see #forResourceBaseName(Class, String)
+	 * @see Class#getSimpleName()
+	 * @see #DEFAULT_CLASS_BASE_NAME_SUFFIX
+	 */
+	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass) {
+		return forResourceBaseName(contextClass, contextClass.getSimpleName() + DEFAULT_CLASS_BASE_NAME_SUFFIX);
+	}
+
+	/**
+	 * Creates a configuration manager that loads a required configuration using the default base filename {@value #DEFAULT_PACKAGE_BASE_NAME} relative to a
+	 * class, using the class' resource loader.
 	 * @param contextClass The class providing the resource context for loading.
 	 * @return A configuration manager for determining a resource with the default base filename.
 	 * @throws NullPointerException if the context class is <code>null</code>.
 	 * @see #forResourceBaseName(Class, String)
-	 * @see #DEFAULT_BASE_NAME
+	 * @see #DEFAULT_PACKAGE_BASE_NAME
 	 */
-	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass) {
-		return forResourceBaseName(contextClass, DEFAULT_BASE_NAME);
+	public static ResourcesConfigurationManager forPackage(@Nonnull final Class<?> contextClass) {
+		return forResourceBaseName(contextClass, DEFAULT_PACKAGE_BASE_NAME);
 	}
 
 	/**
@@ -301,6 +321,86 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	public static ResourcesConfigurationManager forResourceBaseName(@Nonnull final Class<?> contextClass, @Nonnull final String resourceBaseName) {
 		return new Builder().contextClass(contextClass).resourceBaseName(resourceBaseName).build();
 	}
+
+	//direct loading utility methods
+
+	/**
+	 * Loads an <em>optional</em> configuration from a complete path to a configuration resource, relative to a class, using the class' resource loader.
+	 * @param classLoader The class loader to use for loading a configuration resource.
+	 * @param resourcePath The complete resource path such as <code>com/example/foo.bar</code>, relative to the classpath, for loading a configuration file from
+	 *          class resources.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the class loader and/or resource path is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForResourcePath(@Nonnull ClassLoader classLoader, @Nonnull final String resourcePath)
+			throws IOException, ConfigurationException {
+		return new Builder().classLoader(classLoader).resourcePath(resourcePath).required(false).build().loadConfiguration();
+	}
+
+	/**
+	 * Loads an <em>optional</em> configuration using a complete resource filename relative to a class, using the class' resource loader.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @param resourceName The resource filename, such as <code>foo.bar</code> for loading a configuration resource relative to the given class.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the resource filename is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForResourceName(@Nonnull final Class<?> contextClass, @Nonnull final String resourceName)
+			throws IOException, ConfigurationException {
+		return new Builder().contextClass(contextClass).resourceName(resourceName).required(false).build().loadConfiguration();
+	}
+
+	/**
+	 * Loads an <em>optional</em> configuration using the base filename suffix {@value #DEFAULT_CLASS_BASE_NAME_SUFFIX} appended to a class' name, relative to the
+	 * class, using the class' resource loader. For example calling this method with the class <code>FooBar.class</code> will look for a resource with the base
+	 * name <code>FooBar-config.properties</code>.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 * @see #forResourceBaseName(Class, String)
+	 * @see Class#getSimpleName()
+	 * @see #DEFAULT_CLASS_BASE_NAME_SUFFIX
+	 */
+	public static Optional<Configuration> loadConfigurationForClass(@Nonnull final Class<?> contextClass) throws IOException, ConfigurationException {
+		return loadConfigurationForResourceBaseName(contextClass, contextClass.getSimpleName() + DEFAULT_CLASS_BASE_NAME_SUFFIX);
+	}
+
+	/**
+	 * Loads an <em>optional</em> configuration using the default base filename {@value #DEFAULT_PACKAGE_BASE_NAME} relative to a class, using the class' resource
+	 * loader.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 * @see #forResourceBaseName(Class, String)
+	 * @see #DEFAULT_PACKAGE_BASE_NAME
+	 */
+	public static Optional<Configuration> loadConfigurationForPackage(@Nonnull final Class<?> contextClass) throws IOException, ConfigurationException {
+		return loadConfigurationForResourceBaseName(contextClass, DEFAULT_PACKAGE_BASE_NAME);
+	}
+
+	/**
+	 * Loads an <em>optional</em> configuration using a resource base filename relative to a class, using the class' resource loader.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @param resourceBaseName The base filename, such as <code>base</code>, to locate resources with extensions, such as <code>base.foo</code>, supported by
+	 *          installed configuration file formats.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the context class and/or resource base filename is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForResourceBaseName(@Nonnull final Class<?> contextClass, @Nonnull final String resourceBaseName)
+			throws IOException, ConfigurationException {
+		return new Builder().contextClass(contextClass).resourceBaseName(resourceBaseName).required(false).build().loadConfiguration();
+	}
+
+	//builder
 
 	/**
 	 * Builder for the manager.

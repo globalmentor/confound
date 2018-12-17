@@ -145,7 +145,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 			}
 		} else { //if we couldn't determine a configuration path
 			if(isRequired()) {
-				throw new ConfigurationException("No supported configuration file found.");
+				throw createConfigurationNotFoundException();
 			}
 			configuration = null;
 		}
@@ -210,6 +210,8 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		}
 
 	}
+
+	//static factory methods
 
 	/**
 	 * Creates a configuration manager that loads an optional configuration from a given path as necessary.
@@ -283,6 +285,99 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	public static FileSystemConfigurationManager forFilenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern) {
 		return new Builder().filenamePattern(directory, filenamePattern).build();
 	}
+
+	//direct loading utility methods
+
+	/**
+	 * Loads an optional configuration from a given path as necessary.
+	 * @param configurationPath The path at which to find the configuration file.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForPath(@Nonnull final Path configurationPath) throws IOException, ConfigurationException {
+		return loadConfigurationForCandidatePaths(configurationPath);
+	}
+
+	/**
+	 * Discovers and loads an optional configuration file from one of the given paths.
+	 * <p>
+	 * The first configuration file with a supported format is used.
+	 * </p>
+	 * @param configurationCandidatePaths The potential paths at which to find the configuration file.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if one of the paths is <code>null</code>.
+	 * @throws IllegalArgumentException if no paths are given, or if one of the given paths has no filename.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForCandidatePaths(@Nonnull final Path... configurationCandidatePaths)
+			throws IOException, ConfigurationException {
+		return new Builder().candidatePaths(configurationCandidatePaths).build().loadConfiguration();
+	}
+
+	/**
+	 * Discovers and loads an optional configuration file using the default base filename {@value #DEFAULT_BASE_FILENAME}.
+	 * @param directory The source directory for configuration file discovery.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the directory is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 * @see #forBaseFilename(Path, String)
+	 * @see #DEFAULT_BASE_FILENAME
+	 */
+	public static Optional<Configuration> loadConfigurationForDirectory(@Nonnull final Path directory) throws IOException, ConfigurationException {
+		return loadConfigurationForBaseFilename(directory, DEFAULT_BASE_FILENAME);
+	}
+
+	/**
+	 * Discovers and loads an optional configuration file using a base filename.
+	 * @param directory The source directory for configuration file discovery.
+	 * @param baseFilename The base filename, such as <code>base</code>, to return files with any extension, such as <code>base.foo</code> and
+	 *          <code>base.foo.bar</code>, or no extension at all.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the directory and/or base filename is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForBaseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename)
+			throws IOException, ConfigurationException {
+		return new Builder().baseFilename(directory, baseFilename).build().loadConfiguration();
+	}
+
+	/**
+	 * Discovers and loads an optional configuration file using a filename glob.
+	 * <p>
+	 * Only a single directory level is searched, regardless of the glob.
+	 * </p>
+	 * @param directory The source directory for configuration file discovery.
+	 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> that would match both <code>foot.xml</code>
+	 *          and <code>food.properties</code>.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForFilenameGlob(@Nonnull final Path directory, @Nonnull final String filenameGlob)
+			throws IOException, ConfigurationException {
+		return new Builder().filenameGlob(directory, filenameGlob).build().loadConfiguration();
+	}
+
+	/**
+	 * Discovers and loads an optional configuration file using a filename pattern.
+	 * @param directory The source directory for configuration file discovery.
+	 * @param filenamePattern The regular expression pattern for matching files in the directory.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the directory and/or filename pattern is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 */
+	public static Optional<Configuration> loadConfigurationForFilenamePattern(@Nonnull final Path directory, @Nonnull final Pattern filenamePattern)
+			throws IOException, ConfigurationException {
+		return new Builder().filenamePattern(directory, filenamePattern).build().loadConfiguration();
+	}
+
+	//builder
 
 	/**
 	 * Builder for the manager.
