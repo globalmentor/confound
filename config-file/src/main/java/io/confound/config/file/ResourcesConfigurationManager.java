@@ -115,8 +115,8 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * File formats, class loader, resource (base) path, resource base name, and optional required constructor.
 	 * @param fileFormats The file formats to support.
 	 * @param classLoader The class loader to use for loading a configuration resource.
-	 * @param resourcePath The configuration resource base path, relative to the classpath, not including configuration filename; or if no resource base name is
-	 *          specified, the full configuration resource path, relative to the classpath, including configuration filename.
+	 * @param resourcePath The configuration resource base path, relative to the classpath, not including configuration filename and ending in a slash; or if no
+	 *          resource base name is specified, the full configuration resource path, relative to the classpath, including configuration filename.
 	 * @param resourceBaseName The base filename to use for the resource, not including extension, or <code>null</code> if the resource path should be considered
 	 *          the full configuration path.
 	 * @param required Whether the manager requires a configuration to be determined when loading.
@@ -173,7 +173,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 				for(final Map.Entry<String, ConfigurationFileFormat> candidateFormatEntry : (Iterable<Map.Entry<String, ConfigurationFileFormat>>)getFileFormatsByExtension()
 						.stream().sorted((format1, format2) -> Integer.compare(format2.getKey().length(), format1.getKey().length()))::iterator) { //sort the extensions in from longest to shortest
 					final String candidateExtension = candidateFormatEntry.getKey();
-					final String candidateResourcePath = baseResourcePath + RESOURCE_PATH_SEPARATOR + addExtension(resourceBaseName, candidateExtension);
+					final String candidateResourcePath = baseResourcePath + addExtension(resourceBaseName, candidateExtension);
 					getLogger().debug("Searching for configuration resource at path {}.", candidateResourcePath);
 					configurationResourceUrl = classLoader.getResource(candidateResourcePath);
 					if(configurationResourceUrl != null) { //if we found a resource path that exists
