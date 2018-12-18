@@ -266,7 +266,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * Only a single directory level is searched, regardless of the glob.
 	 * </p>
 	 * @param directory The source directory for configuration file discovery.
-	 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> that would match both <code>foot.xml</code>
+	 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> which would match both <code>foot.xml</code>
 	 *          and <code>food.properties</code>.
 	 * @return A configuration manager to use a configuration file matched by the given filename glob.
 	 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
@@ -351,7 +351,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 	 * Only a single directory level is searched, regardless of the glob.
 	 * </p>
 	 * @param directory The source directory for configuration file discovery.
-	 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> that would match both <code>foot.xml</code>
+	 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> which would match both <code>foot.xml</code>
 	 *          and <code>food.properties</code>.
 	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
 	 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
@@ -475,7 +475,7 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 * Only a single directory level is searched, regardless of the glob.
 		 * </p>
 		 * @param directory The source directory for configuration file discovery.
-		 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> that would match both <code>foot.xml</code>
+		 * @param filenameGlob The glob for matching files in the directory, such as <code>foo?.{properties,xml}</code> which would match both <code>foot.xml</code>
 		 *          and <code>food.properties</code>.
 		 * @return This builder.
 		 * @throws NullPointerException if the directory and/or filename glob is <code>null</code>.
