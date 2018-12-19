@@ -25,27 +25,32 @@ import javax.annotation.*;
  */
 public class ConfigurationException extends IllegalStateException {
 
-	private static final long serialVersionUID = -3980300406508371026L;
+	private static final long serialVersionUID = -7970040904023841449L;
+
+	/** No-argument constructor. */
+	public ConfigurationException() {
+		this((String)null);
+	}
 
 	/**
 	 * Message constructor.
-	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
+	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if no message should be used.
 	 */
 	public ConfigurationException(@Nullable final String message) {
 		this(message, null);
 	}
 
 	/**
-	 * Cause constructor.
+	 * Cause constructor. The message of the cause will be used if available.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */
 	public ConfigurationException(@Nullable final Throwable cause) {
-		this(null, cause);
+		this(cause == null ? null : cause.toString(), cause);
 	}
 
 	/**
 	 * Message and cause constructor.
-	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
+	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a no message should be used.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */
 	public ConfigurationException(@Nullable final String message, @Nullable final Throwable cause) {

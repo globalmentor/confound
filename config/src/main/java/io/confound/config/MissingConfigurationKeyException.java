@@ -26,7 +26,7 @@ import javax.annotation.*;
  */
 public class MissingConfigurationKeyException extends ConfigurationException {
 
-	private static final long serialVersionUID = 6748106646702212490L;
+	private static final long serialVersionUID = 5428299096069969523L;
 
 	private final String key;
 
@@ -45,7 +45,7 @@ public class MissingConfigurationKeyException extends ConfigurationException {
 
 	/**
 	 * Message and key constructor.
-	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
+	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if no message should be used.
 	 * @param key The key of the configuration configuration that was not found.
 	 */
 	public MissingConfigurationKeyException(@Nullable final String message, @Nonnull final String key) {
@@ -53,17 +53,17 @@ public class MissingConfigurationKeyException extends ConfigurationException {
 	}
 
 	/**
-	 * Cause constructor.
+	 * Cause constructor. The message of the cause will be used if available.
 	 * @param key The key of the configuration configuration that was not found.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */
 	public MissingConfigurationKeyException(@Nonnull final String key, @Nullable final Throwable cause) {
-		this(null, key, cause);
+		this(cause == null ? null : cause.toString(), key, cause);
 	}
 
 	/**
 	 * Message, key, and cause constructor.
-	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if a default message should be used.
+	 * @param message An explanation of why the input could not be parsed, or <code>null</code> if no message should be used.
 	 * @param key The key of the configuration configuration that was not found.
 	 * @param cause The cause error or <code>null</code> if the cause is nonexistent or unknown.
 	 */

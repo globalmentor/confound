@@ -45,9 +45,11 @@ public interface ConfigurationManager {
 	 * <p>
 	 * After this method has been called, it is expected that {@link #isStale(Configuration)} would return <code>false</code> barring concurrent changes.
 	 * </p>
-	 * @return The loaded configuration.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
 	 * @throws IOException if an I/O error occurs loading the configuration.
-	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded, or if no configuration was found
+	 *           for a required configuration.
+	 * @see #isRequired()
 	 */
 	public Optional<Configuration> loadConfiguration() throws IOException, ConfigurationException;
 
