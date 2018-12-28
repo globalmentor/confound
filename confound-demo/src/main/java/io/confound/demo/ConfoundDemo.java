@@ -40,8 +40,8 @@ import io.csar.Csar;
  * <li>Place a configuration file defining the <code>foo</code> key in <code>~/.confound-demo</code> using one of the following file formats:
  * <ul>
  * <li>config.properties</li>
+ * <li>config.xml</li>
  * <li>config.xml.properties</li>
- * <li>config.turf</li>
  * </ul>
  * </li>
  * </ul>
