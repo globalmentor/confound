@@ -21,11 +21,6 @@
 
 		<dependency>
 			<groupId>io.confound</groupId>
-			<artifactId>config-file-format-turf-provider</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.confound</groupId>
 			<artifactId>config-file-format-xml-provider</artifactId>
 		</dependency>
 	</dependencies>
