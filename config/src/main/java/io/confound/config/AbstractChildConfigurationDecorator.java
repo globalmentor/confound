@@ -108,7 +108,7 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	//long
 
 	@Override
-	public final int getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+	public final long getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
 		return super.getLong(key);
 	}
 

@@ -105,7 +105,7 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	//long
 
 	@Override
-	public int getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+	public long getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
 		return getConfiguration().getLong(key);
 	}
 

@@ -186,8 +186,8 @@ public interface Configuration {
 	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public default @Nonnull int getLong(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalLong(key), key).intValue();
+	public default @Nonnull long getLong(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return requireConfiguration(getOptionalLong(key), key).longValue();
 	}
 
 	/**
