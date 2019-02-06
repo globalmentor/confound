@@ -41,7 +41,7 @@ public class PropertiesConfigurationTest {
 		assertThat(propertiesConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(propertiesConfiguration.getBoolean("flag"), is(true));
 		assertThat(propertiesConfiguration.hasConfigurationValue("none"), is(false));
-		assertThat(propertiesConfiguration.getOptionalObject("none"), isEmpty());
+		assertThat(propertiesConfiguration.findObject("none"), isEmpty());
 	}
 
 }

@@ -41,7 +41,7 @@ public class StringMapConfigurationTest {
 		assertThat(stringMapConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(stringMapConfiguration.getBoolean("flag"), is(true));
 		assertThat(stringMapConfiguration.hasConfigurationValue("none"), is(false));
-		assertThat(stringMapConfiguration.getOptionalObject("none"), isEmpty());
+		assertThat(stringMapConfiguration.findObject("none"), isEmpty());
 	}
 
 }

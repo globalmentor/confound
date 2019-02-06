@@ -89,7 +89,7 @@ public abstract class BaseConfiguration<T> extends AbstractConfiguration {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <P> Optional<P> getOptionalObject(final String key) throws ConfigurationException {
+	public <P> Optional<P> findObject(final String key) throws ConfigurationException {
 		return (Optional<P>)findConfigurationValue(key);
 	}
 

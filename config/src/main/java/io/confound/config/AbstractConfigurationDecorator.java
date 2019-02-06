@@ -62,8 +62,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalObject(key);
+	public <T> Optional<T> findObject(final String key) throws ConfigurationException {
+		return getConfiguration().findObject(key);
 	}
 
 	//Boolean
@@ -74,8 +74,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalBoolean(key);
+	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
+		return getConfiguration().findBoolean(key);
 	}
 
 	//double
@@ -86,8 +86,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalDouble(key);
+	public Optional<Double> findDouble(final String key) throws ConfigurationException {
+		return getConfiguration().findDouble(key);
 	}
 
 	//int
@@ -98,8 +98,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalInt(key);
+	public Optional<Integer> findInt(final String key) throws ConfigurationException {
+		return getConfiguration().findInt(key);
 	}
 
 	//long
@@ -110,8 +110,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalLong(key);
+	public Optional<Long> findLong(final String key) throws ConfigurationException {
+		return getConfiguration().findLong(key);
 	}
 
 	//Path
@@ -122,8 +122,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalPath(key);
+	public Optional<Path> findPath(final String key) throws ConfigurationException {
+		return getConfiguration().findPath(key);
 	}
 
 	//String
@@ -134,8 +134,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalString(key);
+	public Optional<String> findString(final String key) throws ConfigurationException {
+		return getConfiguration().findString(key);
 	}
 
 	//URI
@@ -146,8 +146,8 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
-		return getConfiguration().getOptionalUri(key);
+	public Optional<URI> findUri(final String key) throws ConfigurationException {
+		return getConfiguration().findUri(key);
 	}
 
 }

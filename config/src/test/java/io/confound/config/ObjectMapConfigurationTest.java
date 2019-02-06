@@ -41,7 +41,7 @@ public class ObjectMapConfigurationTest {
 		assertThat(objectMapConfiguration.hasConfigurationValue("flag"), is(true));
 		assertThat(objectMapConfiguration.getBoolean("flag"), is(true));
 		assertThat(objectMapConfiguration.hasConfigurationValue("none"), is(false));
-		assertThat(objectMapConfiguration.getOptionalObject("none"), isEmpty());
+		assertThat(objectMapConfiguration.findObject("none"), isEmpty());
 	}
 
 }

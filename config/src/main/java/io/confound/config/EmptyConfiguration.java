@@ -39,42 +39,42 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
-	public final <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
+	public final <T> Optional<T> findObject(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
+	public final Optional<Double> findDouble(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
+	public final Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
+	public final Optional<Integer> findInt(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
+	public final Optional<Long> findLong(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
+	public final Optional<String> findString(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
+	public final Optional<Path> findPath(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 
 	@Override
-	public final Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
+	public final Optional<URI> findUri(final String key) throws ConfigurationException {
 		return Optional.empty();
 	}
 

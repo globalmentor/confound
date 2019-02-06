@@ -30,14 +30,14 @@ import org.junit.*;
  */
 public class BaseConfigurationTest {
 
-	/** @see BaseConfiguration#getOptionalObject(String) */
+	/** @see BaseConfiguration#findObject(String) */
 	@Test
 	public void testFindOptionalConfigurationValues() {
 		//test direct configuration access
 		@SuppressWarnings("unchecked")
 		final BaseConfiguration<String> parentConfiguration = mock(BaseConfiguration.class, CALLS_REAL_METHODS);
 		when(parentConfiguration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("bar"));
-		assertThat(parentConfiguration.getOptionalObject("foo"), is(Optional.of("bar")));
+		assertThat(parentConfiguration.findObject("foo"), is(Optional.of("bar")));
 	}
 
 	//TODO add test of normalizeKey()

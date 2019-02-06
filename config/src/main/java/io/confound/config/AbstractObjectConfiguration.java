@@ -56,7 +56,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
+	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Boolean.class);
 	}
 
@@ -65,7 +65,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
+	public Optional<Double> findDouble(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Double.class);
 	}
 
@@ -74,7 +74,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
+	public Optional<Integer> findInt(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Integer.class);
 	}
 
@@ -83,7 +83,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
+	public Optional<Long> findLong(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Long.class);
 	}
 
@@ -93,7 +93,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 *           then resolves the path using {@link #resolvePath(Path)}.
 	 */
 	@Override
-	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
+	public Optional<Path> findPath(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Path.class).map(this::resolvePath);
 	}
 
@@ -102,7 +102,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public final Optional<String> getOptionalString(final String key) throws ConfigurationException {
+	public final Optional<String> findString(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), String.class);
 	}
 
@@ -111,7 +111,7 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
+	public Optional<URI> findUri(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), URI.class);
 	}
 

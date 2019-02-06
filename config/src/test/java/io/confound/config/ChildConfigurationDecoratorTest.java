@@ -29,7 +29,7 @@ import org.junit.*;
  */
 public class ChildConfigurationDecoratorTest {
 
-	/** @see ChildConfigurationDecorator#getOptionalString(String) */
+	/** @see ChildConfigurationDecorator#findString(String) */
 	@Test
 	public void testFindOptionalConfigurationValues() {
 
@@ -45,8 +45,8 @@ public class ChildConfigurationDecoratorTest {
 
 		final ChildConfigurationDecorator childConfiguration = new ChildConfigurationDecorator(configuration, parentConfiguration);
 
-		assertThat(childConfiguration.getOptionalString("test"), isPresentAndIs("child"));
-		assertThat(childConfiguration.getOptionalString("foo"), isPresentAndIs("bar"));
+		assertThat(childConfiguration.findString("test"), isPresentAndIs("child"));
+		assertThat(childConfiguration.findString("foo"), isPresentAndIs("bar"));
 	}
 
 }

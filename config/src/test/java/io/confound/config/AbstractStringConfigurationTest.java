@@ -32,45 +32,45 @@ import org.junit.*;
  */
 public class AbstractStringConfigurationTest {
 
-	/** @see AbstractStringConfiguration#getOptionalObject(String) */
+	/** @see AbstractStringConfiguration#findObject(String) */
 	@Test
 	public void testGetOptionalObject() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("abc123"));
-		assertThat(configuration.getOptionalObject("foo"), is(Optional.of("abc123")));
+		assertThat(configuration.findObject("foo"), is(Optional.of("abc123")));
 	}
 
-	/** @see AbstractStringConfiguration#getOptionalDouble(String) */
+	/** @see AbstractStringConfiguration#findDouble(String) */
 	@Test
 	public void testGetOptionalDouble() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("1.23"));
-		assertThat(configuration.getOptionalDouble("foo"), is(Optional.of(1.23)));
+		assertThat(configuration.findDouble("foo"), is(Optional.of(1.23)));
 	}
 
-	/** @see AbstractStringConfiguration#getOptionalInt(String) */
+	/** @see AbstractStringConfiguration#findInt(String) */
 	@Test
 	public void testGetOptionalInt() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("123"));
-		assertThat(configuration.getOptionalInt("foo"), is(Optional.of(123)));
+		assertThat(configuration.findInt("foo"), is(Optional.of(123)));
 	}
 
-	/** @see AbstractStringConfiguration#getOptionalLong(String) */
+	/** @see AbstractStringConfiguration#findLong(String) */
 	@Test
 	public void testGetOptionalLong() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("123456789"));
-		assertThat(configuration.getOptionalLong("foo"), is(Optional.of(123456789L)));
+		assertThat(configuration.findLong("foo"), is(Optional.of(123456789L)));
 	}
 
-	/** @see AbstractStringConfiguration#getOptionalPath(String) */
+	/** @see AbstractStringConfiguration#findPath(String) */
 	@Test
 	public void testGetOptionalPath() {
 		final Path userFooBarPath = Paths.get(System.getProperty("user.home")).resolve("foo").resolve("bar");
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of(userFooBarPath.toString()));
-		assertThat(configuration.getOptionalPath("foo"), is(Optional.of(userFooBarPath)));
+		assertThat(configuration.findPath("foo"), is(Optional.of(userFooBarPath)));
 	}
 
 	/** @see AbstractStringConfiguration#getOptionalString(String, Object...) */
@@ -78,15 +78,15 @@ public class AbstractStringConfigurationTest {
 	public void testGetOptionalString() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("bar"));
-		assertThat(configuration.getOptionalString("foo"), is(Optional.of("bar")));
+		assertThat(configuration.findString("foo"), is(Optional.of("bar")));
 	}
 
-	/** @see AbstractStringConfiguration#getOptionalUri(String) */
+	/** @see AbstractStringConfiguration#findUri(String) */
 	@Test
 	public void testGetOptionalUri() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("http://example.com/bar"));
-		assertThat(configuration.getOptionalUri("foo"), is(Optional.of(URI.create("http://example.com/bar"))));
+		assertThat(configuration.findUri("foo"), is(Optional.of(URI.create("http://example.com/bar"))));
 	}
 
 }

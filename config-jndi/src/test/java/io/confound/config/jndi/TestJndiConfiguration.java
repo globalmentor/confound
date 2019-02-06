@@ -50,7 +50,7 @@ public class TestJndiConfiguration {
 		final Configuration configuration = new JndiConfiguration();
 
 		assertThat(configuration.getString("foo"), is("bar"));
-		assertThat(configuration.getOptionalString("bar"), isEmpty());
+		assertThat(configuration.findString("bar"), isEmpty());
 	}
 
 	/**

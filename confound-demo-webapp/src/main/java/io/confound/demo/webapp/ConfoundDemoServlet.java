@@ -55,13 +55,13 @@ public class ConfoundDemoServlet extends HttpServlet {
 	 * @param args Command-line arguments.
 	 */
 	public static void main(@Nonnull final String[] args) {
-		System.out.println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		System.out.println(String.format("Foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 	}
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding(UTF_8.name());
-		response.getWriter().println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		response.getWriter().println(String.format("Foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 	}
 
 }

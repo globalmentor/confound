@@ -37,8 +37,8 @@ public class EnvironmentConfigurationTest {
 		final Map<String, String> envMap = new HashMap<>();
 		envMap.put("FOO_BAR", "test");
 		final EnvironmentConfiguration envConfiguration = new EnvironmentConfiguration(envMap, false); //disable normalization
-		assertThat(envConfiguration.getOptionalString("foo.bar"), isEmpty());
-		assertThat(envConfiguration.getOptionalString("FOO_BAR"), isPresentAnd(is("test")));
+		assertThat(envConfiguration.findString("foo.bar"), isEmpty());
+		assertThat(envConfiguration.findString("FOO_BAR"), isPresentAnd(is("test")));
 		assertThat(envConfiguration.getString("FOO_BAR"), is("test"));
 
 	}
@@ -50,9 +50,9 @@ public class EnvironmentConfigurationTest {
 		envMap.put("FOO_BAR", "test");
 		final EnvironmentConfiguration envConfiguration = new EnvironmentConfiguration(envMap, true); //enable normalization
 		assertThat(envConfiguration.getString("foo.bar"), is("test"));
-		assertThat(envConfiguration.getOptionalString("foo.bar"), isPresentAnd(is("test")));
+		assertThat(envConfiguration.findString("foo.bar"), isPresentAnd(is("test")));
 		assertThat(envConfiguration.getString("FOO_BAR"), is("test"));
-		assertThat(envConfiguration.getOptionalString("FOO_BAR"), isPresentAnd(is("test")));
+		assertThat(envConfiguration.findString("FOO_BAR"), isPresentAnd(is("test")));
 	}
 
 }

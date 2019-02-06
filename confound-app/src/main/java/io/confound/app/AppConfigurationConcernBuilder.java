@@ -94,7 +94,7 @@ public class AppConfigurationConcernBuilder {
 		final Configuration systemConfiguration = Confound.getSystemConfiguration(); //TODO refactor to a method so subclasses can customize
 
 		final Path baseDirectory = this.baseDirectory;
-		final Path appDataDirectory = systemConfiguration.getOptionalPath(CONFIG_KEY_APP_DATA_DIR).orElse(this.defaultAppDataDirectory);
+		final Path appDataDirectory = systemConfiguration.findPath(CONFIG_KEY_APP_DATA_DIR).orElse(this.defaultAppDataDirectory);
 		if(appDataDirectory == null) {
 			throw new ConfigurationException("No application data directory could be determined.");
 		}
