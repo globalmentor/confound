@@ -21,6 +21,9 @@ import static java.util.Objects.*;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import javax.annotation.*;
 
@@ -69,12 +72,13 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * @implSpec This implementation parses the value using {@link Double#valueOf(String)}.
+	 * @implSpec This implementation parses the value using {@link Double#parseDouble(String)}.
 	 */
 	@Override
-	public Optional<Double> findDouble(final String key) throws ConfigurationException {
+	public OptionalDouble findDouble(final String key) throws ConfigurationException {
 		try {
-			return findConfigurationValue(key).map(Double::valueOf);
+			final Optional<String> value = findConfigurationValue(key);
+			return value.isPresent() ? OptionalDouble.of(Double.parseDouble(value.get())) : OptionalDouble.empty();
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}
@@ -82,12 +86,13 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * @implSpec This implementation parses the value using {@link Integer#valueOf(String)}.
+	 * @implSpec This implementation parses the value using {@link Integer#parseInt(String)}.
 	 */
 	@Override
-	public Optional<Integer> findInt(final String key) throws ConfigurationException {
+	public OptionalInt findInt(final String key) throws ConfigurationException {
 		try {
-			return findConfigurationValue(key).map(Integer::valueOf);
+			final Optional<String> value = findConfigurationValue(key);
+			return value.isPresent() ? OptionalInt.of(Integer.parseInt(value.get())) : OptionalInt.empty();
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}
@@ -95,12 +100,13 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 
 	/**
 	 * {@inheritDoc}
-	 * @implSpec This implementation parses the value using {@link Long#valueOf(long)}.
+	 * @implSpec This implementation parses the value using {@link Long#parseLong(String)}.
 	 */
 	@Override
-	public Optional<Long> findLong(final String key) throws ConfigurationException {
+	public OptionalLong findLong(final String key) throws ConfigurationException {
 		try {
-			return findConfigurationValue(key).map(Long::valueOf);
+			final Optional<String> value = findConfigurationValue(key);
+			return value.isPresent() ? OptionalLong.of(Long.parseLong(value.get())) : OptionalLong.empty();
 		} catch(final NumberFormatException numberFormatException) {
 			throw new ConfigurationException(numberFormatException);
 		}

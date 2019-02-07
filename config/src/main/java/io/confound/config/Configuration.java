@@ -22,6 +22,9 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import javax.annotation.*;
 
@@ -135,7 +138,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull double getDouble(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(findDouble(key), key).doubleValue();
+		return findDouble(key).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	/**
@@ -146,7 +149,7 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Double> findDouble(@Nonnull final String key) throws ConfigurationException;
+	public OptionalDouble findDouble(@Nonnull final String key) throws ConfigurationException;
 
 	//int
 
@@ -161,7 +164,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull int getInt(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(findInt(key), key).intValue();
+		return findInt(key).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	/**
@@ -172,7 +175,7 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Integer> findInt(@Nonnull final String key) throws ConfigurationException;
+	public OptionalInt findInt(@Nonnull final String key) throws ConfigurationException;
 
 	//long
 
@@ -187,19 +190,21 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull long getLong(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(findLong(key), key).longValue();
+		return findLong(key).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	/**
 	 * Retrieves a long integer configuration value that may not be present.
+	 * @implSpec The default implementation delegates to {@link #findInt(String)} for convenience.
 	 * @param key The configuration key.
 	 * @return The optional configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public default Optional<Long> findLong(@Nonnull final String key) throws ConfigurationException {
-		return findInt(key).map(Integer::intValue).map(Long::valueOf); //this apparently uses auto-unboxing and autoboxing  
+	public default OptionalLong findLong(@Nonnull final String key) throws ConfigurationException {
+		final OptionalInt intValue = findInt(key);
+		return intValue.isPresent() ? OptionalLong.of(intValue.getAsInt()) : OptionalLong.empty();
 	}
 
 	//Path
