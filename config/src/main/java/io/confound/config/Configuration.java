@@ -72,7 +72,7 @@ public interface Configuration {
 
 	/**
 	 * Retrieves a general configuration object.
-	 * @implSpec This default version delegates to {@link #getOptionalObject(String)}.
+	 * @implSpec This default version delegates to {@link #findObject(String)}.
 	 * @param <T> The type of configuration object expected.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
@@ -82,7 +82,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull <T> T getObject(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalObject(key), key);
+		return requireConfiguration(findObject(key), key);
 	}
 
 	/**
@@ -94,13 +94,13 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public <T> Optional<T> getOptionalObject(@Nonnull final String key) throws ConfigurationException;
+	public <T> Optional<T> findObject(@Nonnull final String key) throws ConfigurationException;
 
 	//Boolean
 
 	/**
 	 * Retrieves a Boolean configuration value.
-	 * @implSpec This default version delegates to {@link #getOptionalBoolean(String)}.
+	 * @implSpec This default version delegates to {@link #findBoolean(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -109,7 +109,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull boolean getBoolean(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalBoolean(key), key).booleanValue();
+		return requireConfiguration(findBoolean(key), key).booleanValue();
 	}
 
 	/**
@@ -120,13 +120,13 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Boolean> getOptionalBoolean(@Nonnull final String key) throws ConfigurationException;
+	public Optional<Boolean> findBoolean(@Nonnull final String key) throws ConfigurationException;
 
 	//double
 
 	/**
 	 * Retrieves a floating point configuration value.
-	 * @implSpec This default version delegates to {@link #getOptionalDouble(String)}.
+	 * @implSpec This default version delegates to {@link #findDouble(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -135,7 +135,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull double getDouble(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalDouble(key), key).doubleValue();
+		return requireConfiguration(findDouble(key), key).doubleValue();
 	}
 
 	/**
@@ -146,13 +146,13 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Double> getOptionalDouble(@Nonnull final String key) throws ConfigurationException;
+	public Optional<Double> findDouble(@Nonnull final String key) throws ConfigurationException;
 
 	//int
 
 	/**
 	 * Retrieves an integer configuration value.
-	 * @implSpec This default version delegates to {@link #getOptionalInt(String)}.
+	 * @implSpec This default version delegates to {@link #findInt(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -161,7 +161,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull int getInt(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalInt(key), key).intValue();
+		return requireConfiguration(findInt(key), key).intValue();
 	}
 
 	/**
@@ -172,13 +172,13 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Integer> getOptionalInt(@Nonnull final String key) throws ConfigurationException;
+	public Optional<Integer> findInt(@Nonnull final String key) throws ConfigurationException;
 
 	//long
 
 	/**
 	 * Retrieves a long integer configuration value.
-	 * @implSpec This default version delegates to {@link #getOptionalLong(String)}.
+	 * @implSpec This default version delegates to {@link #findLong(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -187,7 +187,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull long getLong(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalLong(key), key).longValue();
+		return requireConfiguration(findLong(key), key).longValue();
 	}
 
 	/**
@@ -198,8 +198,8 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public default Optional<Long> getOptionalLong(@Nonnull final String key) throws ConfigurationException {
-		return getOptionalInt(key).map(Integer::intValue).map(Long::valueOf); //this apparently uses auto-unboxing and autoboxing  
+	public default Optional<Long> findLong(@Nonnull final String key) throws ConfigurationException {
+		return findInt(key).map(Integer::intValue).map(Long::valueOf); //this apparently uses auto-unboxing and autoboxing  
 	}
 
 	//Path
@@ -209,7 +209,7 @@ public interface Configuration {
 	 * <p>
 	 * The path will be resolved using {@link #resolvePath(Path)}.
 	 * </p>
-	 * @implSpec This default version delegates to {@link #getOptionalPath(String)}.
+	 * @implSpec This default version delegates to {@link #findPath(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -218,7 +218,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull Path getPath(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalPath(key), key);
+		return requireConfiguration(findPath(key), key);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<Path> getOptionalPath(@Nonnull final String key) throws ConfigurationException;
+	public Optional<Path> findPath(@Nonnull final String key) throws ConfigurationException;
 
 	/**
 	 * Resolves the given path as appropriate. Absolute paths should not be modified. Relative paths may be resolved to some standard or configured absolute path,
@@ -253,7 +253,7 @@ public interface Configuration {
 	 * <p>
 	 * TODO discuss dereferencing
 	 * </p>
-	 * @implSpec This default version delegates to {@link #getOptionalString(String)}.
+	 * @implSpec This default version delegates to {@link #findString(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -263,7 +263,7 @@ public interface Configuration {
 	 * @see MessageFormat#format(Object)
 	 */
 	public default @Nonnull String getString(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalString(key), key);
+		return requireConfiguration(findString(key), key);
 	}
 
 	/**
@@ -278,13 +278,13 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 * @see MessageFormat#format(Object)
 	 */
-	public Optional<String> getOptionalString(@Nonnull final String key) throws ConfigurationException;
+	public Optional<String> findString(@Nonnull final String key) throws ConfigurationException;
 
 	//URI
 
 	/**
 	 * Retrieves a URI configuration value.
-	 * @implSpec This default version delegates to {@link #getOptionalUri(String)}.
+	 * @implSpec This default version delegates to {@link #findUri(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -293,7 +293,7 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public default @Nonnull URI getUri(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return requireConfiguration(getOptionalUri(key), key);
+		return requireConfiguration(findUri(key), key);
 	}
 
 	/**
@@ -304,7 +304,7 @@ public interface Configuration {
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public Optional<URI> getOptionalUri(@Nonnull final String key) throws ConfigurationException;
+	public Optional<URI> findUri(@Nonnull final String key) throws ConfigurationException;
 
 	/**
 	 * Returns a configuration equivalent to this configuration but that will fall back to a specified parent configuration if a value is not present. This

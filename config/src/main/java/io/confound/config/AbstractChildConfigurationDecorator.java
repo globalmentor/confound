@@ -65,8 +65,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public <T> Optional<T> getOptionalObject(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalObject(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalObject(key)));
+	public <T> Optional<T> findObject(final String key) throws ConfigurationException {
+		return or(getConfiguration().findObject(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findObject(key)));
 	}
 
 	//Boolean
@@ -77,8 +77,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalBoolean(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalBoolean(key)));
+	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
+		return or(getConfiguration().findBoolean(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findBoolean(key)));
 	}
 
 	//double
@@ -89,8 +89,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalDouble(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalDouble(key)));
+	public Optional<Double> findDouble(final String key) throws ConfigurationException {
+		return or(getConfiguration().findDouble(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findDouble(key)));
 	}
 
 	//int
@@ -101,8 +101,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalInt(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalInt(key)));
+	public Optional<Integer> findInt(final String key) throws ConfigurationException {
+		return or(getConfiguration().findInt(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findInt(key)));
 	}
 
 	//long
@@ -113,8 +113,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalLong(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalLong(key)));
+	public Optional<Long> findLong(final String key) throws ConfigurationException {
+		return or(getConfiguration().findLong(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findLong(key)));
 	}
 
 	//Path
@@ -125,8 +125,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalPath(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalPath(key)));
+	public Optional<Path> findPath(final String key) throws ConfigurationException {
+		return or(getConfiguration().findPath(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findPath(key)));
 	}
 
 	//String
@@ -137,8 +137,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalString(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalString(key)));
+	public Optional<String> findString(final String key) throws ConfigurationException {
+		return or(getConfiguration().findString(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findString(key)));
 	}
 
 	//URI
@@ -149,8 +149,8 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
-		return or(getConfiguration().getOptionalUri(key), () -> getParentConfiguration().flatMap(configuration -> configuration.getOptionalUri(key)));
+	public Optional<URI> findUri(final String key) throws ConfigurationException {
+		return or(getConfiguration().findUri(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findUri(key)));
 	}
 
 }

@@ -30,13 +30,13 @@ import org.junit.*;
  */
 public class ConfigurationTest {
 
-	/** @see Configuration#getOptionalLong(String) */
+	/** @see Configuration#findLong(String) */
 	@Test
 	public void testGetOptionalLong() {
 		final Configuration configuration = mock(Configuration.class, CALLS_REAL_METHODS);
-		when(configuration.getOptionalInt("foo")).thenReturn(Optional.of(123));
+		when(configuration.findInt("foo")).thenReturn(Optional.of(123));
 		//the default version delegates to the int version
-		assertThat(configuration.getOptionalLong("foo"), is(Optional.of(123L)));
+		assertThat(configuration.findLong("foo"), is(Optional.of(123L)));
 	}
 
 }

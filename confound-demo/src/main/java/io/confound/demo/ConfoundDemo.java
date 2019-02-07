@@ -81,10 +81,10 @@ public class ConfoundDemo {
 		final ConfigurationConcern localConfigConcern = new DefaultConfigurationConcern(localConfig);
 
 		//#print "foo" value in two separate contexts
-		System.out.println(String.format("By default foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		System.out.println(String.format("By default foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 
 		Csar.run(localConfigConcern, () -> {
-			System.out.println(String.format("In another context foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+			System.out.println(String.format("In another context foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 		});
 
 	}

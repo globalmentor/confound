@@ -40,7 +40,7 @@ public class ConfoundAppDemo {
 	 * @param args Command-line arguments.
 	 */
 	public static void main(@Nonnull final String[] args) {
-		System.out.println(String.format("Foo is %s.", getConfiguration().getOptionalString("foo").orElse("[missing]")));
+		System.out.println(String.format("Foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 	}
 
 }

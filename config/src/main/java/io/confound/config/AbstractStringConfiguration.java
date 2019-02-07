@@ -63,7 +63,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link Boolean#valueOf(String)}.
 	 */
 	@Override
-	public Optional<Boolean> getOptionalBoolean(final String key) throws ConfigurationException {
+	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
 		return findConfigurationValue(key).map(Boolean::valueOf);
 	}
 
@@ -72,7 +72,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link Double#valueOf(String)}.
 	 */
 	@Override
-	public Optional<Double> getOptionalDouble(final String key) throws ConfigurationException {
+	public Optional<Double> findDouble(final String key) throws ConfigurationException {
 		try {
 			return findConfigurationValue(key).map(Double::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
@@ -85,7 +85,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link Integer#valueOf(String)}.
 	 */
 	@Override
-	public Optional<Integer> getOptionalInt(final String key) throws ConfigurationException {
+	public Optional<Integer> findInt(final String key) throws ConfigurationException {
 		try {
 			return findConfigurationValue(key).map(Integer::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
@@ -98,7 +98,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link Long#valueOf(long)}.
 	 */
 	@Override
-	public Optional<Long> getOptionalLong(final String key) throws ConfigurationException {
+	public Optional<Long> findLong(final String key) throws ConfigurationException {
 		try {
 			return findConfigurationValue(key).map(Long::valueOf);
 		} catch(final NumberFormatException numberFormatException) {
@@ -111,7 +111,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link URI#create(String)} and then resolves the path using {@link #resolvePath(Path)}.
 	 */
 	@Override
-	public Optional<Path> getOptionalPath(final String key) throws ConfigurationException {
+	public Optional<Path> findPath(final String key) throws ConfigurationException {
 		try {
 			return findConfigurationValue(key).map(Paths::get).map(this::resolvePath);
 		} catch(final IllegalArgumentException illegalArgumentException) {
@@ -124,7 +124,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation delegates to {@link #findConfigurationValue(String)}.
 	 */
 	@Override
-	public Optional<String> getOptionalString(final String key) throws ConfigurationException {
+	public Optional<String> findString(final String key) throws ConfigurationException {
 		return findConfigurationValue(key);
 	}
 
@@ -133,7 +133,7 @@ public abstract class AbstractStringConfiguration extends BaseConfiguration<Stri
 	 * @implSpec This implementation parses the value using {@link URI#create(String)}.
 	 */
 	@Override
-	public Optional<URI> getOptionalUri(final String key) throws ConfigurationException {
+	public Optional<URI> findUri(final String key) throws ConfigurationException {
 		try {
 			return findConfigurationValue(key).map(URI::create);
 		} catch(final IllegalArgumentException illegalArgumentException) {
