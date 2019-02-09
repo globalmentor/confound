@@ -71,6 +71,7 @@
 		<module>confound-demo-webapp</module>
 		<module>confound-file</module>
 		<module>confound-system-jndi-provider</module>
+		<module>convert</module>
 	</modules>
 
 	<dependencyManagement>
