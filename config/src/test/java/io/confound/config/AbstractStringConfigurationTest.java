@@ -23,6 +23,9 @@ import static org.mockito.Mockito.*;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import org.junit.*;
 
@@ -45,7 +48,7 @@ public class AbstractStringConfigurationTest {
 	public void testGetOptionalDouble() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("1.23"));
-		assertThat(configuration.findDouble("foo"), is(Optional.of(1.23)));
+		assertThat(configuration.findDouble("foo"), is(OptionalDouble.of(1.23)));
 	}
 
 	/** @see AbstractStringConfiguration#findInt(String) */
@@ -53,7 +56,7 @@ public class AbstractStringConfigurationTest {
 	public void testGetOptionalInt() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("123"));
-		assertThat(configuration.findInt("foo"), is(Optional.of(123)));
+		assertThat(configuration.findInt("foo"), is(OptionalInt.of(123)));
 	}
 
 	/** @see AbstractStringConfiguration#findLong(String) */
@@ -61,7 +64,7 @@ public class AbstractStringConfigurationTest {
 	public void testGetOptionalLong() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("123456789"));
-		assertThat(configuration.findLong("foo"), is(Optional.of(123456789L)));
+		assertThat(configuration.findLong("foo"), is(OptionalLong.of(123456789L)));
 	}
 
 	/** @see AbstractStringConfiguration#findPath(String) */

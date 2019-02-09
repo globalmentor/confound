@@ -19,6 +19,9 @@ package io.confound.config;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import javax.annotation.*;
 
@@ -65,8 +68,9 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Double> findDouble(final String key) throws ConfigurationException {
-		return convertValue(findConfigurationValue(key), Double.class);
+	public OptionalDouble findDouble(final String key) throws ConfigurationException {
+		final Optional<Double> optionalValue = convertValue(findConfigurationValue(key), Double.class);
+		return optionalValue.isPresent() ? OptionalDouble.of(optionalValue.get().doubleValue()) : OptionalDouble.empty();
 	}
 
 	/**
@@ -74,8 +78,9 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Integer> findInt(final String key) throws ConfigurationException {
-		return convertValue(findConfigurationValue(key), Integer.class);
+	public OptionalInt findInt(final String key) throws ConfigurationException {
+		final Optional<Integer> optionalValue = convertValue(findConfigurationValue(key), Integer.class);
+		return optionalValue.isPresent() ? OptionalInt.of(optionalValue.get().intValue()) : OptionalInt.empty();
 	}
 
 	/**
@@ -83,8 +88,9 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
-	public Optional<Long> findLong(final String key) throws ConfigurationException {
-		return convertValue(findConfigurationValue(key), Long.class);
+	public OptionalLong findLong(final String key) throws ConfigurationException {
+		final Optional<Long> optionalValue = convertValue(findConfigurationValue(key), Long.class);
+		return optionalValue.isPresent() ? OptionalLong.of(optionalValue.get().longValue()) : OptionalLong.empty();
 	}
 
 	/**

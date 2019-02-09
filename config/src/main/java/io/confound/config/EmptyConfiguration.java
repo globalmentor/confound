@@ -19,6 +19,9 @@ package io.confound.config;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 /**
  * A configuration implementation that contains no definitions.
@@ -44,8 +47,8 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
-	public final Optional<Double> findDouble(final String key) throws ConfigurationException {
-		return Optional.empty();
+	public final OptionalDouble findDouble(final String key) throws ConfigurationException {
+		return OptionalDouble.empty();
 	}
 
 	@Override
@@ -54,13 +57,13 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
-	public final Optional<Integer> findInt(final String key) throws ConfigurationException {
-		return Optional.empty();
+	public final OptionalInt findInt(final String key) throws ConfigurationException {
+		return OptionalInt.empty();
 	}
 
 	@Override
-	public final Optional<Long> findLong(final String key) throws ConfigurationException {
-		return Optional.empty();
+	public final OptionalLong findLong(final String key) throws ConfigurationException {
+		return OptionalLong.empty();
 	}
 
 	@Override

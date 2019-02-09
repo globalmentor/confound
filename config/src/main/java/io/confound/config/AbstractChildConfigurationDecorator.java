@@ -19,6 +19,9 @@ package io.confound.config;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 /**
  * Wrapper configuration that forwards calls to the decorated configuration, falling back to an optional parent configuration.
@@ -89,8 +92,15 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Double> findDouble(final String key) throws ConfigurationException {
-		return or(getConfiguration().findDouble(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findDouble(key)));
+	public OptionalDouble findDouble(final String key) throws ConfigurationException {
+		OptionalDouble value = getConfiguration().findDouble(key);
+		if(!value.isPresent()) {
+			final Optional<C> parent = getParentConfiguration();
+			if(parent.isPresent()) {
+				value = parent.get().findDouble(key);
+			}
+		}
+		return value;
 	}
 
 	//int
@@ -101,8 +111,15 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Integer> findInt(final String key) throws ConfigurationException {
-		return or(getConfiguration().findInt(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findInt(key)));
+	public OptionalInt findInt(final String key) throws ConfigurationException {
+		OptionalInt value = getConfiguration().findInt(key);
+		if(!value.isPresent()) {
+			final Optional<C> parent = getParentConfiguration();
+			if(parent.isPresent()) {
+				value = parent.get().findInt(key);
+			}
+		}
+		return value;
 	}
 
 	//long
@@ -113,8 +130,15 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Long> findLong(final String key) throws ConfigurationException {
-		return or(getConfiguration().findLong(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findLong(key)));
+	public OptionalLong findLong(final String key) throws ConfigurationException {
+		OptionalLong value = getConfiguration().findLong(key);
+		if(!value.isPresent()) {
+			final Optional<C> parent = getParentConfiguration();
+			if(parent.isPresent()) {
+				value = parent.get().findLong(key);
+			}
+		}
+		return value;
 	}
 
 	//Path

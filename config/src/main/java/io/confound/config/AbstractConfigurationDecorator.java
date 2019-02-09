@@ -21,6 +21,9 @@ import static java.util.Objects.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import javax.annotation.*;
 
@@ -86,7 +89,7 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Double> findDouble(final String key) throws ConfigurationException {
+	public OptionalDouble findDouble(final String key) throws ConfigurationException {
 		return getConfiguration().findDouble(key);
 	}
 
@@ -98,7 +101,7 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Integer> findInt(final String key) throws ConfigurationException {
+	public OptionalInt findInt(final String key) throws ConfigurationException {
 		return getConfiguration().findInt(key);
 	}
 
@@ -110,7 +113,7 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	@Override
-	public Optional<Long> findLong(final String key) throws ConfigurationException {
+	public OptionalLong findLong(final String key) throws ConfigurationException {
 		return getConfiguration().findLong(key);
 	}
 
