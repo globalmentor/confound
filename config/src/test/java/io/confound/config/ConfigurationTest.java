@@ -33,7 +33,7 @@ public class ConfigurationTest {
 
 	/** @see Configuration#findLong(String) */
 	@Test
-	public void testGetOptionalLong() {
+	public void testFindLong() {
 		final Configuration configuration = mock(Configuration.class, CALLS_REAL_METHODS);
 		when(configuration.findInt("foo")).thenReturn(OptionalInt.of(123));
 		//the default version delegates to the int version
