@@ -63,13 +63,23 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	//Object
 
 	@Override
-	public final <T> T getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+	public final Object getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
 		return super.getObject(key);
 	}
 
 	@Override
-	public <T> Optional<T> findObject(final String key) throws ConfigurationException {
+	public Optional<Object> findObject(final String key) throws ConfigurationException {
 		return or(getConfiguration().findObject(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findObject(key)));
+	}
+
+	@Override
+	public final <O> O getObject(final String key, final Class<O> type) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getObject(key, type);
+	}
+
+	@Override
+	public <O> Optional<O> findObject(final String key, final Class<O> type) throws ConfigurationException {
+		return or(getConfiguration().findObject(key, type), () -> getParentConfiguration().flatMap(configuration -> configuration.findObject(key, type)));
 	}
 
 	//Boolean

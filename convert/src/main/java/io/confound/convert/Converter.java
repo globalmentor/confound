@@ -26,12 +26,22 @@ package io.confound.convert;
 public interface Converter<C> {
 
 	/**
+	 * Indicates whether this converter supports a conversion between two different types. This method does not guarantee that a conversion would be possible
+	 * between every instance of the given types.
+	 * @param fromType The source type.
+	 * @param toType The destination type.
+	 * @return <code>true</code> if this converter supports a conversion between the two given types in general.
+	 * @throws NullPointerException if either of the given types is <code>null</code>.
+	 */
+	public boolean supportsConvert(final Class<?> fromType, final Class<?> toType) throws IllegalArgumentException;
+
+	/**
 	 * Converts an object from one type to another. If the object is already of the correct type, no action occurs.
 	 * @param <T> The type of object required.
 	 * @param object The object to convert.
 	 * @param convertType The class representing the required type of the object.
 	 * @return The object as the required type.
-	 * @throws NullPointerException if the given object is <code>null</code>.
+	 * @throws NullPointerException if the given object and/or convert type is <code>null</code>.
 	 * @throws IllegalArgumentException if the given object cannot be converted to the requested type; if not a {@link ConversionException}, indicates that the
 	 *           object type and/or the conversion type is not supported by this converter.
 	 * @throws ConversionException if the given object should be able to be converted to the required type but something about its state, format, or contents

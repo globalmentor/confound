@@ -34,6 +34,16 @@ public class NumberConverter implements Converter<Number> {
 	protected NumberConverter() {
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation returns <code>true</code> if both types are {@link Number} types, without checking that the specific number subclass is
+	 *           supported.
+	 */
+	@Override
+	public boolean supportsConvert(final Class<?> fromType, final Class<?> toType) throws IllegalArgumentException {
+		return Number.class.isAssignableFrom(fromType) && Number.class.isAssignableFrom(toType);
+	}
+
 	@Override
 	public <T extends Number> T convert(final Object object, final Class<T> convertType) throws IllegalArgumentException {
 		final Class<?> objectType = object.getClass(); //get the type of the object

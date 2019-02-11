@@ -76,7 +76,6 @@ public interface Configuration {
 	/**
 	 * Retrieves a general configuration object.
 	 * @implSpec This default version delegates to {@link #findObject(String)}.
-	 * @param <T> The type of configuration object expected.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -84,20 +83,53 @@ public interface Configuration {
 	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public default @Nonnull <T> T getObject(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
+	public default @Nonnull Object getObject(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
 		return requireConfiguration(findObject(key), key);
 	}
 
 	/**
 	 * Retrieves a general configuration object that may not be present.
-	 * @param <T> The type of configuration object expected.
+	 * @implSpec This default version delegates to {@link #findObject(String, Class)} with type {@link Object}.
 	 * @param key The configuration key.
 	 * @return The optional configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
-	public <T> Optional<T> findObject(@Nonnull final String key) throws ConfigurationException;
+	public default Optional<Object> findObject(@Nonnull final String key) throws ConfigurationException {
+		return findObject(key, Object.class);
+	}
+
+	/**
+	 * Retrieves a general configuration object as the requested type, converting it as necessary. If the object is present but cannot be converted, a
+	 * {@link ConfigurationException} will be thrown.
+	 * @implSpec This default version delegates to {@link #findObject(String, Class)}.
+	 * @param <O> The type of configuration object expected.
+	 * @param key The configuration key.
+	 * @param type The type of object requested.
+	 * @return The configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and/or type is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default @Nonnull <O> O getObject(@Nonnull final String key, @Nonnull final Class<O> type)
+			throws MissingConfigurationKeyException, ConfigurationException {
+		return requireConfiguration(findObject(key, type), key);
+	}
+
+	/**
+	 * Retrieves a general configuration object that may not be present as the requested type, converting it as necessary. If the object is present but cannot be
+	 * converted, a {@link ConfigurationException} will be thrown.
+	 * @param <O> The type of configuration object expected.
+	 * @param key The configuration key.
+	 * @param type The type of object requested.
+	 * @return The optional configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and/or type is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public <O> Optional<O> findObject(@Nonnull final String key, @Nonnull final Class<O> type) throws ConfigurationException;
 
 	//Boolean
 
@@ -129,6 +161,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves a floating point configuration value.
+	 * @apiNote This method returns a primitive value. If you prefer an object, call {@link #getObject(String, Class)} with the desired class such as
+	 *          {@link Double}.
 	 * @implSpec This default version delegates to {@link #findDouble(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
@@ -143,6 +177,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves a floating point configuration value that may not be present.
+	 * @apiNote This method returns a primitive optional. If you prefer a normal {@link Optional}, call {@link #findObject(String, Class)} with the desired class
+	 *          such as {@link Double}.
 	 * @param key The configuration key.
 	 * @return The optional configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -155,6 +191,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves an integer configuration value.
+	 * @apiNote This method returns a primitive value. If you prefer an object, call {@link #getObject(String, Class)} with the desired class such as
+	 *          {@link Integer}.
 	 * @implSpec This default version delegates to {@link #findInt(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
@@ -169,6 +207,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves an integer configuration value that may not be present.
+	 * @apiNote This method returns a primitive optional. If you prefer a normal {@link Optional}, call {@link #findObject(String, Class)} with the desired class
+	 *          such as {@link Integer}.
 	 * @param key The configuration key.
 	 * @return The optional configuration value associated with the given key.
 	 * @throws NullPointerException if the given key is <code>null</code>.
@@ -181,6 +221,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves a long integer configuration value.
+	 * @apiNote This method returns a primitive value. If you prefer an object, call {@link #getObject(String, Class)} with the desired class such as
+	 *          {@link Long}.
 	 * @implSpec This default version delegates to {@link #findLong(String)}.
 	 * @param key The configuration key.
 	 * @return The configuration value associated with the given key.
@@ -195,6 +237,8 @@ public interface Configuration {
 
 	/**
 	 * Retrieves a long integer configuration value that may not be present.
+	 * @apiNote This method returns a primitive optional. If you prefer a normal {@link Optional}, call {@link #findObject(String, Class)} with the desired class
+	 *          such as {@link Double}.
 	 * @implSpec The default implementation delegates to {@link #findInt(String)} for convenience.
 	 * @param key The configuration key.
 	 * @return The optional configuration value associated with the given key.
