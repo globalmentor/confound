@@ -17,6 +17,7 @@
 package io.confound.config;
 
 import static org.junit.Assert.*;
+import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -40,7 +41,29 @@ public class AbstractStringConfigurationTest {
 	public void testFindObject() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("abc123"));
-		assertThat(configuration.findObject("foo"), is(Optional.of("abc123")));
+		assertThat(configuration.findObject("foo"), isPresentAndIs("abc123"));
+	}
+
+	/**
+	 * Tests that requesting a specific type of object will make the appropriate string conversions.
+	 * @see AbstractStringConfiguration#findObject(String, Class)
+	 */
+	@Test
+	public void testFindObjectType() {
+		final Path userFooBarPath = Paths.get(System.getProperty("user.home")).resolve("foo").resolve("bar");
+		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
+		when(configuration.findConfigurationValueImpl("integerVal")).thenReturn(Optional.of("123"));
+		when(configuration.findConfigurationValueImpl("floatVal")).thenReturn(Optional.of("123.45"));
+		when(configuration.findConfigurationValueImpl("pathVal")).thenReturn(Optional.of(userFooBarPath.toString()));
+		when(configuration.findConfigurationValueImpl("urlVal")).thenReturn(Optional.of("https://example.com/"));
+		assertThat(configuration.findObject("integerVal", Byte.class), isPresentAndIs(Byte.valueOf((byte)123)));
+		assertThat(configuration.findObject("integerVal", Short.class), isPresentAndIs(Short.valueOf((short)123)));
+		assertThat(configuration.findObject("integerVal", Integer.class), isPresentAndIs(Integer.valueOf(123)));
+		assertThat(configuration.findObject("integerVal", Long.class), isPresentAndIs(Long.valueOf(123)));
+		assertThat(configuration.findObject("integerVal", Integer.class), isPresentAndIs(Integer.valueOf(123)));
+		assertThat(configuration.findObject("floatVal", Float.class), isPresentAndIs(Float.valueOf(123.45f)));
+		assertThat(configuration.findObject("floatVal", Double.class), isPresentAndIs(Double.valueOf(123.45)));
+		assertThat(configuration.findObject("pathVal", Path.class), isPresentAndIs(userFooBarPath));
 	}
 
 	/** @see AbstractStringConfiguration#findDouble(String) */
@@ -73,7 +96,7 @@ public class AbstractStringConfigurationTest {
 		final Path userFooBarPath = Paths.get(System.getProperty("user.home")).resolve("foo").resolve("bar");
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of(userFooBarPath.toString()));
-		assertThat(configuration.findPath("foo"), is(Optional.of(userFooBarPath)));
+		assertThat(configuration.findPath("foo"), isPresentAndIs(userFooBarPath));
 	}
 
 	/** @see AbstractStringConfiguration#findString(String) */
@@ -81,7 +104,7 @@ public class AbstractStringConfigurationTest {
 	public void testFindString() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("bar"));
-		assertThat(configuration.findString("foo"), is(Optional.of("bar")));
+		assertThat(configuration.findString("foo"), isPresentAndIs("bar"));
 	}
 
 	/** @see AbstractStringConfiguration#findUri(String) */
@@ -89,7 +112,7 @@ public class AbstractStringConfigurationTest {
 	public void testFindUri() {
 		final AbstractStringConfiguration configuration = mock(AbstractStringConfiguration.class, CALLS_REAL_METHODS);
 		when(configuration.findConfigurationValueImpl("foo")).thenReturn(Optional.of("http://example.com/bar"));
-		assertThat(configuration.findUri("foo"), is(Optional.of(URI.create("http://example.com/bar"))));
+		assertThat(configuration.findUri("foo"), isPresentAndIs(URI.create("http://example.com/bar")));
 	}
 
 }

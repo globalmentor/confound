@@ -42,7 +42,7 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
-	public final <T> Optional<T> findObject(final String key) throws ConfigurationException {
+	public <T> Optional<T> findObject(final String key, final Class<T> type) throws ConfigurationException {
 		return Optional.empty();
 	}
 

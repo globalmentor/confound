@@ -60,13 +60,23 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	//Object
 
 	@Override
-	public <T> T getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+	public Object getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
 		return getConfiguration().getObject(key);
 	}
 
 	@Override
-	public <T> Optional<T> findObject(final String key) throws ConfigurationException {
+	public Optional<Object> findObject(final String key) throws ConfigurationException {
 		return getConfiguration().findObject(key);
+	}
+
+	@Override
+	public <O> O getObject(final String key, final Class<O> type) throws MissingConfigurationKeyException, ConfigurationException {
+		return getConfiguration().getObject(key, type);
+	}
+
+	@Override
+	public <O> Optional<O> findObject(final String key, final Class<O> type) throws ConfigurationException {
+		return getConfiguration().findObject(key, type);
 	}
 
 	//Boolean

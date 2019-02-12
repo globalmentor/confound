@@ -18,6 +18,8 @@ package io.confound.config;
 
 import static java.util.Objects.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.Optional;
@@ -36,6 +38,42 @@ import javax.annotation.*;
  * @author Garret Wilson
  */
 public abstract class AbstractStringConfiguration extends BaseConfiguration<String> {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <O> Optional<O> findObject(final String key, final Class<O> type) throws ConfigurationException {
+		if(Boolean.class.isAssignableFrom(type)) {
+			return (Optional<O>)findBoolean(key);
+		} else if(Number.class.isAssignableFrom(type)) { //if they request some type of number
+			final Optional<String> configurationValue = findConfigurationValue(key);
+			try {
+				if(Byte.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Byte::valueOf);
+				} else if(Short.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Short::valueOf);
+				} else if(Integer.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Integer::valueOf);
+				} else if(Long.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Long::valueOf);
+				} else if(BigInteger.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(BigInteger::new);
+				} else if(Float.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Float::valueOf);
+				} else if(Double.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(Double::valueOf);
+				} else if(BigDecimal.class.isAssignableFrom(type)) {
+					return (Optional<O>)configurationValue.map(BigDecimal::new);
+				}
+			} catch(final NumberFormatException numberFormatException) {
+				throw new ConfigurationException(numberFormatException);
+			}
+		} else if(Path.class.isAssignableFrom(type)) {
+			return (Optional<O>)findPath(key);
+		} else if(URI.class.isAssignableFrom(type)) {
+			return (Optional<O>)findUri(key);
+		}
+		return super.findObject(key, type); //for all other types, the default implementation will assume and attempt to cast to a string
+	}
 
 	/**
 	 * Evaluates and replaces any references in the given string.

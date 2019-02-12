@@ -25,33 +25,46 @@ import java.util.OptionalLong;
 
 import javax.annotation.*;
 
+import io.confound.convert.Converter;
+import io.confound.convert.NumberConverter;
+
 /**
  * Abstract configuration implementation for which the underlying storage is based on general objects.
- * <p>
- * In the current implementation, this class throws a {@link ConfigurationException} if the requested object is not of the requested type. A future version will
- * allow values to be converted between compatible types.
- * </p>
+ * @implSpec The current implementation supports conversion between number types; otherwise this class throws a {@link ConfigurationException} if the requested
+ *           object is not of the requested type.
  * @author Garret Wilson
  */
 public abstract class AbstractObjectConfiguration extends BaseConfiguration<Object> {
 
+	//currently we use a hard-coded converter that only supports converting numbers
+	private final static Converter<?> CONVERTER = NumberConverter.INSTANCE;
+
 	/**
 	 * Converts a configuration value from its actual type in the underlying storage to the requested type.
-	 * <p>
-	 * The current implementation merely checked to see if the value can be cast to the requested type; otherwise, an exception is thrown.
-	 * </p>
-	 * @param <T> The requested conversion type.
+	 * @implSpec The current implementation supports conversion between number types; otherwise this implementation merely checked to see if the value can be cast
+	 *           to the requested type.
+	 * @param <O> The requested conversion type.
 	 * @param value The value to convert.
 	 * @param convertClass The class indicating the requested conversion type.
 	 * @return The value converted to the requested type.
 	 * @throws ConfigurationException if the value is present and cannot be converted to the requested type.
 	 */
-	protected <T> Optional<T> convertValue(@Nonnull final Optional<Object> value, @Nonnull final Class<T> convertClass) throws ConfigurationException {
-		try {
-			return value.map(convertClass::cast);
-		} catch(final ClassCastException classCastException) {
-			throw new ConfigurationException(classCastException.getMessage(), classCastException);
-		}
+	protected <O> Optional<O> convertValue(@Nonnull final Optional<Object> value, @Nonnull final Class<O> convertClass) throws ConfigurationException {
+		return value.map(object -> {
+			try {
+				final O convertedObject;
+				if(CONVERTER.supportsConvert(object.getClass(), convertClass)) {
+					@SuppressWarnings("unchecked")
+					final Converter<O> converter = (Converter<O>)CONVERTER;
+					convertedObject = converter.convert(object, convertClass);
+				} else {
+					convertedObject = convertClass.cast(object);
+				}
+				return convertedObject;
+			} catch(final IllegalArgumentException | ClassCastException classCastException) {
+				throw new ConfigurationException(classCastException.getMessage(), classCastException);
+			}
+		});
 	}
 
 	/**
