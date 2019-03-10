@@ -17,7 +17,8 @@
 package io.confound.system.jndi.provider;
 
 import static io.confound.Confound.*;
-import static java.util.Collections.*;
+
+import java.util.stream.Stream;
 
 import javax.naming.NamingException;
 
@@ -34,14 +35,14 @@ import io.csar.ConcernProvider;
 public class SystemJndiConfigurationConcernProvider implements ConcernProvider {
 
 	@Override
-	public Iterable<Concern> getConcerns() {
+	public Stream<Concern> concerns() {
 		final JndiConfiguration jndiConfiguration;
 		try {
 			jndiConfiguration = new JndiConfiguration();
 		} catch(final NamingException namingException) {
 			throw new ConfigurationException(namingException);
 		}
-		return singleton(new DefaultConfigurationConcern(jndiConfiguration.withFallback(getSystemConfiguration())));
+		return Stream.of(new DefaultConfigurationConcern(jndiConfiguration.withFallback(getSystemConfiguration())));
 	}
 
 }

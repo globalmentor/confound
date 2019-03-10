@@ -16,7 +16,7 @@
 
 package io.confound.app.provider;
 
-import static java.util.Collections.*;
+import java.util.stream.Stream;
 
 import io.confound.app.AppConfigurationConcernBuilder;
 import io.csar.Concern;
@@ -38,8 +38,8 @@ import io.csar.ConcernProvider;
 public class AppConfigurationConcernProvider implements ConcernProvider {
 
 	@Override
-	public Iterable<Concern> getConcerns() {
-		return singleton(new AppConfigurationConcernBuilder().build());
+	public Stream<Concern> concerns() {
+		return Stream.of(new AppConfigurationConcernBuilder().build());
 	}
 
 }
