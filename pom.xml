@@ -54,6 +54,7 @@
 	</scm>
 
 	<properties>
+		<clogr.version>0.8.0-SNAPSHOT</clogr.version>
 		<csar.version>0.8.0-SNAPSHOT</csar.version>
 	</properties>
 
@@ -83,7 +84,7 @@
 			<dependency>
 				<groupId>io.clogr</groupId>
 				<artifactId>clogr</artifactId>
-				<version>0.7.0</version>
+				<version>${clogr.version}</version>
 			</dependency>
 
 			<dependency>
@@ -187,12 +188,6 @@
 				<groupId>io.csar</groupId>
 				<artifactId>csar</artifactId>
 				<version>${csar.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>4.0.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
