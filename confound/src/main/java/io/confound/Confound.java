@@ -146,10 +146,10 @@ public class Confound {
 	/**
 	 * Returns the default configuration concern.
 	 * @return The default configuration concern.
-	 * @see Csar#getDefaultConcern(Class)
+	 * @see Csar#findDefaultConcern(Class)
 	 */
 	public static Optional<ConfigurationConcern> getDefaultConfigurationConcern() {
-		return Csar.getDefaultConcern(ConfigurationConcern.class);
+		return Csar.findDefaultConcern(ConfigurationConcern.class);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class Confound {
 	 * @see #getSystemConfiguration()
 	 */
 	public static @Nonnull ConfigurationConcern getConfigurationConcern() {
-		return Csar.getOptionalConcern(ConfigurationConcern.class).orElse(SYSTEM_CONFIGURATION_CONCERN);
+		return Csar.findConcern(ConfigurationConcern.class).orElse(SYSTEM_CONFIGURATION_CONCERN);
 	}
 
 	/**
