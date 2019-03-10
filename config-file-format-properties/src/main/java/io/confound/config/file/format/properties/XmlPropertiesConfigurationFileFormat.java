@@ -28,7 +28,7 @@ import io.confound.config.properties.PropertiesConfiguration;
 /**
  * File format implementation for a configuration stored in XML properties format.
  * <p>
- * This implementation recognizes files with the extension suffix {@value #EXTENSION_SUFFIX}, stored in the XML schema recognized by
+ * This implementation recognizes files with the extension suffix {@value #FILENAME_EXTENSION}, stored in the XML schema recognized by
  * {@link Properties#loadFromXML(InputStream)}.
  * </p>
  * @author Garret Wilson
@@ -36,12 +36,12 @@ import io.confound.config.properties.PropertiesConfiguration;
  */
 public class XmlPropertiesConfigurationFileFormat implements ConfigurationFileFormat {
 
-	/** The supported extension suffix. */
-	public static final String EXTENSION_SUFFIX = "properties.xml";
+	/** The supported filename extension. */
+	public static final String FILENAME_EXTENSION = "properties.xml";
 
 	@Override
-	public Set<String> getFilenameExtensionSuffixes() {
-		return singleton(EXTENSION_SUFFIX);
+	public Set<String> getFilenameExtensions() {
+		return singleton(FILENAME_EXTENSION);
 	}
 
 	@Override

@@ -72,7 +72,7 @@ public abstract class AbstractFileConfigurationManager extends AbstractConfigura
 	/**
 	 * Configuration file formats constructor. The provided file formats will be registered with this configuration manager.
 	 * <p>
-	 * The value returned by each {@link ConfigurationFileFormat#getFilenameExtensionSuffixes()} will be used as format identifiers. If multiple file file formats
+	 * The value returned by each {@link ConfigurationFileFormat#getFilenameExtensions()} will be used as format identifiers. If multiple file file formats
 	 * indicate the same filename extension suffix, the last file format will replace the others for that format. Otherwise the formats will be attempted in the
 	 * order given.
 	 * </p>
@@ -84,7 +84,7 @@ public abstract class AbstractFileConfigurationManager extends AbstractConfigura
 		//use a LinkedHashMap to remember the given order of file formats
 		final Map<String, ConfigurationFileFormat> fileFormatsById = new LinkedHashMap<>();
 		fileFormats.forEach(fileFormat -> {
-			fileFormat.getFilenameExtensionSuffixes().forEach(format -> {
+			fileFormat.getFilenameExtensions().forEach(format -> {
 				fileFormatsById.put(format, fileFormat);
 			});
 		});

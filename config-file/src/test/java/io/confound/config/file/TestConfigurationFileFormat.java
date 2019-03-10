@@ -40,7 +40,7 @@ public class TestConfigurationFileFormat implements ConfigurationFileFormat {
 	public static final String FILENAME_EXTENSION = "test-config";
 
 	@Override
-	public Set<String> getFilenameExtensionSuffixes() {
+	public Set<String> getFilenameExtensions() {
 		return singleton(FILENAME_EXTENSION);
 	}
 
