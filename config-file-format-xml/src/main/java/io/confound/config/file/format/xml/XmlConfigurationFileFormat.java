@@ -32,17 +32,19 @@ import io.confound.config.file.ConfigurationFileFormat;
 
 /**
  * File format implementation for a configuration stored in XML format.
- * 
+ * <p>
+ * This implementation recognizes files with the extension suffix {@value #FILENAME_EXTENSION}.
+ * </p>
  * @author Magno N A Cruz
  */
 public class XmlConfigurationFileFormat implements ConfigurationFileFormat {
 
 	/** The supported extension suffix. */
-	public static final String EXTENSION_SUFFIX = "xml";
+	public static final String FILENAME_EXTENSION = "xml";
 
 	@Override
-	public Set<String> getFilenameExtensionSuffixes() {
-		return singleton(EXTENSION_SUFFIX);
+	public Set<String> getFilenameExtensions() {
+		return singleton(FILENAME_EXTENSION);
 	}
 
 	@Override

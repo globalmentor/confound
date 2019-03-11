@@ -31,15 +31,15 @@ import io.confound.config.Configuration;
 public interface ConfigurationFileFormat {
 
 	/**
-	 * Retrieves the extension suffixes of files supported by this file format.
+	 * Retrieves the extensions of files supported by this file format.
 	 * <p>
-	 * An <dfn>extension suffix</dfn> is merely a file suffix of any type, except that it is understood that the full stop <code>.</code> character
-	 * <code>U+002E</code> will be prepended to the suffix. For example, an extension suffix of <code>foo.bar</code> would match a file ending in
-	 * <code>.foo.bar</code>, such as <code>example.foo.bar</code>.
+	 * An <dfn>extension</dfn> is merely a file suffix of any type, except that it is understood that the full stop <code>.</code> character <code>U+002E</code>
+	 * will be prepended to the suffix. For example, an extension of <code>foo.bar</code> would match a file ending in <code>.foo.bar</code>, such as
+	 * <code>example.foo.bar</code>.
 	 * </p>
-	 * @return The extension suffixes of filenames for file type supported by this loader.
+	 * @return The extensions of filenames for file type supported by this loader.
 	 */
-	public Set<String> getFilenameExtensionSuffixes();
+	public Set<String> getFilenameExtensions();
 
 	/**
 	 * Loads a configuration from the given input stream.

@@ -32,18 +32,18 @@ import io.confound.config.properties.PropertiesConfiguration;
  * File format implementation for a configuration stored in standard properties format, using the UTF-8 charset by default, or any UTF-* encoding (including
  * UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, and UTF-32LE) for which a Byte Order Mark (BOM) is present.
  * <p>
- * This implementation recognizes files with the extension suffix {@value #EXTENSION_SUFFIX}.
+ * This implementation recognizes files with the extension suffix {@value #FILENAME_EXTENSION}.
  * </p>
  * @author Garret Wilson
  */
 public class PropertiesConfigurationFileFormat implements ConfigurationFileFormat {
 
-	/** The supported extension suffix. */
-	public static final String EXTENSION_SUFFIX = "properties";
+	/** The supported filename extension. */
+	public static final String FILENAME_EXTENSION = "properties";
 
 	@Override
-	public Set<String> getFilenameExtensionSuffixes() {
-		return singleton(EXTENSION_SUFFIX);
+	public Set<String> getFilenameExtensions() {
+		return singleton(FILENAME_EXTENSION);
 	}
 
 	@Override
