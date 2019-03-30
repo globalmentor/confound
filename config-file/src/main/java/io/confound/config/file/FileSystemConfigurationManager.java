@@ -16,6 +16,7 @@
 
 package io.confound.config.file;
 
+import static com.globalmentor.io.Filenames.*;
 import static com.globalmentor.java.Conditions.*;
 import static java.nio.file.Files.*;
 import static java.util.Collections.*;
@@ -30,6 +31,8 @@ import java.util.regex.*;
 import java.util.stream.Stream;
 
 import javax.annotation.*;
+
+import com.globalmentor.io.Filenames;
 
 import io.clogr.Clogged;
 import io.confound.config.*;
@@ -464,9 +467,10 @@ public class FileSystemConfigurationManager extends AbstractFileConfigurationMan
 		 *          <code>base.foo.bar</code>, or no extension at all.
 		 * @return This builder.
 		 * @throws NullPointerException if the directory and/or base filename is <code>null</code>.
+		 * @see Filenames#getBaseFilenamePattern(String)
 		 */
 		public Builder baseFilename(@Nonnull final Path directory, @Nonnull final String baseFilename) {
-			return filenamePattern(directory, Pattern.compile(Pattern.quote(baseFilename) + "\\..+"));
+			return filenamePattern(directory, getBaseFilenamePattern(baseFilename));
 		}
 
 		/**
