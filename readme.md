@@ -10,8 +10,6 @@ Confound.setDefaultConfigurationConcern(new MyConfigurationConcern());
 
 ## Quick Start
 
-_This initial release of Confound only supports system variables and environment variables._
-
 An application can easily integrate Confound configuration support with just a few steps:
 
 1. Include the dependency `io.confound:confound:x.x.x`.
@@ -20,7 +18,7 @@ An application can easily integrate Confound configuration support with just a f
 
 Note: Confounded also provides a mixin interface `Confounded` that allows an instance of `MyClass` to call `getConfiguration().getXXX("foo.bar")`.  
 
-Other Confound implementations in addition to system and environment variables will be available in the future.
+Other Confound implementations are available via pluggable providers.
 
 ## Download
 
