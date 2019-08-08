@@ -102,12 +102,13 @@ public class EnvironmentConfiguration extends StringMapConfiguration {
 	 * {@inheritDoc} This version normalizes requested keys by replacing <code>'.'</code> with <code>'_'</code> and converting the key to uppercase, but only if
 	 * {@link #isNormalNames()} is enabled.
 	 * @see #isNormalNames()
+	 * @see Configuration#KEY_SEGMENT_SEPARATOR
 	 */
 	@Override
 	protected String normalizeKey(String key) {
 		key = super.normalizeKey(key); //perform default normalization, if any
 		if(isNormalNames()) {
-			key = key.replace('.', '_').toUpperCase(Locale.ROOT); //foo.bar -> FOO_BAR
+			key = key.replace(KEY_SEGMENT_SEPARATOR, '_').toUpperCase(Locale.ROOT); //foo.bar -> FOO_BAR
 		}
 		return key;
 	}

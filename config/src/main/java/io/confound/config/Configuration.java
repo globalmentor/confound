@@ -39,6 +39,9 @@ public interface Configuration {
 		return EmptyConfiguration.INSTANCE;
 	}
 
+	/** The delimiter separating segments of a compound key, such as <code>foo.bar</code>. */
+	public static final char KEY_SEGMENT_SEPARATOR = '.';
+
 	/**
 	 * Retrieves a required configuration from an {@link Optional}, throwing a {@link MissingConfigurationKeyException} if the configuration key was not present.
 	 * @apiNote This method is primarily used to check the result of a configuration lookup call for the non-optional convenience configuration lookup versions.
@@ -355,6 +358,8 @@ public interface Configuration {
 	 */
 	public Optional<URI> findUri(@Nonnull final String key) throws ConfigurationException;
 
+	//fallback
+
 	/**
 	 * Returns a configuration equivalent to this configuration but that will fall back to a specified parent configuration if a value is not present. This
 	 * configuration will remain unmodified.
@@ -377,6 +382,37 @@ public interface Configuration {
 	 */
 	public static Configuration withFallback(@Nonnull final Configuration configuration, @Nonnull final Optional<Configuration> fallbackConfiguration) {
 		return fallbackConfiguration.map(configuration::withFallback).orElse(configuration);
+	}
+
+	//subset/superset
+
+	/**
+	 * Returns a subset of this configuration representing a subtree of the keyspace with the given key prefix. The subconfiguration acts as a live view of this
+	 * configuration, but only has access to keys with the given prefix plus {@value #KEY_SEGMENT_SEPARATOR}, and those keys will effectively have the prefix and
+	 * delimiter removed. For example if a key prefix of <code>foo.bar</code> is given, only keys logically starting with <code>foo.bar.</code> would be
+	 * accessible in the subconfiguration. A setting in this configuration with the key <code>foo.bar.example</code> would be accessible in the subconfiguration
+	 * as <code>example</code>.
+	 * @apiNote The returned configuration is not merely a "subset" of the settings with identical keys; instead the returned keyspace represents a subtree of
+	 *          they keys, making the returned configuration a "subconfiguration" of the original.
+	 * @param prefixKey The prefix not including the final segment separator {@value #KEY_SEGMENT_SEPARATOR}, for settings to include.
+	 * @return A configuration view representing a subtree of the configuration keyspace.
+	 */
+	public default Configuration subConfiguration(@Nonnull final String prefixKey) {
+		return new SubConfiguration(this, prefixKey);
+	}
+
+	/**
+	 * Returns a superset of this configuration representing a broader keyspace with the given key prefix. The superconfiguration acts as a live view of this
+	 * configuration, but all keys will effectively have the given prefix plus {@value #KEY_SEGMENT_SEPARATOR} added. For example if a key prefix of
+	 * <code>foo.bar</code> is given, and this configuration has a key <code>example</code>, in the superconfiguration it will only be accessible using the key
+	 * <code>foo.bar.example</code>.
+	 * @apiNote The returned configuration is not merely a "superset" of the settings with identical keys; instead the returned keyspace represents a parent tree
+	 *          of they keys, making the returned configuration a "superconfiguration" of the original.
+	 * @param prefixKey The prefix not including the final segment separator {@value #KEY_SEGMENT_SEPARATOR}, with which to prefix all settings.
+	 * @return A configuration view representing a parent tree of the configuration keyspace.
+	 */
+	public default Configuration superConfiguration(@Nonnull final String prefixKey) {
+		return new SuperConfiguration(this, prefixKey);
 	}
 
 }
