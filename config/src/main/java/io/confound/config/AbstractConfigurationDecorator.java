@@ -44,6 +44,23 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	}
 
 	/**
+	 * Transforms the key appropriately before it is passed to the decorated configuration. The key may be given some prefix or have some prefix removed, for
+	 * example, or the case of the key may be changed.
+	 * <p>
+	 * If no key is returned, it indicates that the given key does not represent a key in this configuration view. For example, if the decorator represents a
+	 * subset of the decorator configuration only for those keys starting with <code>foo.</code>, this method would return an empty configuration if a key did not
+	 * being with <code>foo.</code>.
+	 * </p>
+	 * @implSpec The default implementation merely returns the key unchanged.
+	 * @apiNote This method is useful for implementing subsets and supersets.
+	 * @param key The key as provided by the caller.
+	 * @return The key transformed appropriately to be passed to the wrapped configuration.
+	 */
+	protected Optional<String> decorateKey(@Nonnull final String key) {
+		return Optional.of(key);
+	}
+
+	/**
 	 * Wrapped configuration constructor.
 	 * @param configuration The configuration to decorate.
 	 * @throws NullPointerException if the given configuration is <code>null</code>.
@@ -54,113 +71,113 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 
 	@Override
 	public boolean hasConfigurationValue(final String key) throws ConfigurationException {
-		return getConfiguration().hasConfigurationValue(key);
+		return decorateKey(key).map(getConfiguration()::hasConfigurationValue).orElse(false);
 	}
 
 	//Object
 
 	@Override
 	public Object getObject(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getObject(key);
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getObject), key);
 	}
 
 	@Override
 	public Optional<Object> findObject(final String key) throws ConfigurationException {
-		return getConfiguration().findObject(key);
+		return decorateKey(key).map(getConfiguration()::findObject);
 	}
 
 	@Override
 	public <O> O getObject(final String key, final Class<O> type) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getObject(key, type);
+		return requireConfiguration(decorateKey(key).map(decoratedKey -> getConfiguration().getObject(decoratedKey, type)), key);
 	}
 
 	@Override
 	public <O> Optional<O> findObject(final String key, final Class<O> type) throws ConfigurationException {
-		return getConfiguration().findObject(key, type);
+		return decorateKey(key).flatMap(decoratedKey -> getConfiguration().findObject(decoratedKey, type));
 	}
 
 	//Boolean
 
 	@Override
 	public boolean getBoolean(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getBoolean(key);
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getBoolean), key);
 	}
 
 	@Override
 	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
-		return getConfiguration().findBoolean(key);
+		return decorateKey(key).flatMap(getConfiguration()::findBoolean);
 	}
 
 	//double
 
 	@Override
 	public double getDouble(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getDouble(key);
+		return decorateKey(key).map(getConfiguration()::getDouble).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	@Override
 	public OptionalDouble findDouble(final String key) throws ConfigurationException {
-		return getConfiguration().findDouble(key);
+		return decorateKey(key).map(getConfiguration()::findDouble).orElse(OptionalDouble.empty());
 	}
 
 	//int
 
 	@Override
 	public int getInt(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getInt(key);
+		return decorateKey(key).map(getConfiguration()::getInt).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	@Override
 	public OptionalInt findInt(final String key) throws ConfigurationException {
-		return getConfiguration().findInt(key);
+		return decorateKey(key).map(getConfiguration()::findInt).orElse(OptionalInt.empty());
 	}
 
 	//long
 
 	@Override
 	public long getLong(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getLong(key);
+		return decorateKey(key).map(getConfiguration()::getLong).orElseThrow(() -> createMissingConfigurationKeyException(key));
 	}
 
 	@Override
 	public OptionalLong findLong(final String key) throws ConfigurationException {
-		return getConfiguration().findLong(key);
+		return decorateKey(key).map(getConfiguration()::findLong).orElse(OptionalLong.empty());
 	}
 
 	//Path
 
 	@Override
 	public Path getPath(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getPath(key);
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getPath), key);
 	}
 
 	@Override
 	public Optional<Path> findPath(final String key) throws ConfigurationException {
-		return getConfiguration().findPath(key);
+		return decorateKey(key).flatMap(getConfiguration()::findPath);
 	}
 
 	//String
 
 	@Override
 	public String getString(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getString(key);
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getString), key);
 	}
 
 	@Override
 	public Optional<String> findString(final String key) throws ConfigurationException {
-		return getConfiguration().findString(key);
+		return decorateKey(key).flatMap(getConfiguration()::findString);
 	}
 
 	//URI
 
 	@Override
 	public URI getUri(final String key) throws MissingConfigurationKeyException, ConfigurationException {
-		return getConfiguration().getUri(key);
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getUri), key);
 	}
 
 	@Override
 	public Optional<URI> findUri(final String key) throws ConfigurationException {
-		return getConfiguration().findUri(key);
+		return decorateKey(key).flatMap(getConfiguration()::findUri);
 	}
 
 }
