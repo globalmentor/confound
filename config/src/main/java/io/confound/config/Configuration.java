@@ -398,6 +398,8 @@ public interface Configuration {
 	 * as <code>example</code>.
 	 * @apiNote The returned configuration is not merely a "subset" of the settings with identical keys; instead the returned keyspace represents a subtree of
 	 *          they keys, making the returned configuration a "subconfiguration" of the original.
+	 * @apiNote A subconfiguration differs from a section in that a subconfiguration is a view of the original configuration and follows the original
+	 *          configuration's fallback rule, while a section acts merely like a compound value reflecting only local settings.
 	 * @param prefixKey The prefix not including the final segment separator {@value #KEY_SEGMENT_SEPARATOR}, for settings to include.
 	 * @return A configuration view representing a subtree of the configuration keyspace.
 	 */
