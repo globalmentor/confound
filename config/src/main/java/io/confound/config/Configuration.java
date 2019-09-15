@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.regex.Pattern;
 
 import javax.annotation.*;
 
@@ -41,6 +42,9 @@ public interface Configuration {
 
 	/** The delimiter separating segments of a compound key, such as <code>foo.bar</code>. */
 	public static final char KEY_SEGMENT_SEPARATOR = '.';
+
+	/** The pattern for splitting out the segments of a compound key. */
+	public static final Pattern KEY_SEGMENTS_PATTERN = Pattern.compile(Pattern.quote(String.valueOf(KEY_SEGMENT_SEPARATOR)));
 
 	/**
 	 * Retrieves a required configuration from an {@link Optional}, throwing a {@link MissingConfigurationKeyException} if the configuration key was not present.
