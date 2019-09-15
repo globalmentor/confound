@@ -26,7 +26,7 @@ import java.util.Optional;
 public interface Section extends Configuration {
 
 	/**
-	 * Returns root configuration containing this section.
+	 * Returns the root configuration containing this section.
 	 * @apiNote The root configuration containing this section, if also a {@link Section}, will return itself for this method.
 	 * @return The root configuration of which this configuration is a section.
 	 */

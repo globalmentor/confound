@@ -47,6 +47,11 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	}
 
 	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
+	}
+
+	@Override
 	public final OptionalDouble findDouble(final String key) throws ConfigurationException {
 		return OptionalDouble.empty();
 	}

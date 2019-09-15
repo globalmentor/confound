@@ -44,6 +44,15 @@ public class StringMapConfiguration extends AbstractStringConfiguration {
 
 	/**
 	 * {@inheritDoc}
+	 * @implSpec This implementation always returns {@link Optional#empty()}, as string maps do not support sections.
+	 */
+	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * @implSpec This implementation delegates to {@link Map#containsKey(Object)}.
 	 */
 	@Override

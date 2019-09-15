@@ -28,8 +28,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.globalmentor.java.CharSequences;
+
 import io.confound.config.AbstractStringConfiguration;
 import io.confound.config.ConfigurationException;
+import io.confound.config.Section;
 
 /**
  * Implementation of a configuration based on a XML file format.
@@ -37,8 +40,6 @@ import io.confound.config.ConfigurationException;
  * @author Magno N A Cruz
  */
 public class XmlConfiguration extends AbstractStringConfiguration {
-
-	private static final String HIERARCHY_DELIMITER = ".";
 
 	private final Document xmlDocument;
 
@@ -51,6 +52,15 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 		this.xmlDocument = requireNonNull(xmlDocument);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @implSpec The simple XML implementation does not support sections, so this implementation always returns {@link Optional#empty()}.
+	 */
+	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
+	}
+
 	@Override
 	protected Optional<String> findConfigurationValueImpl(@Nonnull final String key) throws ConfigurationException {
 		requireNonNull(key, "The key for the object to be looked up cannot be null.");
@@ -61,12 +71,12 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 
 		// TODO improve key splitting algorithm.
 
-		while(keySegment.contains(HIERARCHY_DELIMITER)) {
-			final String currentKey = keySegment.substring(0, keySegment.indexOf(HIERARCHY_DELIMITER));
+		while(CharSequences.contains(keySegment, KEY_SEGMENT_SEPARATOR)) {
+			final String currentKey = keySegment.substring(0, keySegment.indexOf(KEY_SEGMENT_SEPARATOR));
 
 			parentNode = getChildNode(parentNode, currentKey);
 
-			keySegment = keySegment.substring(keySegment.indexOf(HIERARCHY_DELIMITER) + 1);
+			keySegment = keySegment.substring(keySegment.indexOf(KEY_SEGMENT_SEPARATOR) + 1);
 		}
 
 		return Optional.ofNullable(getChildNode(parentNode, keySegment)).map(Node::getTextContent);

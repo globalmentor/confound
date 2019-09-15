@@ -80,6 +80,8 @@ public interface Configuration {
 	 */
 	public boolean hasConfigurationValue(@Nonnull final String key) throws ConfigurationException;
 
+	//Object
+
 	/**
 	 * Retrieves a general configuration object.
 	 * @implSpec This default version delegates to {@link #findObject(String)}.
@@ -137,6 +139,36 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public <O> Optional<O> findObject(@Nonnull final String key, @Nonnull final Class<O> type) throws ConfigurationException;
+
+	//Section
+
+	/**
+	 * Retrieves a section by its key.
+	 * @apiNote The returned section is considered a compound entity local to the section root, and retrieval of the values it contains does not support fallback
+	 *          lookup. If fallback lookup is desired, use a compound key relative to the section root configuration.
+	 * @implSpec This default version delegates to {@link #findSection(String)}.
+	 * @param key The configuration key.
+	 * @return The section associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default @Nonnull Section getSection(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return requireConfiguration(findSection(key), key);
+	}
+
+	/**
+	 * Retrieves a section that may not be present.
+	 * @apiNote The returned section is considered a compound entity local to the section root, and retrieval of the values it contains does not support fallback
+	 *          lookup. If fallback lookup is desired, use a compound key relative to the section root configuration.
+	 * @param key The configuration key.
+	 * @return The optional section associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public Optional<Section> findSection(@Nonnull final String key) throws ConfigurationException;
 
 	//Boolean
 

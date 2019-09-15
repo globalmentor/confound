@@ -18,7 +18,7 @@ package io.confound.config.jndi;
 
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
+import javax.annotation.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -26,6 +26,7 @@ import javax.naming.NamingException;
 
 import io.confound.config.AbstractStringConfiguration;
 import io.confound.config.ConfigurationException;
+import io.confound.config.Section;
 
 /**
  * Configuration implementation backed by JNDI variables.
@@ -55,6 +56,15 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 	 */
 	public JndiConfiguration(@Nonnull final InitialContext initialContext) throws NamingException {
 		this.context = initialContext;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation always returns {@link Optional#empty()}, as JNDI does not support sections.
+	 */
+	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
 	}
 
 	@Override

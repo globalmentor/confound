@@ -96,6 +96,18 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 		return decorateKey(key).flatMap(decoratedKey -> getConfiguration().findObject(decoratedKey, type));
 	}
 
+	//Section
+
+	@Override
+	public Section getSection(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getSection), key);
+	}
+
+	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return decorateKey(key).flatMap(getConfiguration()::findSection);
+	}
+
 	//Boolean
 
 	@Override
