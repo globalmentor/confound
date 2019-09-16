@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * A configuration implementation that contains no definitions.
@@ -49,6 +51,11 @@ public class EmptyConfiguration extends AbstractConfiguration {
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return Optional.empty();
+	}
+
+	@Override
+	public Stream<Map.Entry<Optional<String>, Section>> sections() {
+		return Stream.empty();
 	}
 
 	@Override

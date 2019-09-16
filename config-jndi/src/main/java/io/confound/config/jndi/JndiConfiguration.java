@@ -17,6 +17,8 @@
 package io.confound.config.jndi;
 
 import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.*;
 import javax.naming.Context;
@@ -65,6 +67,15 @@ public class JndiConfiguration extends AbstractStringConfiguration {
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return Optional.empty();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation always returns {@link Stream#empty()}, as JNDI does not support sections.
+	 */
+	@Override
+	public Stream<Map.Entry<Optional<String>, Section>> sections() {
+		return Stream.empty();
 	}
 
 	@Override

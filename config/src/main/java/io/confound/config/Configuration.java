@@ -21,11 +21,13 @@ import static java.util.Objects.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import javax.annotation.*;
 
@@ -169,6 +171,15 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public Optional<Section> findSection(@Nonnull final String key) throws ConfigurationException;
+
+	/**
+	 * Returns all the direct child sections of the configuration. Nested configurations and configurations that are components of other first-level values, such
+	 * as values in maps, are not included.
+	 * @apiNote In some formats each section has an identified name. In other formats the section name will correspond to some property name with which the
+	 *          section is associated, which would usually correspond to the last segment of the configuration key. Some formats may support unnamed sections.
+	 * @return A stream of all direct child sections, in no guaranteed order.
+	 */
+	public Stream<Map.Entry<Optional<String>, Section>> sections();
 
 	//Boolean
 

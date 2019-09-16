@@ -18,8 +18,10 @@ package io.confound.config.file.format.xml;
 
 import static java.util.Objects.*;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.annotation.*;
 
@@ -59,6 +61,15 @@ public class XmlConfiguration extends AbstractStringConfiguration {
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return Optional.empty();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @implSpec The simple XML implementation does not support sections, so this implementation always returns {@link Stream#empty()}.
+	 */
+	@Override
+	public Stream<Map.Entry<Optional<String>, Section>> sections() {
+		return Stream.empty();
 	}
 
 	@Override

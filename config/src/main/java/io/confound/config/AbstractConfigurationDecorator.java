@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.*;
 
@@ -106,6 +108,11 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return decorateKey(key).flatMap(getConfiguration()::findSection);
+	}
+
+	@Override
+	public Stream<Map.Entry<Optional<String>, Section>> sections() {
+		return getConfiguration().sections();
 	}
 
 	//Boolean

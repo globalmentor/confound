@@ -18,7 +18,9 @@ package io.confound.config;
 
 import static java.util.Objects.*;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.annotation.*;
 
@@ -49,6 +51,14 @@ public class TestConfiguration extends AbstractStringConfiguration {
 	}
 
 	/**
+	 * Test value constructor.
+	 * @param value The value to return if for the key {@value #TEST_KEY}.
+	 */
+	public TestConfiguration(@Nonnull final String value) {
+		this.testValue = requireNonNull(value);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @implSpec This implementation always returns {@link Optional#empty()}.
 	 */
@@ -58,11 +68,12 @@ public class TestConfiguration extends AbstractStringConfiguration {
 	}
 
 	/**
-	 * Test value constructor.
-	 * @param value The value to return if for the key {@value #TEST_KEY}.
+	 * {@inheritDoc}
+	 * @implSpec This implementation always returns {@link Stream#empty()}.
 	 */
-	public TestConfiguration(@Nonnull final String value) {
-		this.testValue = requireNonNull(value);
+	@Override
+	public Stream<Map.Entry<Optional<String>, Section>> sections() {
+		return Stream.empty();
 	}
 
 	@Override

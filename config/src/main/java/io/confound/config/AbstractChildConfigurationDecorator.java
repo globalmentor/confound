@@ -90,7 +90,7 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	}
 
 	@Override
-	public Optional<Section> findSection(String key) throws ConfigurationException {
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return or(getConfiguration().findSection(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findSection(key)));
 	}
 
