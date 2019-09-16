@@ -82,6 +82,18 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 		return or(getConfiguration().findObject(key, type), () -> getParentConfiguration().flatMap(configuration -> configuration.findObject(key, type)));
 	}
 
+	//Section
+
+	@Override
+	public Section getSection(final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return super.getSection(key);
+	}
+
+	@Override
+	public Optional<Section> findSection(String key) throws ConfigurationException {
+		return or(getConfiguration().findSection(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findSection(key)));
+	}
+
 	//Boolean
 
 	@Override

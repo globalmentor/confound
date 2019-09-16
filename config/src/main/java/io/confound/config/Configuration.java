@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.regex.Pattern;
 
 import javax.annotation.*;
 
@@ -41,6 +42,9 @@ public interface Configuration {
 
 	/** The delimiter separating segments of a compound key, such as <code>foo.bar</code>. */
 	public static final char KEY_SEGMENT_SEPARATOR = '.';
+
+	/** The pattern for splitting out the segments of a compound key. */
+	public static final Pattern KEY_SEGMENTS_PATTERN = Pattern.compile(Pattern.quote(String.valueOf(KEY_SEGMENT_SEPARATOR)));
 
 	/**
 	 * Retrieves a required configuration from an {@link Optional}, throwing a {@link MissingConfigurationKeyException} if the configuration key was not present.
@@ -75,6 +79,8 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public boolean hasConfigurationValue(@Nonnull final String key) throws ConfigurationException;
+
+	//Object
 
 	/**
 	 * Retrieves a general configuration object.
@@ -133,6 +139,36 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public <O> Optional<O> findObject(@Nonnull final String key, @Nonnull final Class<O> type) throws ConfigurationException;
+
+	//Section
+
+	/**
+	 * Retrieves a section by its key.
+	 * @apiNote The returned section is considered a compound entity local to the section root, and retrieval of the values it contains does not support fallback
+	 *          lookup. If fallback lookup is desired, use a compound key relative to the section root configuration.
+	 * @implSpec This default version delegates to {@link #findSection(String)}.
+	 * @param key The configuration key.
+	 * @return The section associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default @Nonnull Section getSection(@Nonnull final String key) throws MissingConfigurationKeyException, ConfigurationException {
+		return requireConfiguration(findSection(key), key);
+	}
+
+	/**
+	 * Retrieves a section that may not be present.
+	 * @apiNote The returned section is considered a compound entity local to the section root, and retrieval of the values it contains does not support fallback
+	 *          lookup. If fallback lookup is desired, use a compound key relative to the section root configuration.
+	 * @param key The configuration key.
+	 * @return The optional section associated with the given key.
+	 * @throws NullPointerException if the given key is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public Optional<Section> findSection(@Nonnull final String key) throws ConfigurationException;
 
 	//Boolean
 
@@ -394,6 +430,8 @@ public interface Configuration {
 	 * as <code>example</code>.
 	 * @apiNote The returned configuration is not merely a "subset" of the settings with identical keys; instead the returned keyspace represents a subtree of
 	 *          they keys, making the returned configuration a "subconfiguration" of the original.
+	 * @apiNote A subconfiguration differs from a section in that a subconfiguration is a view of the original configuration and follows the original
+	 *          configuration's fallback rule, while a section acts merely like a compound value reflecting only local settings.
 	 * @param prefixKey The prefix not including the final segment separator {@value #KEY_SEGMENT_SEPARATOR}, for settings to include.
 	 * @return A configuration view representing a subtree of the configuration keyspace.
 	 */

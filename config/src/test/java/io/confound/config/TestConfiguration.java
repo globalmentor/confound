@@ -49,6 +49,15 @@ public class TestConfiguration extends AbstractStringConfiguration {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation always returns {@link Optional#empty()}.
+	 */
+	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
+	}
+
+	/**
 	 * Test value constructor.
 	 * @param value The value to return if for the key {@value #TEST_KEY}.
 	 */

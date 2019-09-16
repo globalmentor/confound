@@ -72,6 +72,15 @@ public abstract class AbstractObjectConfiguration extends BaseConfiguration<Obje
 	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
 	 */
 	@Override
+	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return convertValue(findConfigurationValue(key), Section.class);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation converts the value using {@link #convertValue(Optional, Class)}.
+	 */
+	@Override
 	public Optional<Boolean> findBoolean(final String key) throws ConfigurationException {
 		return convertValue(findConfigurationValue(key), Boolean.class);
 	}
