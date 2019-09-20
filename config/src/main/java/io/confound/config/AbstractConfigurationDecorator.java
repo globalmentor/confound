@@ -20,6 +20,7 @@ import static java.util.Objects.*;
 
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -106,6 +107,28 @@ public abstract class AbstractConfigurationDecorator extends AbstractConfigurati
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
 		return decorateKey(key).flatMap(getConfiguration()::findSection);
+	}
+
+	//Collection
+
+	@Override
+	public Collection<Object> getCollection(final String key) throws ConfigurationException {
+		return requireConfiguration(decorateKey(key).map(getConfiguration()::getCollection), key);
+	}
+
+	@Override
+	public Optional<Collection<Object>> findCollection(final String key) throws ConfigurationException {
+		return decorateKey(key).flatMap(getConfiguration()::findCollection);
+	}
+
+	@Override
+	public <E> Collection<E> getCollection(final String key, final Class<E> elementType) throws ConfigurationException {
+		return requireConfiguration(decorateKey(key).map(decoratedKey -> getConfiguration().getCollection(decoratedKey, elementType)), key);
+	}
+
+	@Override
+	public <E> Optional<Collection<E>> findCollection(final String key, final Class<E> elementType) throws ConfigurationException {
+		return decorateKey(key).flatMap(decoratedKey -> getConfiguration().findCollection(decoratedKey, elementType));
 	}
 
 	//Boolean

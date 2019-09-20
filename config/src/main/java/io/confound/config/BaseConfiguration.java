@@ -16,6 +16,7 @@
 
 package io.confound.config;
 
+import static java.util.Collections.*;
 import static java.util.Objects.*;
 
 import java.util.*;
@@ -142,5 +143,37 @@ public abstract class BaseConfiguration<T> extends AbstractConfiguration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	protected abstract Optional<T> findConfigurationValueImpl(@Nonnull final String key) throws ConfigurationException;
+
+	/**
+	 * {@inheritDoc}
+	 * @implSpec This implementation uses {@link #findObject(String, Class)} to return a {@link Collection}, and then converts each of the elements to the
+	 *           requested element type using {@link #convertValue(Optional, Class)}. This requires that {@link #findObject(String, Class)} return elements of
+	 *           type {@code <T>} so that they can in turn be converted; otherwise, a {@link ConfigurationException} will be thrown.
+	 * @implSpec This implementation always creates a copy of the original collection, creating a {@link LinkedHashSet} if the collection is a {@link Set} to
+	 *           maintain order, and converts each value using {@link #convertValue(Optional, Class)}.
+	 */
+	@Override
+	public <E> Optional<Collection<E>> findCollection(@Nonnull final String key, @Nonnull final Class<E> elementType) throws ConfigurationException {
+		return findObject(key, Collection.class).map(originalCollection -> {
+			final Collection<E> collection;
+			if(originalCollection instanceof Set<?>) {
+				if(originalCollection.isEmpty()) {
+					return emptySet();
+				}
+				collection = new LinkedHashSet<>(originalCollection.size());
+			} else { //we'll just use a list for all other collection types
+				if(originalCollection.isEmpty()) {
+					return emptyList();
+				}
+				collection = new ArrayList<>(originalCollection.size());
+			}
+			for(final Object originalElement : originalCollection) {
+				@SuppressWarnings("unchecked")
+				final T typedElement = (T)originalElement; //this implementation requires that findObject() return us a collection of type <T>
+				collection.add(convertValue(Optional.ofNullable(typedElement), elementType).orElse(null)); //TODO support null in collections?
+			}
+			return collection;
+		});
+	}
 
 }

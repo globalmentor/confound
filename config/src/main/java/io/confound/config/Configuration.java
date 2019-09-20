@@ -21,10 +21,7 @@ import static java.util.Objects.*;
 import java.net.URI;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import javax.annotation.*;
@@ -139,6 +136,95 @@ public interface Configuration {
 	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
 	 */
 	public <O> Optional<O> findObject(@Nonnull final String key, @Nonnull final Class<O> type) throws ConfigurationException;
+
+	//Collection
+
+	/**
+	 * Retrieves a collection of objects, converting the underlying group of objects to a {@link Collection} if necessary. The returned collection may be
+	 * read-only, and may be a copy of the original collection, in which case it will maintain the order of the original collection, but is guaranteed to
+	 * implement {@link Set} if the underlying collection implements {@link Set}. If the collection is present but cannot be converted, a
+	 * {@link ConfigurationException} will be thrown.
+	 * <p>
+	 * The returned collection is guaranteed to be thread-safe and to be iterable even if the contents of the underlying configuration change during
+	 * configuration.
+	 * </p>
+	 * @apiNote If no value is associated with the given key, an empty {@link Optional} will be returned, not an empty collection.
+	 * @implSpec This default version delegates to {@link #findCollection(String)}.
+	 * @param key The configuration key.
+	 * @return The optional configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default Collection<Object> getCollection(@Nonnull final String key) throws ConfigurationException {
+		return requireConfiguration(findCollection(key), key);
+	}
+
+	/**
+	 * Retrieves a collection of objects that may not be present, converting the underlying group of objects to a {@link Collection} if necessary. The returned
+	 * collection may be read-only, and may be a copy of the original collection, in which case it will maintain the order of the original collection, but is
+	 * guaranteed to implement {@link Set} if the underlying collection implements {@link Set}.
+	 * <p>
+	 * The returned collection is guaranteed to be thread-safe and to be iterable even if the contents of the underlying configuration change during
+	 * configuration.
+	 * </p>
+	 * @apiNote If no value is associated with the given key, an empty {@link Optional} will be returned, not an empty collection.
+	 * @implSpec This default version delegates to {@link #findCollection(String, Class)} with type {@link Object}.
+	 * @param key The configuration key.
+	 * @return The optional configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default Optional<Collection<Object>> findCollection(@Nonnull final String key) throws ConfigurationException {
+		return findCollection(key, Object.class);
+	}
+
+	/**
+	 * Retrieves a collection, containing objects of the the requested type, converting the underlying group of objects to a {@link Collection} and converting
+	 * each object to the correct type as necessary. If an object cannot be converted, a {@link ConfigurationException} will be thrown. The returned collection
+	 * may be read-only, and may be a copy of the original collection, in which case it will maintain the order of the original collection, but is guaranteed to
+	 * implement {@link Set} if the underlying collection implements {@link Set}. If the collection is present but cannot be converted, a
+	 * {@link ConfigurationException} will be thrown.
+	 * <p>
+	 * The returned collection is guaranteed to be thread-safe and to be iterable even if the contents of the underlying configuration change during
+	 * configuration.
+	 * </p>
+	 * @apiNote If no value is associated with the given key, an empty {@link Optional} will be returned, not an empty collection.
+	 * @implSpec This default version delegates to {@link #findCollection(String, Class)}.
+	 * @param <E> The type of elements in this collection
+	 * @param key The configuration key.
+	 * @param elementType The type of objects requested in the collection.
+	 * @return The optional configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and/or type is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws MissingConfigurationKeyException if no configuration is associated with the given key.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public default <E> Collection<E> getCollection(@Nonnull final String key, @Nonnull final Class<E> elementType) throws ConfigurationException {
+		return requireConfiguration(findCollection(key, elementType), key);
+	}
+
+	/**
+	 * Retrieves a collection that may not be present, containing objects of the the requested type, converting the underlying group of objects to a
+	 * {@link Collection} and converting each object to the correct type as necessary. If an object cannot be converted, a {@link ConfigurationException} will be
+	 * thrown. The returned collection may be read-only, and may be a copy of the original collection, in which case it will maintain the order of the original
+	 * collection, but is guaranteed to implement {@link Set} if the underlying collection implements {@link Set}.
+	 * <p>
+	 * The returned collection is guaranteed to be thread-safe and to be iterable even if the contents of the underlying configuration change during
+	 * configuration.
+	 * </p>
+	 * @apiNote If no value is associated with the given key, an empty {@link Optional} will be returned, not an empty collection.
+	 * @param <E> The type of elements in this collection
+	 * @param key The configuration key.
+	 * @param elementType The type of objects requested in the collection.
+	 * @return The optional configuration value associated with the given key.
+	 * @throws NullPointerException if the given key and/or type is <code>null</code>.
+	 * @throws SecurityException If a security manager exists and it doesn't allow access to the specified configuration.
+	 * @throws ConfigurationException if there is a configuration value stored in an invalid format.
+	 */
+	public <E> Optional<Collection<E>> findCollection(@Nonnull final String key, @Nonnull final Class<E> elementType) throws ConfigurationException;
 
 	//Section
 
