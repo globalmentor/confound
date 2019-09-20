@@ -18,6 +18,7 @@ package io.confound.config;
 
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -92,6 +93,29 @@ public abstract class AbstractChildConfigurationDecorator<C extends Configuratio
 	@Override
 	public Optional<Section> findSection(String key) throws ConfigurationException {
 		return or(getConfiguration().findSection(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findSection(key)));
+	}
+
+	//Collection
+
+	@Override
+	public Collection<Object> getCollection(final String key) throws ConfigurationException {
+		return super.getCollection(key);
+	}
+
+	@Override
+	public Optional<Collection<Object>> findCollection(String key) throws ConfigurationException {
+		return or(getConfiguration().findCollection(key), () -> getParentConfiguration().flatMap(configuration -> configuration.findCollection(key)));
+	}
+
+	@Override
+	public <E> Collection<E> getCollection(final String key, final Class<E> elementType) throws ConfigurationException {
+		return super.getCollection(key, elementType);
+	}
+
+	@Override
+	public <E> Optional<Collection<E>> findCollection(final String key, final Class<E> elementType) throws ConfigurationException {
+		return or(getConfiguration().findCollection(key, elementType),
+				() -> getParentConfiguration().flatMap(configuration -> configuration.findCollection(key, elementType)));
 	}
 
 	//Boolean

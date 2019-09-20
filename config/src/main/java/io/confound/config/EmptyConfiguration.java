@@ -18,6 +18,7 @@ package io.confound.config;
 
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -48,6 +49,11 @@ public class EmptyConfiguration extends AbstractConfiguration {
 
 	@Override
 	public Optional<Section> findSection(final String key) throws ConfigurationException {
+		return Optional.empty();
+	}
+
+	@Override
+	public <E> Optional<Collection<E>> findCollection(String key, Class<E> elementType) throws ConfigurationException {
 		return Optional.empty();
 	}
 
