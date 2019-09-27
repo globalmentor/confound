@@ -16,20 +16,71 @@
 
 package io.confound.config;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.OptionalInt;
-import java.util.OptionalLong;
+import java.util.*;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test default methods of {@link Configuration}.
  * @author Garret Wilson
  */
 public class ConfigurationTest {
+
+	/** Tests the {@link Configuration#check(boolean)} and the {@link Configuration#check(boolean, String, Object...)} methods. */
+	@Test
+	public void testConfigurationCheck() {
+		Configuration.check(true);
+		Configuration.check(true, "error message");
+		Configuration.check(true, "error message", 123);
+		Configuration.check(true, "error message %d", 123);
+	}
+
+	/** Tests the {@link Configuration#check(boolean)} method with a false statement. */
+	@Test
+	public void testConfigurationCheckWithAFalseStatement() {
+		assertThrows(ConfigurationException.class, () -> Configuration.check(false));
+	}
+
+	/**
+	 * Tests the {@link Configuration#check(boolean)} and {@link Configuration#check(boolean, String, Object...)} methods with a false statement and how the
+	 * messages are being formatted.
+	 */
+	@Test
+	public void testConfigurationCheckErrorMessage() {
+
+		try {
+			Configuration.check(false);
+			fail("The statement above should have thrown an ConfigurationException");
+		} catch(final ConfigurationException configurationException) {
+			assertThat(configurationException.getMessage(), equalTo(null));
+		}
+
+		try {
+			Configuration.check(false, "error message");
+			fail("The statement above should have thrown an ConfigurationException");
+		} catch(final ConfigurationException configurationException) {
+			assertThat(configurationException.getMessage(), equalTo("error message"));
+		}
+
+		try {
+			Configuration.check(false, "error message %d", 123);
+			fail("The statement above should have thrown an ConfigurationException");
+		} catch(final ConfigurationException configurationException) {
+			assertThat(configurationException.getMessage(), equalTo("error message 123"));
+		}
+
+		try {
+			Configuration.check(false, "error message", 123); // The arguments of the error message should be ignored.
+			fail("The statement above should have thrown an ConfigurationException");
+		} catch(final ConfigurationException configurationException) {
+			assertThat(configurationException.getMessage(), equalTo("error message"));
+		}
+	}
 
 	/** @see Configuration#findLong(String) */
 	@Test

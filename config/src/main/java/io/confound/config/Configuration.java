@@ -44,6 +44,37 @@ public interface Configuration {
 	public static final Pattern KEY_SEGMENTS_PATTERN = Pattern.compile(Pattern.quote(String.valueOf(KEY_SEGMENT_SEPARATOR)));
 
 	/**
+	 * Checks whether a configuration condition is correct, and throws a {@link ConfigurationException} if not.
+	 * @implSpec This implementation defaults to {@link #check(boolean, String, Object...)}.
+	 * @param test The condition expression to test.
+	 * @throws ConfigurationException if the given test condition is <code>false</code>.
+	 */
+	public static void check(final boolean test) {
+		check(test, null); //check the test with no description
+	}
+
+	/**
+	 * Checks whether a configuration condition is correct, and throws a {@link ConfigurationException} if not.
+	 * @param test The condition expression to test.
+	 * @param description A description of the test to be used when generating an exception, optionally formatted with arguments, or <code>null</code> for no
+	 *          description.
+	 * @param arguments The arguments to be applied when formatting, or an empty array if the message should not be formatted.
+	 * @throws NullPointerException if the given arguments is <code>null</code>.
+	 * @throws ConfigurationException if the given test condition is <code>false</code>.
+	 * @throws IllegalArgumentException if the description is an invalid pattern, or if an argument in the arguments array is not of the type expected by the
+	 *           format element(s) that use it.
+	 * @see String#format(String, Object...)
+	 */
+	public static void check(final boolean test, @Nullable String description, @Nonnull final Object... arguments) {
+		if(!test) {
+			if(description != null && arguments.length > 0) {
+				description = String.format(description, arguments);
+			}
+			throw new ConfigurationException(description);
+		}
+	}
+
+	/**
 	 * Retrieves a required configuration from an {@link Optional}, throwing a {@link MissingConfigurationKeyException} if the configuration key was not present.
 	 * @apiNote This method is primarily used to check the result of a configuration lookup call for the non-optional convenience configuration lookup versions.
 	 * @implSpec The default implementation delegates to {@link #createMissingConfigurationKeyException(String)}.
