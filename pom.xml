@@ -5,23 +5,23 @@
 	<parent>
 		<groupId>com.globalmentor</groupId>
 		<artifactId>globalmentor-base</artifactId>
-		<version>0.6.4</version>
+		<version>0.7.2-SNAPSHOT</version>
 	</parent>
 
 	<groupId>io.confound</groupId>
-	<artifactId>confound-parent</artifactId>
+	<artifactId>confound-bom</artifactId>
 	<version>0.7.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Confound Parent</name>
-	<description>Aggregate parent POM of all Confound projects.</description>
+	<name>Confound BOM</name>
+	<description>Aggregate parent POM and bill of materials of all Confound projects.</description>
 	<url>https://confound.io/</url>
 	<inceptionYear>2018</inceptionYear>
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>Apache-2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -53,11 +53,6 @@
 		<url>https://bitbucket.org/globalmentor/confound</url>
 	</scm>
 
-	<properties>
-		<clogr.version>0.8.0</clogr.version>
-		<csar.version>0.8.0</csar.version>
-	</properties>
-
 	<modules>
 		<module>config</module>
 		<module>config-env</module>
@@ -84,7 +79,7 @@
 			<dependency>
 				<groupId>io.clogr</groupId>
 				<artifactId>clogr</artifactId>
-				<version>${clogr.version}</version>
+				<version>0.8.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
@@ -168,6 +163,24 @@
 
 			<dependency>
 				<groupId>io.confound</groupId>
+				<artifactId>confound-demo</artifactId>
+				<version>0.7.3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
+				<artifactId>confound-demo-app</artifactId>
+				<version>0.7.3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
+				<artifactId>confound-demo-webapp</artifactId>
+				<version>0.7.3-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.confound</groupId>
 				<artifactId>confound-file</artifactId>
 				<version>0.7.3-SNAPSHOT</version>
 			</dependency>
@@ -187,7 +200,7 @@
 			<dependency>
 				<groupId>io.csar</groupId>
 				<artifactId>csar</artifactId>
-				<version>${csar.version}</version>
+				<version>0.8.1-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
