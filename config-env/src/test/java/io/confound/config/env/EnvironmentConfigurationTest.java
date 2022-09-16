@@ -16,14 +16,13 @@
 
 package io.confound.config.env;
 
-import static org.junit.Assert.*;
+import java.util.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.jupiter.api.*;
 
 import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import org.junit.*;
 
 /**
  * Tests of {@link EnvironmentConfiguration}.

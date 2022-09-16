@@ -16,14 +16,13 @@
 
 package io.confound.config.file;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 
-import static com.globalmentor.io.Filenames.*;
-import static org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+import static com.globalmentor.io.Filenames.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 import io.confound.config.Configuration;
 

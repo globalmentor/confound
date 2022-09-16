@@ -16,13 +16,13 @@
 
 package io.confound.config.file.format.properties;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 
-import static org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import io.confound.config.Configuration;
 import io.confound.config.MissingConfigurationKeyException;
@@ -61,7 +61,7 @@ public class XmlPropertiesConfigurationFileFormatTest {
 	 * @see XmlPropertiesConfigurationFileFormat#load(InputStream)
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 */
-	@Test(expected = MissingConfigurationKeyException.class)
+	@Test
 	public void testLoadNonExistingConfigurationKey() throws IOException {
 		final XmlPropertiesConfigurationFileFormat format = new XmlPropertiesConfigurationFileFormat();
 		final Configuration configuration;
@@ -69,6 +69,6 @@ public class XmlPropertiesConfigurationFileFormatTest {
 			configuration = format.load(inputStream);
 		}
 
-		configuration.getString("foobar");
+		assertThrows(MissingConfigurationKeyException.class, () -> configuration.getString("foobar"));
 	}
 }

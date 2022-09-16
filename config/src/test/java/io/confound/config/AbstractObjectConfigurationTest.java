@@ -16,8 +16,8 @@
 
 package io.confound.config;
 
-import static org.junit.Assert.*;
 import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -30,7 +30,7 @@ import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Test base implemented methods of {@link AbstractObjectConfiguration}.

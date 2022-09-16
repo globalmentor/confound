@@ -16,13 +16,13 @@
 
 package io.confound.config;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests base implemented methods of {@link BaseConfiguration}.

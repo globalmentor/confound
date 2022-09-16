@@ -16,13 +16,13 @@
 
 package io.confound;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import io.confound.config.Configuration;
 import io.confound.config.StringMapConfiguration;
@@ -46,13 +46,13 @@ import io.csar.Csar;
  */
 public class ConfoundTest {
 
-	@After
+	@AfterEach
 	public void clearSystemProperties() {
 		System.clearProperty("test");
 		System.clearProperty("foo.bar");
 	}
 
-	@After
+	@AfterEach
 	public void resetCounfound() {
 		Csar.unregisterDefaultConcern(ConfigurationConcern.class); //unregister any default concern 
 	}

@@ -16,12 +16,12 @@
 
 package io.confound.config;
 
-import static org.junit.Assert.*;
 import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 import java.util.*;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests methods of {@link ChildConfigurationDecorator}.

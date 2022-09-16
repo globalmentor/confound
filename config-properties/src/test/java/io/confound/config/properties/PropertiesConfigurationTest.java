@@ -16,13 +16,13 @@
 
 package io.confound.config.properties;
 
-import static org.junit.Assert.*;
-
 import java.util.Properties;
 
+import org.junit.jupiter.api.*;
+
 import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
-import org.junit.*;
 
 /**
  * Tests of {@link PropertiesConfiguration}.

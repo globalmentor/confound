@@ -16,18 +16,18 @@
 
 package io.confound.config.jndi;
 
-import static org.junit.Assert.*;
-
 import java.io.*;
 import java.util.Hashtable;
 
 import javax.naming.*;
 import javax.naming.spi.*;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static com.github.npathai.hamcrestopt.OptionalMatchers.*;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 
 import io.confound.config.Configuration;
 import io.confound.config.ConfigurationException;
@@ -59,11 +59,11 @@ public class TestJndiConfiguration {
 	 * @throws IOException if there was an error preparing or loading the configuration.
 	 * @throws NamingException If an error occur while handling with JNDI.
 	 */
-	@Test(expected = ConfigurationException.class)
+	@Test
 	public void testFindParameterNotExisting() throws IOException, NamingException {
 		final Configuration configuration = new JndiConfiguration();
 
-		configuration.getString("bar");
+		assertThrows(ConfigurationException.class, () -> configuration.getString("bar"));
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class TestJndiConfiguration {
 	 * 
 	 * @throws NamingException If an error occur while setting the initial context.
 	 */
-	@BeforeClass
+	@BeforeAll
 	public static void setupInitialContext() throws NamingException {
 		NamingManager.setInitialContextFactoryBuilder(new InitialContextFactoryBuilder() {
 
