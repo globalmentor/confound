@@ -35,6 +35,7 @@ import io.confound.config.Section;
  */
 public class JndiConfiguration extends AbstractStringConfiguration {
 
+	/** The naming context namespace for JNDI. */
 	public static final String JNDI_NAMESPACE = "java:comp/env";
 
 	private final Context context;

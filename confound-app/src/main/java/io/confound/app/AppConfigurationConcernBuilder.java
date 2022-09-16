@@ -89,7 +89,11 @@ public class AppConfigurationConcernBuilder {
 
 	private String configBaseFilename = DEFAULT_CONFIG_BASE_FILENAME;
 
-	//TODO document
+	/**
+	 * Builds and produces an application concern based upon the configured builder.
+	 * @return The new application configuration concern.
+	 * @throws ConfigurationException If there is a problem with the configuration of the builder.
+	 */
 	public ConfigurationConcern build() throws ConfigurationException {
 		final Configuration systemConfiguration = Confound.getSystemConfiguration(); //TODO refactor to a method so subclasses can customize
 

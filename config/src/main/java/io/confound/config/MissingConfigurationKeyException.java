@@ -28,6 +28,7 @@ public class MissingConfigurationKeyException extends ConfigurationException {
 
 	private static final long serialVersionUID = 5428299096069969523L;
 
+	/** The key for the missing configuration. */
 	private final String key;
 
 	/** @return The key for the missing configuration. */
