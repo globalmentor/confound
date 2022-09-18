@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.globalmentor</groupId>
 		<artifactId>globalmentor-base</artifactId>
-		<version>0.7.2-SNAPSHOT</version>
+		<version>0.7.2</version>
 	</parent>
 
 	<groupId>io.confound</groupId>
 	<artifactId>confound-bom</artifactId>
-	<version>0.7.3-SNAPSHOT</version>
+	<version>0.7.3</version>
 	<packaging>pom</packaging>
 
 	<name>Confound BOM</name>
@@ -28,7 +28,7 @@
 
 	<organization>
 		<name>GlobalMentor, Inc.</name>
-		<url>http://www.globalmentor.com/</url>
+		<url>https://www.globalmentor.com/</url>
 	</organization>
 
 	<developers>
@@ -36,14 +36,14 @@
 			<name>Garret Wilson</name>
 			<email>garret@globalmentor.com</email>
 			<organization>GlobalMentor, Inc.</organization>
-			<organizationUrl>http://www.globalmentor.com/</organizationUrl>
+			<organizationUrl>https://www.globalmentor.com/</organizationUrl>
 		</developer>
 
 		<developer>
 			<name>Magno N A Cruz</name>
 			<email>magno@globalmentor.com</email>
 			<organization>GlobalMentor, Inc.</organization>
-			<organizationUrl>http://www.globalmentor.com/</organizationUrl>
+			<organizationUrl>https://www.globalmentor.com/</organizationUrl>
 		</developer>
 	</developers>
 
@@ -79,128 +79,128 @@
 			<dependency>
 				<groupId>io.clogr</groupId>
 				<artifactId>clogr</artifactId>
-				<version>0.8.1-SNAPSHOT</version>
+				<version>0.8.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 				<type>test-jar</type>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-env</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-jndi</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-file</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-file-format-properties</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-file-format-properties-provider</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-file-format-xml</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-file-format-xml-provider</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config-properties</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-app</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-app-provider</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-demo</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-demo-app</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-demo-webapp</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-file</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>confound-system-jndi-provider</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>convert</artifactId>
-				<version>0.7.3-SNAPSHOT</version>
+				<version>0.7.3</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.csar</groupId>
 				<artifactId>csar</artifactId>
-				<version>0.8.1-SNAPSHOT</version>
+				<version>0.8.1</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
