@@ -83,9 +83,9 @@ public class ConfoundDemo {
 		//#print "foo" value in two separate contexts
 		System.out.println(String.format("By default foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
 
-		Csar.run(localConfigConcern, () -> {
+		Csar.run(() -> {
 			System.out.println(String.format("In another context foo is %s.", getConfiguration().findString("foo").orElse("[missing]")));
-		});
+		}, localConfigConcern);
 
 	}
 

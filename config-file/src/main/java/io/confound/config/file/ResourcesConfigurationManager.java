@@ -16,8 +16,8 @@
 
 package io.confound.config.file;
 
+import static com.globalmentor.io.ClassResources.*;
 import static com.globalmentor.io.Filenames.*;
-import static com.globalmentor.java.Classes.*;
 import static com.globalmentor.java.Conditions.*;
 import static java.util.Collections.*;
 import static java.util.Objects.*;
@@ -129,7 +129,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 		this.classLoader = requireNonNull(classLoader);
 		this.resourcePath = requireNonNull(resourcePath);
 		this.resourceBaseName = resourceBaseName;
-		final boolean resourcePathContainsName = getResourceName(resourcePath).isPresent();
+		final boolean resourcePathContainsName = findResourceName(resourcePath).isPresent();
 		if(resourceBaseName != null) {
 			checkArgument(!resourcePathContainsName, "Resource base path %s must end in a slash and cannot contain a filename.", resourcePath);
 		} else {
@@ -144,7 +144,7 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * @throws IllegalArgumentException if the given resource path has no filename.
 	 */
 	public Optional<ConfigurationFileFormat> getFileFormat(@Nonnull final String resourcePath) {
-		final String resourceName = getResourceName(resourcePath)
+		final String resourceName = findResourceName(resourcePath)
 				.orElseThrow(() -> new IllegalArgumentException(String.format("Configuration path %s has no filename.", resourcePath)));
 		return getFileFormatForFilename(resourceName);
 	}
@@ -557,10 +557,10 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 			if(resourcePath == null) { //there must always be a resource path, either a full path or a base path
 				if(this.resourceName != null) { //if a filename was given, determine the full path
 					checkState(this.contextClass != null, "No context class for determining resource path from filename.");
-					resourcePath = resolveResourcePath(contextClass, resourceName);
+					resourcePath = getClassLoaderResourcePath(contextClass, resourceName);
 				} else if(this.resourceBaseName != null) { //if a base filename was given, determine the base path
 					checkState(this.contextClass != null, "No context class for determining resource base path.");
-					resourcePath = getResourceBasePath(contextClass);
+					resourcePath = getClassLoaderResourceBasePath(contextClass);
 				} else {
 					throw new IllegalStateException("Insufficient information for determining configuration resource path.");
 				}
