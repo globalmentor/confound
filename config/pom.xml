@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.confound</groupId>
 		<artifactId>confound-bom</artifactId>
-		<version>0.7.3</version>
+		<version>0.7.4-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>config</artifactId>
