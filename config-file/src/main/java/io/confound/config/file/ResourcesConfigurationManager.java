@@ -42,11 +42,14 @@ import io.confound.config.*;
  */
 public class ResourcesConfigurationManager extends AbstractFileConfigurationManager implements Clogged {
 
-	/** The default base name to use for determining a configuration resource for a context package. */
-	public static final String DEFAULT_PACKAGE_BASE_NAME = "config";
+	/** The default classifier to use for determining a configuration resource for a context package or class. */
+	public static final String CONFIG_CLASSIFIER = "config";
 
-	/** The default base name suffix to use for determining a configuration resource for a context class. */
-	public static final String DEFAULT_CLASS_BASE_NAME_SUFFIX = "-" + DEFAULT_PACKAGE_BASE_NAME;
+	/** The delimiter for separating a classifier from a resource name. */
+	private static final char CLASSIFIER_DELIMITER = '-';
+
+	/** The default base name to use for determining a configuration resource for a context package. */
+	public static final String DEFAULT_PACKAGE_BASE_NAME = CONFIG_CLASSIFIER;
 
 	/** The class loader to use in loading the configuration resource. */
 	private final ClassLoader classLoader;
@@ -283,18 +286,36 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	}
 
 	/**
-	 * Creates a configuration manager that loads a required configuration using the base filename suffix {@value #DEFAULT_CLASS_BASE_NAME_SUFFIX} appended to a
-	 * class' name, relative to the class, using the class' resource loader. For example calling this method with the class <code>FooBar.class</code> will look
-	 * for a resource with the base name <code>FooBar-config.properties</code>.
+	 * Creates a configuration manager that loads a required configuration using the given classifier appended to a class' name and separated by a dash
+	 * <code>-</code> character, relative to the class, using the class' resource loader. For example calling this method with the class <code>FooBar.class</code>
+	 * will look for a resource with the base name <code>FooBar-config.properties</code>.
+	 * @implSpec This implementation delegates to {@link #forClass(Class, String)}.
 	 * @param contextClass The class providing the resource context for loading.
 	 * @return A configuration manager for determining a resource with the base filename and suffix.
 	 * @throws NullPointerException if the context class is <code>null</code>.
 	 * @see #forResourceBaseName(Class, String)
 	 * @see Class#getSimpleName()
-	 * @see #DEFAULT_CLASS_BASE_NAME_SUFFIX
+	 * @see #CONFIG_CLASSIFIER
 	 */
 	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass) {
-		return forResourceBaseName(contextClass, contextClass.getSimpleName() + DEFAULT_CLASS_BASE_NAME_SUFFIX);
+		return forClass(contextClass, CONFIG_CLASSIFIER);
+	}
+
+	/**
+	 * Creates a configuration manager that loads a required configuration using the given classifier appended to a class' name and separated by a dash
+	 * <code>-</code> character, relative to the class, using the class' resource loader. For example calling this method with the class <code>Foo.class</code>
+	 * and a classifier of <code>bar</code> will look for a resource with the base name <code>Foo-bar.properties</code>.
+	 * @apiNote The name "classifier" was inspired by the Maven POM classifier used to identify
+	 *          <a href="https://maven.apache.org/pom.html#Dependencies">variations of dependencies</a>.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @param classifier The identifier for extending the resource name for locating the configuration.
+	 * @return A configuration manager for determining a resource with the base filename and suffix.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @see #forResourceBaseName(Class, String)
+	 * @see Class#getSimpleName()
+	 */
+	public static ResourcesConfigurationManager forClass(@Nonnull final Class<?> contextClass, @Nonnull final String classifier) {
+		return forResourceBaseName(contextClass, contextClass.getSimpleName() + CLASSIFIER_DELIMITER + classifier);
 	}
 
 	/**
@@ -354,9 +375,9 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	}
 
 	/**
-	 * Loads an <em>optional</em> configuration using the base filename suffix {@value #DEFAULT_CLASS_BASE_NAME_SUFFIX} appended to a class' name, relative to the
-	 * class, using the class' resource loader. For example calling this method with the class <code>FooBar.class</code> will look for a resource with the base
-	 * name <code>FooBar-config.properties</code>.
+	 * Loads an <em>optional</em> configuration using the classifier {@value #CONFIG_CLASSIFIER} appended to a class' name, using the class' resource loader. For
+	 * example calling this method with the class <code>FooBar.class</code> will look for a resource with the base name <code>FooBar-config.properties</code>.
+	 * @implSpec This method delegates to {@link #loadConfigurationForClass(Class, String)}.
 	 * @param contextClass The class providing the resource context for loading.
 	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
 	 * @throws NullPointerException if the context class is <code>null</code>.
@@ -364,10 +385,30 @@ public class ResourcesConfigurationManager extends AbstractFileConfigurationMana
 	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
 	 * @see #forResourceBaseName(Class, String)
 	 * @see Class#getSimpleName()
-	 * @see #DEFAULT_CLASS_BASE_NAME_SUFFIX
+	 * @see #CONFIG_CLASSIFIER
 	 */
 	public static Optional<Configuration> loadConfigurationForClass(@Nonnull final Class<?> contextClass) throws IOException, ConfigurationException {
-		return loadConfigurationForResourceBaseName(contextClass, contextClass.getSimpleName() + DEFAULT_CLASS_BASE_NAME_SUFFIX);
+		return loadConfigurationForClass(contextClass, CONFIG_CLASSIFIER);
+	}
+
+	/**
+	 * Loads an <em>optional</em> configuration using the given classifier appended to a class' name and separated by a dash <code>-</code> character, relative to
+	 * the class, using the class' resource loader. For example calling this method with the class <code>Foo.class</code> and a classifier of <code>bar</code>
+	 * will look for a resource with the base name <code>Foo-bar.properties</code>.
+	 * @apiNote The name "classifier" was inspired by the Maven POM classifier used to identify
+	 *          <a href="https://maven.apache.org/pom.html#Dependencies">variations of dependencies</a>.
+	 * @param contextClass The class providing the resource context for loading.
+	 * @param classifier The identifier for extending the resource name for locating the configuration.
+	 * @return The loaded configuration, which will not be present if no appropriate configuration was found.
+	 * @throws NullPointerException if the context class is <code>null</code>.
+	 * @throws IOException if an I/O error occurs loading the configuration.
+	 * @throws ConfigurationException If there is invalid data or invalid state preventing the configuration from being loaded.
+	 * @see #forResourceBaseName(Class, String)
+	 * @see Class#getSimpleName()
+	 */
+	public static Optional<Configuration> loadConfigurationForClass(@Nonnull final Class<?> contextClass, @Nonnull final String classifier)
+			throws IOException, ConfigurationException {
+		return loadConfigurationForResourceBaseName(contextClass, contextClass.getSimpleName() + CLASSIFIER_DELIMITER + classifier);
 	}
 
 	/**
