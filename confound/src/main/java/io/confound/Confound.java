@@ -75,19 +75,19 @@ public class Confound {
 
 	/**
 	 * Retrieves a configuration based on environment variables, with an optional fallback parent configuration.
-	 * @param fallbackfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
+	 * @param fallbackConfiguration The parent configuration to use for fallback lookup, or <code>null</code> if there is no parent configuration.
 	 * @return Configuration based on environment variables.
 	 * @throws SecurityException If a security manager exists and it doesn't allow access to environment variables.
 	 * @see System#getenv()
 	 */
-	public static Configuration getEnvironmentConfiguration(@Nullable final Configuration fallbackfiguration) {
+	public static Configuration getEnvironmentConfiguration(@Nullable final Configuration fallbackConfiguration) {
 		Configuration configuration = environmentConfiguration;
 		if(configuration == null) { //the race condition here is benign
 			configuration = new EnvironmentConfiguration(System.getenv());
 			environmentConfiguration = configuration; //cache the environment configuration
 		}
-		if(fallbackfiguration != null) {
-			configuration = configuration.withFallback(fallbackfiguration);
+		if(fallbackConfiguration != null) {
+			configuration = configuration.withFallback(fallbackConfiguration);
 		}
 		return configuration;
 	}
@@ -145,17 +145,17 @@ public class Confound {
 
 	/**
 	 * Returns the default configuration concern.
-	 * @return The default configuration concern.
+	 * @return The default configuration concern, if any.
 	 * @see Csar#findDefaultConcern(Class)
 	 */
-	public static Optional<ConfigurationConcern> getDefaultConfigurationConcern() {
+	public static Optional<ConfigurationConcern> findDefaultConfigurationConcern() {
 		return Csar.findDefaultConcern(ConfigurationConcern.class);
 	}
 
 	/**
 	 * Sets the default configuration concern.
 	 * @param configurationConcern The default configuration concern to set.
-	 * @return The previous concern, or <code>null</code> if there was no previous concern.
+	 * @return The previous concern, if any.
 	 * @throws NullPointerException if the given concern is <code>null</code>.
 	 * @see Csar#registerDefaultConcern(Class, Concern)
 	 */
