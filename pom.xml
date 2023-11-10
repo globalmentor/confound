@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.globalmentor</groupId>
 		<artifactId>globalmentor-root</artifactId>
-		<version>0.8.14</version>
+		<version>1.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -80,13 +80,15 @@
 			<dependency>
 				<groupId>com.globalmentor</groupId>
 				<artifactId>globalmentor-core</artifactId>
-				<version>0.7.3</version>
+				<version>0.17.0</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.clogr</groupId>
-				<artifactId>clogr</artifactId>
-				<version>0.8.4</version>
+				<artifactId>clogr-bom</artifactId>
+				<version>0.9.0</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 
 			<dependency>
@@ -207,7 +209,7 @@
 			<dependency>
 				<groupId>io.csar</groupId>
 				<artifactId>csar</artifactId>
-				<version>0.8.2</version>
+				<version>0.9.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
