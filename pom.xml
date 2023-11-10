@@ -15,7 +15,7 @@
 	<packaging>pom</packaging>
 
 	<name>Confound BOM</name>
-	<description>Aggregate parent POM and bill of materials of all Confound projects.</description>
+	<description>Aggregate bill of materials of all Confound projects.</description>
 	<url>https://confound.io/</url>
 	<inceptionYear>2018</inceptionYear>
 
@@ -55,6 +55,7 @@
 	</scm>
 
 	<modules>
+		<module>parent</module>
 		<module>config</module>
 		<module>config-env</module>
 		<module>config-jndi</module>
@@ -77,20 +78,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.globalmentor</groupId>
-				<artifactId>globalmentor-core</artifactId>
-				<version>0.17.0</version>
-			</dependency>
-
-			<dependency>
-				<groupId>io.clogr</groupId>
-				<artifactId>clogr-bom</artifactId>
-				<version>0.9.0</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<dependency>
 				<groupId>io.confound</groupId>
 				<artifactId>config</artifactId>
@@ -204,12 +191,6 @@
 				<groupId>io.confound</groupId>
 				<artifactId>convert</artifactId>
 				<version>0.8.0-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>io.csar</groupId>
-				<artifactId>csar</artifactId>
-				<version>0.9.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
