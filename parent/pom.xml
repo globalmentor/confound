@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>io.confound</groupId>
+		<artifactId>confound-bom</artifactId>
+		<version>0.8.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>confound-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Confound Parent</name>
+	<description>Confound parent POM managing common dependencies.</description>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.globalmentor</groupId>
+				<artifactId>globalmentor-core</artifactId>
+				<version>0.17.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.clogr</groupId>
+				<artifactId>clogr-bom</artifactId>
+				<version>0.9.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>io.csar</groupId>
+				<artifactId>csar</artifactId>
+				<version>0.9.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
